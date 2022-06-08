@@ -1,0 +1,36 @@
+.container {
+    display: grid;
+    grid-gap:15px;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(2,1fr);
+    padding:20px;
+    height: 94vh;
+    grid-template-areas: 
+    'a b c'
+    'a b c'
+    'd f f';
+}
+
+.box1{
+    grid-area: a;
+}
+
+.box2{
+    grid-area: b;
+}
+
+.box3{
+    grid-area: c;
+}
+
+.box4{
+    grid-area: d;
+}
+
+.box5{
+    grid-area: e;
+}
+
+.box6{
+    grid-area: f;
+}
