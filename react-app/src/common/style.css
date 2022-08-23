@@ -2,11 +2,13 @@
     display: grid;
     grid-gap:15px;
     grid-template-columns: repeat(3,1fr);
-    /* grid-template-rows: repeat(2,1fr); */
+    grid-template-rows: repeat(2,1fr);
     padding:20px;
+    height: 94vh;
     grid-template-areas: 
     'a b c'
-    'd e e';
+    'a b c'
+    'd f f';
 }
 
 .box1{
@@ -27,5 +29,8 @@
 
 .box5{
     grid-area: e;
-    grid-column: span 2;
+}
+
+.box6{
+    grid-area: f;
 }
