@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import './style.css'
-import {TextField, Paper, Stack, Button } from '@mui/material'
+import {TextField, Paper, Stack, Button, Slide } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import Chart from "../components/Charts"
 import fetchData from "./action"
 //import Field from "../components/ConstantsFields"
+import logo1 from '../bd/logo1.jpg'; // with import
+import logo2 from '../bd/logo2.jpg'; // with import
+import logo3 from '../bd/logo3.jpg'; // with import
+import logo4 from '../bd/logo4.jpg'; // with import
+import logo5 from '../bd/logo5.jpg'; // with import
 
 const Page = () => {
 
@@ -47,6 +52,8 @@ const Page = () => {
 
     const [selectedRows,setSelectedRows] = useState([])
 
+    const [birthday, setBirthday] = useState(false)
+
     const setValue_1 = (value) => {
         dispatch({type:'SET_VALUE1', payload:value})
     }
@@ -60,6 +67,10 @@ const Page = () => {
         fetch(`http://localhost:8080/api/v1/json?value=${value1[0].value}`)
         .then(response=>response.json())
         .then(data=>console.log(data))
+    };
+
+    const handleBirthday = () => {
+        setBirthday(window.confirm("Я слышал, у тебя сегодня День Рождения?"))
     };
 
     const handleChange1 = index => event => {
@@ -86,6 +97,7 @@ const Page = () => {
 
             {/* <Field class={'box1'} label={'omega'} /> */}
 
+<Slide in={!birthday} direction={'right'} timeout={{ enter: 0, exit: 1000 }} mountOnEnter unmountOnExit >
             <Paper className='box1'>
                 <Stack direction={'column'} alignItems={'center'}>
                     {value1.map((item,index)=>
@@ -93,12 +105,14 @@ const Page = () => {
                     )}
                 </Stack>
 
-                <Button onClick={handleClick}>
-                    Test
+                <Button onClick={handleBirthday}>
+                    Жмяк
                 </Button>
 
             </Paper>
+</Slide>
 
+<Slide in={!birthday} direction={'down'} timeout={{ enter: 0, exit: 1000 }} mountOnEnter unmountOnExit >
             <Paper className={'box2'}>
                 <Stack direction='column' alignItems={'center'}>
                     {value2.map((item,index) => 
@@ -106,7 +120,10 @@ const Page = () => {
                     )}
                 </Stack>
             </Paper>
+</Slide>
 
+
+<Slide in={!birthday} direction={'left'} timeout={{ enter: 0, exit: 1000 }} mountOnEnter unmountOnExit >
             <Paper className={'box3'}>
                 <Stack direction={'column'} alignItems={'center'}>
                     {value3.map((item,index) => 
@@ -114,7 +131,9 @@ const Page = () => {
                     )}
                 </Stack>
             </Paper>
+</Slide>
 
+<Slide in={!birthday} direction={'right'} timeout={{ enter: 0, exit: 1000 }} mountOnEnter unmountOnExit >
             <Paper className={'box4'}>
                 <div >
                     <DataGrid
@@ -128,10 +147,46 @@ const Page = () => {
                     />
                 </div>
             </Paper>
+</Slide>
 
+<Slide in={!birthday} direction={'left'} timeout={{ enter: 0, exit: 1000 }} mountOnEnter unmountOnExit>
             <Paper className={'box5'}>
                 <Chart data={selectedRows}/>
             </Paper>
+</Slide>
+
+<Slide in={birthday} direction={'right'} mountOnEnter unmountOnExit style={{ transitionDelay: birthday ? '2000ms' : '0ms' }}>
+            <Paper className={'box1'}>
+                <img src={logo1} style={{width:'100%', hight:'100%'}}></img>
+            </Paper>
+</Slide>
+
+<Slide in={birthday} direction={'up'} mountOnEnter unmountOnExit style={{ transitionDelay: birthday ? '2500ms' : '0ms' }}>
+            <Paper className={'box2'} style={{width:'100%', hight:'100%'}}>
+                <img src={logo2} style={{width:'100%', hight:'100%'}}></img>
+            </Paper>
+</Slide>
+
+<Slide in={birthday} direction={'left'} mountOnEnter unmountOnExit style={{ transitionDelay: birthday ? '3000ms' : '0ms' }}>
+            <Paper className={'box3'} style={{width:'100%', hight:'100%'}}>
+                <img src={logo3} style={{width:'100%', hight:'100%'}}></img>
+            </Paper>
+</Slide>
+
+<Slide in={birthday} direction={'right'} mountOnEnter unmountOnExit style={{ transitionDelay: birthday ? '3500ms' : '0ms' }}>
+            <Paper className={'box4'} style={{width:'100%', hight:'100%'}} >
+                <img src={logo4} style={{width:'100%', hight:'100%'}}></img>
+            </Paper>
+</Slide>
+
+
+<Slide in={birthday} direction={'left'} mountOnEnter unmountOnExit style={{ transitionDelay: birthday ? '4000ms' : '0ms' }}>
+            <Paper className={'box5'} style={{width:'100%', hight:'100%'}}>
+                <img src={logo5} style={{width:'100%', hight:'100%'}}></img>
+            </Paper>
+</Slide>
+
+
         </div>
     )
 }
