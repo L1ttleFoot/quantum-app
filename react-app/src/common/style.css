@@ -3,7 +3,7 @@
     grid-gap:15px;
     grid-template-columns: repeat(3,1fr);
     /* grid-template-rows: repeat(2,1fr); */
-    padding:20px;
+    padding: 20px;
     grid-template-areas: 
     'a b c'
     'd e e';
@@ -11,21 +11,32 @@
 
 .box1{
     grid-area: a;
+    display: flex;
 }
 
 .box2{
     grid-area: b;
+    display: flex;
 }
 
 .box3{
     grid-area: c;
+    display: flex;
 }
 
 .box4{
     grid-area: d;
+    display: flex;
 }
 
 .box5{
     grid-area: e;
+    display: flex;
+    
+}
+
+.box6{
+    grid-area: e;
+    display: flex;
     grid-column: span 2;
 }
