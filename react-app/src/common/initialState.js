@@ -1,6 +1,7 @@
 export const initialState = {
-    cash: 0,
     value1: [{}],
     value2: [],
     value3: [],
+    numbers: 3,
+    order: 1,
 }

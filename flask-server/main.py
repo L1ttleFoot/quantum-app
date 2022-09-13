@@ -1,3 +1,4 @@
+from itertools import combinations_with_replacement
 from flask import Flask, request, jsonify
 import datetime
 
@@ -24,6 +25,24 @@ def get_test():
     response = jsonify(message="Simple server is running")
 
     # Enable Access-Control-Allow-Origin
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+@app.route("/api/v1/config", methods=['GET'])
+def config_response():
+    numbers = request.args.get('numbers')
+    order = request.args.get('order')
+    index_list = [str(i+1) for i in range(int(numbers))]
+    #frequency_list = {'omega__'+str(k+1):'' for k in range(int(numbers))}
+    frequency_list = [{'index':i+1, 'value':''} for i in range(int(numbers))]
+    #const_list = {'A__'+''.join(i):'' for i in combinations_with_replacement('ijk', int(numbers))}
+    const_list = sum([[{'index': ''.join(i), 'value':''} for i in combinations_with_replacement(''.join(index_list), j+3)] for j in range(int(order))],[])
+    data = {
+        'frequency_list': frequency_list,
+        'const_list' : const_list
+    }
+
+    response = jsonify(data)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
