@@ -6,9 +6,9 @@ const reduser = (state = initialState, action) => {
         case "SET_VALUE1":
             return {...state, value1: action.payload}
         case "SET_VALUE2":
-            return {...state, value1: action.payload}
+            return {...state, value2: action.payload}
         case "SET_VALUE3":
-            return {...state, value1: action.payload}
+            return {...state, value3: action.payload}
         case "SET_NUMBERS":
             return {...state, numbers: action.payload}
         case "SET_ORDER":
