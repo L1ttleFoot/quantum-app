@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { AppBar, Toolbar, Button, TextField, FormControl,FormLabel, FormControlLabel, RadioGroup, Radio } from '@mui/material';
+import { AppBar, Toolbar, Button, TextField } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import MainPage from "./screens/main"
 
@@ -9,16 +9,24 @@ const Main = () => {
 
     const state = useSelector(state=>state)
 
-    const [frequencyList,setFrequencyList] = useState([])
-    const [constList,setConstList] = useState([])
+    const [frequencyList, setFrequencyList] = useState([])
+    const [constList, setConstList] = useState([])
 
     const handleClick = () => {
-        fetch(`http://localhost:8080/api/v1/config?numbers=${state.numbers}&order=${state.order}`)
+        fetch(`/api/v1/config?numbers=${state.numbers}&order=${state.order}`)
         .then(response=>response.json())
         .then(data=>{
             console.log(data)
             setConstList(data.const_list)
             setFrequencyList(data.frequency_list)
+        })
+    };
+
+    const handleClick1 = () => {
+        fetch(`/api/v1/calculation`, {method: 'POST',  body: JSON.stringify({n:state.value1, omega:state.value2, const: state.value3})})
+        .then(response=>response.json())
+        .then(data=>{
+            console.log(data)
         })
     };
 
@@ -35,19 +43,19 @@ const Main = () => {
             <AppBar style={{background: 'white',position:'absolute'}}>
                 <Toolbar>
 
-                    <TextField label={'Степени свободы'} size='small' onChange={setNumbers}></TextField>
+                    <TextField value={state.numbers} style={{margin: 10}} label={'Степени свободы'} size='small' onChange={setNumbers}></TextField>
 
-                    <TextField label={'Порядок'} size='small' onChange={setOrder}></TextField>
+                    <TextField value={state.order} style={{margin: 10}} label={'Порядок'} size='small' onChange={setOrder}></TextField>
 
                     <Button 
                         onClick={handleClick} 
                         variant="outlined" 
-                        style={{background: 'white', margin:10}}
+                        style={{background: 'white', margin: 10}}
                     >
-                            Задать параметры
+                        Задать параметры
                     </Button>
             
-                    <Button variant="outlined" style={{background: 'white', margin:10}}>Рассчет</Button>
+                    <Button onClick={handleClick1} variant="outlined" style={{background: 'white', margin: 10}}>Расчет</Button>
                     {/* <FormControl>
                         <FormLabel>const</FormLabel>
                         <RadioGroup
