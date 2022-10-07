@@ -13,6 +13,8 @@ const reduser = (state = initialState, action) => {
             return {...state, numbers: action.payload}
         case "SET_ORDER":
             return {...state, order: action.payload}
+        case "SET_CONST_TYPE":
+            return {...state, constType: action.payload}
         default:
             return state
     }

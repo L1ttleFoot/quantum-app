@@ -20,14 +20,22 @@ def VECTORS_m(n:int, vec, number_of_vibrational_degrees):
   el = np.array(el) + vec
   return list(map(tuple,el))
 
-def constant_gen(n, omega, const):
+def constant_gen(n, omega, const, constType):
   CONST_A_LIST=""
   CONST_n_LIST=""
   CONST_W_LIST=""
   CONST_D_LIST=""
+  number_of_vibrational_degrees=len(n)
+  max_indignation_step=2
+  TYPE_ANGARMONIC_CONST=constType
   f=open(f'const_new.py','w')
   f.write('import sympy as sy\n')
   f.write('\n')
+
+
+  f.write('number_of_vibrational_degrees=%s'%(number_of_vibrational_degrees) + '\n')
+  f.write('max_indignation_step=%s'%(max_indignation_step) + '\n')
+  f.write('TYPE_ANGARMONIC_CONST="%s"'%(TYPE_ANGARMONIC_CONST) + '\n')
 
   n_list={}
   for i in range(len(n)):
@@ -37,21 +45,28 @@ def constant_gen(n, omega, const):
   omega_list={}
   for i in range(len(omega)):
     f.write('omega_%s=sy.symbols(''"omega_%s"'')'%(omega[i]['letIndex'], omega[i]['letIndex'])+'\n')
-    omega_list[sy.symbols('omega_'+str(omega[i]['letIndex']))]=int(omega[i]['value'])
+    omega_list[sy.symbols('omega_'+str(omega[i]['letIndex']))]=float(omega[i]['value'])
 
   const_list={}
   for i in range(len(const)):
     f.write('A_%s=sy.symbols(''"A_%s"'')'%(const[i]['letIndex'], const[i]['letIndex'])+'\n')
-    const_list[sy.symbols('A_'+str(const[i]['letIndex']))]=int(const[i]['value'])
+    const_list[sy.symbols('A_'+str(const[i]['letIndex']))]=float(const[i]['value'])
+
+  D_0=sy.symbols('D_0')
+  f.write('D_0=sy.symbols(''"D_0"'')'+'\n')
+
+  d_list={D_0:0}
   
   CONST_n_LIST='const_n_dict=%s'%(n_list)
   CONST_W_LIST='const_omega_dict=%s'%(omega_list)
-  CONST_A_LIST='const_angarmonik_dikt=%s'%(const_list)
+  CONST_A_LIST='const_angarmonik_dict=%s'%(const_list)
+  CONST_D_LIST='const_dipol_dict=%s'%(d_list)
   
   f.write(CONST_n_LIST+'\n')
   f.write(CONST_W_LIST+'\n')
   f.write(CONST_A_LIST+'\n')
+  f.write(CONST_D_LIST+'\n')
   
-  f.write("ZAMENA={**const_n_dict, **const_omega_dict, **const_angarmonik_dikt}\n")
+  f.write("ZAMENA={**const_n_dict, **const_omega_dict, **const_angarmonik_dict, **const_dipol_dict}\n")
   f.close()
   return

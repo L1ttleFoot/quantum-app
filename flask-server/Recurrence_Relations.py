@@ -2,18 +2,18 @@
 # -*- coding: utf-8 -*- # необходима для ввода коментариев на русском
 
 import numpy as np
-from const import *
+#from const import *
 from const_new import *
 ###################### Создал функцию замены n_i на n_i+k   ################
 
 def ZAM(XXX,k):
-  Z1=np.array(list(const_n_dikt.keys()))
-  Z2=np.array(list(const_n_dikt.keys()))+np.array(list(k))
+  Z1=np.array(list(const_n_dict.keys()))
+  Z2=np.array(list(const_n_dict.keys()))+np.array(list(k))
   return XXX.subs([(Z1[i],Z2[i]) for i in range(len(k))])
 
 def ZAM_ZAM(VEC,k):
-    Z1=np.array(list(const_n_dikt.keys()))
-    Z2=np.array(list(const_n_dikt.keys()))+np.array(list(k))
+    Z1=np.array(list(const_n_dict.keys()))
+    Z2=np.array(list(const_n_dict.keys()))+np.array(list(k))
     def zam(vec):
         if isinstance(vec[1], int): return [tuple(np.array((vec[0]))+np.array(k)), vec[1]]
         else: return [tuple(np.array((vec[0]))+np.array(k)), vec[1].subs([(Z1[i],Z2[i]) for i in range(len(k))])]
@@ -21,13 +21,11 @@ def ZAM_ZAM(VEC,k):
 
 from MAKE_DB import *
 
-
-
 #################библиотеки##############################
 from itertools import product
 
 import sympy as sy
-from sympy import sqrt, prod, Rational,diff, factorial
+from sympy import sqrt, prod, Rational, diff, factorial
 #from const import * #потом удалить, когда соберу программу
 from apendix import *
 from time import time
@@ -46,11 +44,11 @@ from collections import namedtuple
 
 class Vector():
 	def __init__(self, vec=[0 for i in range(number_of_vibrational_degrees)],Const=1):
-		self._vec = np.array(list(const_n_dikt.keys()))+np.array(list(vec))
+		self._vec = np.array(list(const_n_dict.keys()))+np.array(list(vec))
 		self._NF=[]
 		self._const=[Const]
 	def vec(self):
-		return tuple(self._vec-np.array(list(const_n_dikt.keys())))
+		return tuple(self._vec-np.array(list(const_n_dict.keys())))
 	def NF(self):
 		return prod(self._NF)
 	def const(self):
@@ -83,7 +81,7 @@ def ksi_polinom(n:int)->list:
   return [x[::-1] for x in product(ksi,repeat=n)]  # декартово произведение [[z,y,x] for x in a for y in a for z in a ]  
 
 
-KEY_key=dict([(i.name,i) for i in list(const_angarmonik_dikt.keys())+list(const_dipol_dikt.keys())+list(const_omega_dikt.keys())])
+KEY_key=dict([(i.name,i) for i in list(const_angarmonik_dict.keys())+list(const_dipol_dict.keys())+list(const_omega_dict.keys())])
 # Расчет G|KET> где G=G(p)
 #########################
 def G_KET(KET:list,fksi:list,IJK:list,Factor='A'):
@@ -203,7 +201,7 @@ def DEL(p:list):
   
 def AE(vec1=[0,0,0,0],vec2=[0,0,0,0],ind=0):
     if ind==0:
-        if vec1!=vec2:return 0
+        if vec1!=vec2 : return sy.symbols("0")
         fksi=ksi_polinom(2)
         G_ket=G_KET(AV(vec1,0),fksi,INDEX(0),'omega')
         return sum([BRA_G_ket(bra,G_ket) for bra in AV(vec1,0)])
@@ -231,7 +229,7 @@ def AE(vec1=[0,0,0,0],vec2=[0,0,0,0],ind=0):
 def AE_BD(vec1=[0,0,0,0],vec2=[0,0,0,0],ind=0):
   '''Расчитывает поправку к энергии'''
   if ind==0: return AE(vec1,vec2,ind) 
-  elif ind%2==1 and vec1==vec2: return 0
+  elif ind%2==1 and vec1==vec2: return sy.symbols("0")
   elif ind%2==0 and vec1==vec2:
     AAA=[0 for i in range(len(vec1))]
     aaa=tuple(AAA)

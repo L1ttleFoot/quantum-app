@@ -1,7 +1,7 @@
 .container {
     display: grid;
     grid-gap: 15px;
-    grid-template-columns: repeat(4,1fr);
+    grid-template-columns: 1fr 1fr 30% 1fr;
     /* grid-template-rows: repeat(2,1fr); */
     padding: 20px;
     grid-template-areas: 
@@ -11,6 +11,7 @@
 
 .box1{
     grid-area: a;
+    display: flex;
 }
 
 .box2{

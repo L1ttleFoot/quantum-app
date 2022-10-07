@@ -1,6 +1,6 @@
 from itertools import product, combinations_with_replacement
 import numpy as np
-from const import number_of_vibrational_degrees
+from const_new import number_of_vibrational_degrees
 VECTOR_INDEX = '0ijklxyzopqvcasdfghtremn' # список возможных индексов
 VECTOR_INDEX_MAP = {k:i for i,k in enumerate(VECTOR_INDEX)} # словарь индексов
 

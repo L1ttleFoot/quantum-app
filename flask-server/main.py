@@ -1,24 +1,29 @@
 from itertools import combinations_with_replacement
 from flask import Flask, request, jsonify
-from functions import constant_gen
-from functions import constant_gen_new
+import constant_gen
+import constant_gen_new
 import Recurrence_Relations
+from const_new import ZAMENA
 
 app = Flask(__name__)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
 
 
 @app.route('/api/v1/calculation', methods=['POST'])
 def get_test():
     request_data = request.get_json(force = True)
-    #eng = Recurrence_Relations.AE_BD([0, 0, 0], [0, 0, 0], 2)
-    #print('zamena = ',Recurrence_Relations.ZAMENA)
-    #print(eng)
-    #print(eng.subs(Recurrence_Relations.ZAMENA))
-    constant_gen_new.constant_gen(request_data['n'], request_data['omega'], request_data['const'])
-    print('data',request_data['const'])
+    constant_gen_new.constant_gen(request_data['n'], request_data['omega'], request_data['const'], request_data['constType'])
 
-    response = jsonify(message="Simple server is running")
+    n_list = [int(d['value']) for d in request_data['n']]
+
+    energy = Recurrence_Relations.AE_BD(n_list, n_list, 2)
+    #energy =sum([Recurrence_Relations.AE_BD(n_list, n_list, i) for i in range(3)])
+    #energy-=sum([Recurrence_Relations.AE_BD([0,0,0], [0,0,0], i) for i in range(3)])
+    #print('zamena = ', ZAMENA)
+    #print('energy = ', energy)
+    #print('energy_subs = ', energy.subs(ZAMENA))
+
+    response = jsonify(message="Simple server is ", value='%s'%(energy.subs(ZAMENA)))
     # Enable Access-Control-Allow-Origin
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
