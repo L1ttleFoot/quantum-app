@@ -1,0 +1,11 @@
+.appbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.radio-group{
+    /* border: solid #0E76BB; */
+    /* border-radius: 12px; */
+    /* height: 50px; */
+}

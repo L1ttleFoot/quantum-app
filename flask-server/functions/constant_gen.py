@@ -67,15 +67,15 @@ def constant_gen(number_of_vibrational_degrees=4,max_indignation_step=4,TYPE_ANG
     
     f.write('\n')
     C+=1
-  CONST_n_LIST='const_n_dikt={%s}'%(CONST_n_LIST[:-1])
-  CONST_W_LIST='const_omega_dikt={%s}'%(CONST_W_LIST[:-1])
-  CONST_A_LIST='const_angarmonik_dikt={%s}'%(CONST_A_LIST[:-1])
-  CONST_D_LIST='const_dipol_dikt={%s}'%(CONST_D_LIST[:-1])
+  CONST_n_LIST='const_n_dict={%s}'%(CONST_n_LIST[:-1])
+  CONST_W_LIST='const_omega_dict={%s}'%(CONST_W_LIST[:-1])
+  CONST_A_LIST='const_angarmonik_dict={%s}'%(CONST_A_LIST[:-1])
+  CONST_D_LIST='const_dipol_dict={%s}'%(CONST_D_LIST[:-1])
 
   f.write(CONST_n_LIST+'\n')
   f.write(CONST_W_LIST+'\n')
   f.write(CONST_A_LIST+'\n')
   f.write(CONST_D_LIST+'\n')
-  f.write("ZAMENA={**const_n_dikt,**const_angarmonik_dikt,**const_dipol_dikt}\n")
+  f.write("ZAMENA={**const_n_dict,**const_angarmonik_dict,**const_dipol_dict}\n")
   f.close()
   return
