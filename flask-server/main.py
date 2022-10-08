@@ -3,27 +3,38 @@ from flask import Flask, request, jsonify
 import constant_gen
 import constant_gen_new
 import Recurrence_Relations
+import sympy as sy
 from const_new import ZAMENA
 
 app = Flask(__name__)
 app.config["DEBUG"] = False
 
-
 @app.route('/api/v1/calculation', methods=['POST'])
 def get_test():
     request_data = request.get_json(force = True)
-    constant_gen_new.constant_gen(request_data['n'], request_data['omega'], request_data['const'], request_data['constType'])
+    constant_gen_new.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['constsType'])
 
-    n_list = [int(d['value']) for d in request_data['n']]
+    n_list1 = [int(item['value']) for item in request_data['numbers1']]
+    n_list2 = [int(item['value']) for item in request_data['numbers2']]
 
-    energy = Recurrence_Relations.AE_BD(n_list, n_list, 2)
-    #energy =sum([Recurrence_Relations.AE_BD(n_list, n_list, i) for i in range(3)])
-    #energy-=sum([Recurrence_Relations.AE_BD([0,0,0], [0,0,0], i) for i in range(3)])
-    #print('zamena = ', ZAMENA)
-    #print('energy = ', energy)
-    #print('energy_subs = ', energy.subs(ZAMENA))
+    n_str1 = ''.join([item['value'] for item in request_data['numbers1']])
+    n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
 
-    response = jsonify(message="Simple server is ", value='%s'%(energy.subs(ZAMENA)))
+    #frequency_list = {'omega__'+str(k+1):'' for k in range(int(numbers))}
+    #n_list[sy.symbols('n_'+str(n[i]['letIndex']))]=int(n[i]['value'])
+
+    """ n_dict={}
+    for i in a['number1']:
+        n_dict[sy.symbols('n_'+str(i['letIndex']))]=int(i['value'])
+    n_dict """
+
+    print(request_data)
+
+    #energy = Recurrence_Relations.AE_BD(n_list, n_list, 2)
+    energy = sum([Recurrence_Relations.AE_BD(n_list2, n_list2, i) for i in range(3)])
+    energy -= sum([Recurrence_Relations.AE_BD(n_list1, n_list1, i) for i in range(3)])
+
+    response = jsonify(transition='%s->%s'%(n_str1, n_str2) , energy='%s'%(energy.subs(ZAMENA)))
     # Enable Access-Control-Allow-Origin
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
@@ -31,19 +42,16 @@ def get_test():
 
 @app.route("/api/v1/config", methods=['GET'])
 def config_response():
-    numbers = request.args.get('numbers')
+    freedomDegrees = request.args.get('freedomDegrees')
     order = request.args.get('order')
-    constant_gen.constant_gen(int(numbers), int(order))
-    index_list = [str(i+1) for i in range(int(numbers))]
-    #frequency_list = {'omega__'+str(k+1):'' for k in range(int(numbers))}
-    frequency_list = [{'index':i+1, 'value':''} for i in range(int(numbers))]
-    #const_list = {'A__'+''.join(i):'' for i in combinations_with_replacement('ijk', int(numbers))}
-    const_list = sum([[{'index': ''.join(i), 'value':'', 'var': 'const'} for i in combinations_with_replacement(''.join(index_list), j+3)] for j in range(int(order))],[])
+    constant_gen.constant_gen(int(freedomDegrees), int(order))
+    index_list = [str(i+1) for i in range(int(freedomDegrees))]
+    omegas_list = [{'index':i+1, 'value':''} for i in range(int(freedomDegrees))]
+    consts_list = sum([[{'index': ''.join(i), 'value':'', 'var': 'const'} for i in combinations_with_replacement(''.join(index_list), j+3)] for j in range(int(order))],[])
     data = {
-        'frequency_list': frequency_list,
-        'const_list' : const_list
+        'omegas_list': omegas_list,
+        'consts_list' : consts_list
     }
-
     response = jsonify(data)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response

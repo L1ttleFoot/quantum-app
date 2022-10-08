@@ -1,8 +1,8 @@
 .container {
     display: grid;
     grid-gap: 15px;
-    grid-template-columns: 1fr 1fr 30% 1fr;
-    /* grid-template-rows: repeat(2,1fr); */
+    grid-template-columns: 25% 1fr 30% 1fr;
+    grid-template-rows: 1fr 40vh;
     padding: 20px;
     grid-template-areas: 
     'a b c d'
@@ -34,7 +34,7 @@
     grid-area: f;
 }
 
-.box6{
+/*.box6{
     grid-area: e;
-    grid-column: span 2;
-}
+    grid-column: span 3;
+}*/
