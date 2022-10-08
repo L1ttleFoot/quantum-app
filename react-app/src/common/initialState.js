@@ -1,9 +1,10 @@
 export const initialState = {
-    value1: [{}],
-    value2: [{}],
-    value3: [{}],
-    numbers: 3,
+    numbers1: [{}],
+    numbers2: [{}],
+    omegas: [{}],
+    consts: [{}],
+    freedomDegrees: 3,
     order: 2,
-    constType: 'A',
-    state: [],
+    constsType: 'A',
+    rows: []
 }

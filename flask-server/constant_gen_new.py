@@ -59,7 +59,7 @@ def constant_gen(n, omega, const, constType):
   
   CONST_n_LIST='const_n_dict=%s'%(n_list)
   CONST_W_LIST='const_omega_dict=%s'%(omega_list)
-  CONST_A_LIST='const_angarmonik_dict=%s'%(const_list)
+  CONST_A_LIST='const_anharmonic_dict=%s'%(const_list)
   CONST_D_LIST='const_dipol_dict=%s'%(d_list)
   
   f.write(CONST_n_LIST+'\n')
@@ -67,6 +67,6 @@ def constant_gen(n, omega, const, constType):
   f.write(CONST_A_LIST+'\n')
   f.write(CONST_D_LIST+'\n')
   
-  f.write("ZAMENA={**const_n_dict, **const_omega_dict, **const_angarmonik_dict, **const_dipol_dict}\n")
+  f.write("ZAMENA={**const_n_dict, **const_omega_dict, **const_anharmonic_dict, **const_dipol_dict}\n")
   f.close()
   return

@@ -3,18 +3,25 @@ import { initialState } from '../common/initialState'
 
 const reduser = (state = initialState, action) => {
     switch (action.type) {
-        case "SET_VALUE1":
-            return {...state, value1: action.payload}
-        case "SET_VALUE2":
-            return {...state, value2: action.payload}
-        case "SET_VALUE3":
-            return {...state, value3: action.payload}
-        case "SET_NUMBERS":
-            return {...state, numbers: action.payload}
+        case "SET_NUMBERS1":
+            return {...state, numbers1: action.payload}
+        case "SET_NUMBERS2":
+            return {...state, numbers2: action.payload}
+        case "SET_OMEGAS":
+            return {...state, omegas: action.payload}
+        case "SET_CONSTS":
+            return {...state, consts: action.payload}
+        case "SET_FREEDOM_DEGREES":
+            return {...state, freedomDegrees: action.payload}
         case "SET_ORDER":
             return {...state, order: action.payload}
-        case "SET_CONST_TYPE":
-            return {...state, constType: action.payload}
+        case "SET_CONSTS_TYPE":
+            return {...state, constsType: action.payload}
+        case "PUSH_ROWS":
+            state.rows.push(action.payload)
+            return {...state}
+        case "SET_ROWS":
+            return {...state, rows: action.payload}
         default:
             return state
     }

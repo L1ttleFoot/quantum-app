@@ -81,7 +81,7 @@ def ksi_polinom(n:int)->list:
   return [x[::-1] for x in product(ksi,repeat=n)]  # декартово произведение [[z,y,x] for x in a for y in a for z in a ]  
 
 
-KEY_key=dict([(i.name,i) for i in list(const_angarmonik_dict.keys())+list(const_dipol_dict.keys())+list(const_omega_dict.keys())])
+KEY_key=dict([(i.name,i) for i in list(const_anharmonic_dict.keys())+list(const_dipol_dict.keys())+list(const_omega_dict.keys())])
 # Расчет G|KET> где G=G(p)
 #########################
 def G_KET(KET:list,fksi:list,IJK:list,Factor='A'):
