@@ -4,8 +4,27 @@
     justify-content: space-around;
 }
 
+.buttons{
+    background: white;
+}
+
+.input{
+    display: flex;
+    align-items: center;
+}
+
 .radio-group{
-    /* border: solid #0E76BB; */
-    /* border-radius: 12px; */
-    /* height: 50px; */
+    display: flex;
+    align-items: center;
+}
+
+.radio-lable{
+    position: absolute;
+    font-size: 12px;
+    top: 5px;
+    padding: 0 5px;
+    margin-left: 20px;
+    color: #666666;
+    background-color: white;
+    z-index: 1;
 }

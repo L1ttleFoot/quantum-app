@@ -20,21 +20,13 @@ def get_test():
     n_str1 = ''.join([item['value'] for item in request_data['numbers1']])
     n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
 
-    #frequency_list = {'omega__'+str(k+1):'' for k in range(int(numbers))}
-    #n_list[sy.symbols('n_'+str(n[i]['letIndex']))]=int(n[i]['value'])
-
-    """ n_dict={}
-    for i in a['number1']:
-        n_dict[sy.symbols('n_'+str(i['letIndex']))]=int(i['value'])
-    n_dict """
-
-    print(request_data)
+    constType = request_data['constsType']
 
     #energy = Recurrence_Relations.AE_BD(n_list, n_list, 2)
     energy = sum([Recurrence_Relations.AE_BD(n_list2, n_list2, i) for i in range(3)])
     energy -= sum([Recurrence_Relations.AE_BD(n_list1, n_list1, i) for i in range(3)])
 
-    response = jsonify(transition='%s->%s'%(n_str1, n_str2) , energy='%s'%(energy.subs(ZAMENA)))
+    response = jsonify(transition='%s > %s'%(n_str1, n_str2) , energy='%s'%(energy.subs(ZAMENA)))
     # Enable Access-Control-Allow-Origin
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
