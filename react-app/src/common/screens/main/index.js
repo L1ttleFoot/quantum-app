@@ -58,8 +58,6 @@ const Page = (props) => {
           },
       ];
 
-    
-    
     /* const rows = [
         { id: 1, transition: '0 => 0', energy: 0, matrix: 446.4995 },
         { id: 2, transition: '0 => 1', energy: 2309.036, matrix: -4.9995 },
@@ -74,7 +72,7 @@ const Page = (props) => {
     const numbersArr1 = new Array(Number(state.freedomDegrees)).fill(undefined).map((item, index)=>({var: 'number', index: index+1, value: '', letIndex: letterIndexes[index]}))
     const numbersArr2 = new Array(Number(state.freedomDegrees)).fill(undefined).map((item, index)=>({var: 'number', index: index+1, value: '', letIndex: letterIndexes[index]}))
     const omegasArr = new Array(Number(state.freedomDegrees)).fill(undefined).map((item, index)=>({var: 'omega', index: index+1, value: '', letIndex: letterIndexes[index]}))
-    const constsArr = [...constsList]
+    const constsArr = [...constsList]   
 
     const [numbersList1, setNumbersList] = useState([])
     const [numbersList2, setNumbersList2] = useState([])
@@ -115,10 +113,19 @@ const Page = (props) => {
 
     useEffect(
         () => {
-            setOmegasList(omegasArr)
+            setOmegasList(new Array(Number(state.freedomDegrees)).fill(undefined).map((item, index)=>({var: 'omega', index: index+1, value: '', letIndex: letterIndexes[index]}))
+            )
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [state.freedomDegrees],
+    );
+
+    useEffect(
+        () => {
+            setOmegasList(state.omegas)
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [state.omegas],
     );
 
     const handleChangeNumbers = index => event => {
@@ -149,77 +156,85 @@ const Page = (props) => {
         <div className={'container'}>
 
             <Paper className={'box1'}>
-                <Stack direction={'column'} alignItems={'center'}>
+                <div className='block'>
                     <Typography variant="subtitle2">Начальное состояние</Typography>
+                    <Stack direction={'column'} alignItems={'center'}>
+                        
+                        {numbersList1.map((item,index)=>
+                            <TextField 
+                                key={item.index+'omega'} 
+                                size={'small'} 
+                                style={{margin:15}} 
+                                label={<span>n<sub>{item.index}</sub></span>} 
+                                value={item.value}
+                                onChange={handleChangeNumbers(index)}
+                            />
+                        )}
 
-                    {numbersList1.map((item,index)=>
-                        <TextField 
-                            key={item.index+'omega'} 
-                            size={'small'} 
-                            style={{margin:15}} 
-                            label={<span>n<sub>{item.index}</sub></span>} 
-                            value={item.value}
-                            onChange={handleChangeNumbers(index)}
-                        />
-                    )}
+                    </Stack>
+                </div>
 
-                </Stack>
+                <div className='block'>
+                    <Typography variant="subtitle2">Конечное состояние</Typography>
+                    <Stack direction={'column'} alignItems={'center'}>
+                    
+                        {numbersList2.map((item,index)=>
+                            <TextField 
+                                key={item.index+'omega'} 
+                                size={'small'} 
+                                style={{margin:15}} 
+                                label={<span>n<sub>{item.index}</sub></span>} 
+                                value={item.value}
+                                onChange={handleChangeNumbers2(index)}
+                            />
+                        )}
 
-                <Stack direction={'column'} alignItems={'center'}>
-                <Typography variant="subtitle2">Конечное состояние</Typography>
-
-                    {numbersList2.map((item,index)=>
-                        <TextField 
-                            key={item.index+'omega'} 
-                            size={'small'} 
-                            style={{margin:15}} 
-                            label={<span>n<sub>{item.index}</sub></span>} 
-                            value={item.value}
-                            onChange={handleChangeNumbers2(index)}
-                        />
-                    )}
-
-                </Stack>
+                    </Stack>
+                </div>
             </Paper>
 
             <Paper className={'box2'}>
-                <Stack direction={'column'} alignItems={'center'}>
-                <Typography variant="subtitle2">Фундоментальные частоты</Typography>
+                <div className='block'>
+                    <Typography variant="subtitle2">Гармонические частоты</Typography>
+                    <Stack direction={'column'} alignItems={'center'}>
+                        
+                        {omegasList.map((item, index)=>
+                            <TextField 
+                                key={item.index+'omega'} 
+                                size={'small'} 
+                                style={{margin:15}} 
+                                label={<span>{decodeURI('%CF%89')}<sub>{item.index}</sub></span>} 
+                                value={item.value}
+                                onChange={handleChangeOmegas(index)}
+                            />
+                        )}
 
-                    {omegasList.map((item, index)=>
-                        <TextField 
-                            key={item.index+'omega'} 
-                            size={'small'} 
-                            style={{margin:15}} 
-                            label={<span>{decodeURI('%CF%89')}<sub>{item.index}</sub></span>} 
-                            value={item.value}
-                            onChange={handleChangeOmegas(index)}
-                        />
-                    )}
-
-                </Stack>
-              </Paper>
-
+                    </Stack>
+                </div>
+            </Paper>
+            
             <Paper className={'box3'}>
-                
-                <div style={{display: 'flex',
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            justifyContent: 'center'
-                        }} 
-                >
+                <div className='block'>
+                    <Typography variant="subtitle2">Силовые постоянные</Typography>
+                    <div style={{display: 'flex',
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                                justifyContent: 'center'
+                            }} 
+                    >
 
-                    {constsArr.map((item, index)=>
-                        <TextField
-                            key={item.index+'const'}
-                            size={'small'} 
-                            style={{margin:15, width:'25%'}} 
-                            label={<span>a<sub>{item.index}</sub></span>} 
-                            value={item.value}
-                            onChange={handleChangeConst(index)}
-                        />
-                    )}
+                        {constsArr.map((item, index)=>
+                            <TextField
+                                key={item.index+'const'}
+                                size={'small'} 
+                                style={{margin:15, width:'18%'}} 
+                                label={<span>a<sub>{item.index}</sub></span>} 
+                                value={item.value}
+                                onChange={handleChangeConst(index)}
+                            />
+                        )}
 
+                    </div>
                 </div>
             </Paper>
 
