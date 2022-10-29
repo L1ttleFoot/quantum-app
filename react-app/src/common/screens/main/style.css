@@ -1,12 +1,14 @@
 .container {
     display: grid;
     grid-gap: 15px;
-    grid-template-columns: 25% 1fr 40% 1fr;
-    grid-template-rows: 1fr 50vh;
+    /* grid-template-columns: 1fr 38% 38%; */
+    /* grid-template-rows: 1fr 1fr 1fr; */
     padding: 20px;
-    grid-template-areas: 
-    'a b c d'
-    'e f f f';
+    grid-template: 
+    'b c c d' 
+    'a c c d' 0.1fr
+    'g c c d' 60px
+    'e e f f' minmax(300px, 1fr) / 330px 1fr 2fr 3fr
 }
 
 .block{
@@ -18,15 +20,35 @@
 .box1{
     grid-area: a;
     display: flex;
+    /* min-height: 210px; */
+    height: fit-content;
 }
 
 .box2{
     grid-area: b;
+    /* min-height: 210px; */
+    height: fit-content;
 }
 
 .box3{
     grid-area: c;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
 }
+
+.box3::-webkit-scrollbar {
+    /* This is the magic bit for WebKit */
+    /* display: none; */
+    width: 5px;
+    height: 8px;
+    background-color: #aaa; /* or add it to the track */
+    border-radius: 4px;
+}
+
+.box3::-webkit-scrollbar-thumb {
+    background: #0E76BB;
+    border-radius: 4px;
+  }
 
 .box4{
     grid-area: d;
@@ -38,6 +60,15 @@
 
 .box6{
     grid-area: f;
+    min-height: 250px;
+}
+
+.box7{
+    grid-area: g;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    height: 40px;
 }
 
 /*.box6{

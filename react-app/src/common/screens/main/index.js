@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import './style.css'
-import {TextField, Paper, Stack, Typography, Button} from '@mui/material'
+import {TextField, Paper, Stack, Typography, Button, IconButton} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import Chart from "../../../components/Charts"
+import DeleteIcon from '@mui/icons-material/Delete';
 
 //mport Field from "../components/ConstantsFields"
 
@@ -11,7 +12,7 @@ const Page = (props) => {
 
     const dispatch = useDispatch()
 
-    const {state, constsList} = props
+    const {state, constsList, calculation, someEmpty} = props
 
     const [selectedRows, setSelectedRows] = useState([])
 
@@ -25,24 +26,25 @@ const Page = (props) => {
         {
             field: 'transition', 
             headerName: 'Переход', 
-            width: 100,
+            width: 90,
             sortable: false 
         },
         {
             field: 'energy',
             headerName: 'Энергия',
-            width: 130,
+            width: 120,
             sortable: false,
         },
         {
             field: 'matrix',
             headerName: 'Матричный элемент',
-            width: 200,
+            width: 180,
             sortable: false,
         },
         {
             field: 'delet',
             headerName: '',
+            width: 60,
             sortable: false,
             renderCell: (params) => {
 
@@ -53,7 +55,9 @@ const Page = (props) => {
                 
               };
         
-              return <Button onClick={onClick}>Click</Button>;
+              return <IconButton onClick={onClick}>
+                        <DeleteIcon/>
+                    </IconButton>
             },
           },
       ];
@@ -164,7 +168,7 @@ const Page = (props) => {
                             <TextField 
                                 key={item.index+'omega'} 
                                 size={'small'} 
-                                style={{margin:15}} 
+                                style={{margin:10}} 
                                 label={<span>n<sub>{item.index}</sub></span>} 
                                 value={item.value}
                                 onChange={handleChangeNumbers(index)}
@@ -182,7 +186,7 @@ const Page = (props) => {
                             <TextField 
                                 key={item.index+'omega'} 
                                 size={'small'} 
-                                style={{margin:15}} 
+                                style={{margin:10}} 
                                 label={<span>n<sub>{item.index}</sub></span>} 
                                 value={item.value}
                                 onChange={handleChangeNumbers2(index)}
@@ -202,7 +206,7 @@ const Page = (props) => {
                             <TextField 
                                 key={item.index+'omega'} 
                                 size={'small'} 
-                                style={{margin:15}} 
+                                style={{margin:10}} 
                                 label={<span>{decodeURI('%CF%89')}<sub>{item.index}</sub></span>} 
                                 value={item.value}
                                 onChange={handleChangeOmegas(index)}
@@ -219,7 +223,7 @@ const Page = (props) => {
                     <div style={{display: 'flex',
                                 flexDirection: 'row',
                                 flexWrap: 'wrap',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
                             }} 
                     >
 
@@ -227,7 +231,7 @@ const Page = (props) => {
                             <TextField
                                 key={item.index+'const'}
                                 size={'small'} 
-                                style={{margin:15, width:'18%'}} 
+                                style={{margin:10, width:'15%', minWidth:80}} 
                                 label={<span>a<sub>{item.index}</sub></span>} 
                                 value={item.value}
                                 onChange={handleChangeConst(index)}
@@ -239,9 +243,17 @@ const Page = (props) => {
             </Paper>
 
             <Paper className={'box4'}>
-                <Stack direction={'column'} alignItems={'center'}>
-                    
-                </Stack>
+                <div className='block'>
+                    <Typography variant="subtitle2">Производные дипольного момента</Typography>
+                    <div style={{display: 'flex',
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',
+                                justifyContent: 'center'
+                            }} 
+                    >
+
+                    </div>
+                </div>
             </Paper>
 
             <Paper className={'box5'}>
@@ -262,6 +274,10 @@ const Page = (props) => {
                 <Chart data={selectedRows}/>
             </Paper>
 
+            <Paper className={'box7'}>
+                <Button style={{width:'100%'}} variant='contained' onClick={calculation} disabled={someEmpty}>Запустить расчет</Button>
+            </Paper>
+            
         </div>
     )
 }
