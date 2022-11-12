@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import './style.css'
-import {TextField, Paper, Stack, Typography, Button, IconButton} from '@mui/material'
+import {TextField, Paper, Stack, Typography, Button, IconButton, CircularProgress } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import Chart from "../../../components/Charts"
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,7 +12,7 @@ const Page = (props) => {
 
     const dispatch = useDispatch()
 
-    const {state, constsList, calculation, someEmpty} = props
+    const {state, constsList, calculation, someEmpty, load} = props
 
     const [selectedRows, setSelectedRows] = useState([])
 
@@ -275,7 +275,15 @@ const Page = (props) => {
             </Paper>
 
             <Paper className={'box7'}>
-                <Button style={{width:'100%'}} variant='contained' onClick={calculation} disabled={someEmpty}>Запустить расчет</Button>
+                <Button 
+                    endIcon={load ? <CircularProgress size={20}/> : ''} 
+                    fullWidth={true} 
+                    variant='contained' 
+                    onClick={calculation} 
+                    disabled={someEmpty || load}
+                >
+                    Запустить расчет
+                </Button>
             </Paper>
             
         </div>

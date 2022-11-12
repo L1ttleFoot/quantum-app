@@ -15,7 +15,7 @@ export default function Chart (props) {
 
   const newData = data.map(n => ({...n, intensity:(n.matrix*n.matrix)}))
 
-  const maxValue = newData.map(item=>item.energy).reduce((a, b) => b > a ? b : a, 0)
+  const maxValue = newData.map(item=>parseFloat(item.energy)).reduce((a, b) => b > a ? b : a, 0)
 
   return (
     <ResponsiveContainer width="100%" height="100%">

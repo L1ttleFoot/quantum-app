@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Button, TextField, FormControl, FormControlLabel, Radi
 import { useDispatch, useSelector } from 'react-redux';
 import MainPage from "./screens/main"
 import './style.css'
-import UploadIcon from '@mui/icons-material/Upload';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 const Main = () => {
 
@@ -16,6 +16,7 @@ const Main = () => {
     const [loading, setLoading] = useState(false)
 
     const [fileName, setFileName] = useState('')
+    const [load, setLoad] = useState(false)
 
     const setRows = (value) => {
         dispatch({type:'SET_ROWS', payload: value})
@@ -36,9 +37,9 @@ const Main = () => {
 
     };
 
-    const handleClickCalculation = () => {
-
-        fetch(`/api/v1/calculation`, 
+    const handleClickCalculation = async() => {
+        setLoad(l=>!l)
+        await fetch(`/api/v1/calculation`, 
         {   method: 'POST',  
             body: JSON.stringify({
                 numbers1: state.numbers1, 
@@ -54,6 +55,8 @@ const Main = () => {
         .catch(error => {
             console.log(error)
         });
+
+        setLoad(l=>!l)
 
     };
 
@@ -93,7 +96,7 @@ const Main = () => {
         'f':'4',
     }
 
-    const onChange = (e)=> {
+    const onChange = (e) => {
         
         let reader = new FileReader()
 
@@ -122,6 +125,11 @@ const Main = () => {
         }
         
         reader.readAsText(e.target.files[0])
+        //e.target.value = "";
+    }
+
+    const onClick = (e) => {
+        e.target.value = '';
     }
 
     useEffect(
@@ -179,14 +187,15 @@ const Main = () => {
                             </Button>
 
                             <Tooltip title="Загрузить файл" placement="right">
-                                <IconButton color="primary" component="label">
+                                <IconButton onClick={onClick} color="primary" component="label">
                                     <input
                                         onChange={onChange}
+                                        
                                         accept="application/json,.py,.txt"
                                         type="file"
                                         hidden
                                     />
-                                    <UploadIcon />
+                                    <UploadFileIcon />
                                 </IconButton>
                             </Tooltip>
 
@@ -210,6 +219,7 @@ const Main = () => {
                 constsList={constsList} 
                 calculation={handleClickCalculation}
                 someEmpty = {someEmpty}
+                load={load}
             />
 
         </div>
