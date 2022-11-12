@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*- # необходима для ввода коментариев на русском
 
 import numpy as np
-#from const import *
 from const_new import *
 ###################### Создал функцию замены n_i на n_i+k   ################
 
