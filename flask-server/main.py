@@ -1,10 +1,9 @@
 from itertools import combinations_with_replacement
 from flask import Flask, request, jsonify
-import constant_gen
+
 import constant_gen_new
 import Recurrence_Relations
-import sympy as sy
-from const_new import ZAMENA
+
 from dict_gen import dict_gen
 
 app = Flask(__name__)
@@ -40,7 +39,7 @@ def get_test():
 def config_response():
     freedomDegrees = request.args.get('freedomDegrees')
     order = request.args.get('order')
-    constant_gen.constant_gen(int(freedomDegrees), int(order))
+    # constant_gen.constant_gen(int(freedomDegrees), int(order))
     index_list = [str(i+1) for i in range(int(freedomDegrees))]
     omegas_list = [{'index':i+1, 'value':''} for i in range(int(freedomDegrees))]
     consts_list = sum([[{'index': ''.join(i), 'value':'', 'var': 'const'} for i in combinations_with_replacement(''.join(index_list), j+3)] for j in range(int(order))],[])
