@@ -18,7 +18,7 @@ def home():
     return "It's quantum app home page"
 
 
-@app.route('/api/v1/calculation', methods=['POST'])
+@app.route('/api/v1/calculation', methods=['GET', 'POST'])
 @cross_origin()
 def get_test():
     request_data = request.get_json(force = True)
