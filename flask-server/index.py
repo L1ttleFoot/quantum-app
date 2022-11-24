@@ -1,5 +1,6 @@
 from itertools import combinations_with_replacement
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 
 import constant_gen_new
 import Recurrence_Relations
@@ -7,7 +8,9 @@ import Recurrence_Relations
 from dict_gen import dict_gen
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config["DEBUG"] = False
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @app.route('/')
@@ -16,6 +19,7 @@ def home():
 
 
 @app.route('/api/v1/calculation', methods=['POST'])
+@cross_origin()
 def get_test():
     request_data = request.get_json(force = True)
 
