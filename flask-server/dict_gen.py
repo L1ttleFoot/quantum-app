@@ -47,8 +47,8 @@ def dict_gen(n, omega, const, constType):
     list(map(lambda x: x.update(value=float(x['value'])*factor_fi(x['letIndex'])),const_changed))
 
   const_list_changed={}
-  for i in range(len(const)):
-    const_list_changed[sy.symbols('A_'+str(const[i]['letIndex']))]=float(const[i]['value'])
+  for i in range(len(const_changed)):
+    const_list_changed[sy.symbols('A_'+str(const_changed[i]['letIndex']))]=float(const_changed[i]['value'])
 
   D_0=sy.symbols('D_0')
 
