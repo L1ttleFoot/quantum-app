@@ -1,5 +1,4 @@
 from itertools import product, combinations_with_replacement
-from tkinter.ttk import Separator
 import numpy as np
 import sympy as sy
 from functools import reduce
