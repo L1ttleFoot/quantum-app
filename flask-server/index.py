@@ -10,6 +10,11 @@ app = Flask(__name__)
 app.config["DEBUG"] = False
 
 
+@app.route('/')
+def home():
+    return 'Hello World!'
+
+
 @app.route('/api/v1/calculation', methods=['POST'])
 def get_test():
     request_data = request.get_json(force = True)
