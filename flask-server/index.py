@@ -45,6 +45,7 @@ def get_test():
 
 
 @app.route("/api/v1/config", methods=['GET'])
+@cross_origin()
 def config_response():
     freedomDegrees = request.args.get('freedomDegrees')
     order = request.args.get('order')
