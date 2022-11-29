@@ -8,7 +8,7 @@ import Recurrence_Relations
 from dict_gen import dict_gen
 
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app)
 app.config["DEBUG"] = False
 app.config['CORS_HEADERS'] = 'Content-Type'
 
@@ -19,7 +19,6 @@ def home():
 
 
 @app.route('/api/v1/calculation', methods=['GET', 'POST'])
-@cross_origin()
 def get_test():
     request_data = request.get_json(force = True)
 
@@ -45,7 +44,6 @@ def get_test():
 
 
 @app.route("/api/v1/config", methods=['GET'])
-@cross_origin()
 def config_response():
     freedomDegrees = request.args.get('freedomDegrees')
     order = request.args.get('order')
