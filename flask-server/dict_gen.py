@@ -34,7 +34,8 @@ def dict_gen(n, omega, const, constType):
 
   n_list={}
   for i in range(len(n)):
-    n_list[sy.symbols('n_'+str(n[i]['letIndex']))]=int(n[i]['value'])
+    #n_list[sy.symbols('n_'+str(n[i]['letIndex']))]=int(n[i]['value'])
+    n_list[sy.symbols('n_'+str(n[i]['letIndex']))]=0
 
   omega_list={}
   for i in range(len(omega)):
