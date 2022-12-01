@@ -47,8 +47,10 @@ def constant_gen(n, omega, const, constType):
 
   n_list={}
   for i in range(len(n)):
+    #f.write('n_%s=sy.symbols(''"n_%s"'')'%(n[i]['letIndex'], n[i]['letIndex'])+'\n')
+    #n_list[sy.symbols('n_'+str(n[i]['letIndex']))]=int(n[i]['value'])
     f.write('n_%s=sy.symbols(''"n_%s"'')'%(n[i]['letIndex'], n[i]['letIndex'])+'\n')
-    n_list[sy.symbols('n_'+str(n[i]['letIndex']))]=int(n[i]['value'])
+    n_list[sy.symbols('n_'+str(n[i]['letIndex']))]=0
 
   omega_list={}
   for i in range(len(omega)):
