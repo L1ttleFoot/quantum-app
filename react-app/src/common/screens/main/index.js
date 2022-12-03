@@ -281,8 +281,19 @@ const Page = (props) => {
                     variant='contained' 
                     onClick={calculation} 
                     disabled={someEmpty || load}
+                    style={{margin:'0px 5px'}}
                 >
-                    Запустить расчет
+                    Расчет
+                </Button>
+
+                <Button 
+                    endIcon={load ? <CircularProgress size={20}/> : ''} 
+                    fullWidth={true} 
+                    variant='contained' 
+                    disabled={someEmpty || load}
+                    style={{margin:'0px 5px'}}
+                >
+                    Резонанс
                 </Button>
             </Paper>
             
