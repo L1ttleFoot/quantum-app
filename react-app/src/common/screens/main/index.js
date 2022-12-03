@@ -290,7 +290,8 @@ const Page = (props) => {
                     endIcon={load ? <CircularProgress size={20}/> : ''} 
                     fullWidth={true} 
                     variant='contained' 
-                    disabled={someEmpty || load}
+                    disabled
+                    /* disabled={someEmpty || load} */
                     style={{margin:'0px 5px'}}
                 >
                     Резонанс
