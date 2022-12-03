@@ -10,8 +10,8 @@ VECTOR_INDEX_MAP = {k:i for i,k in enumerate(VECTOR_INDEX)} # словарь и�
 def INDEX(n:int, number_of_vibrational_degrees)->list:
     ''' Индексы вектора vec, степени возмущения n, vec дб tuple для хэширования '''
     if n==-2:return [('0')] # добавил так как в VECTOR_INDEX добавил 0
-    
-    return [''.join(i) for i in combinations_with_replacement(VECTOR_INDEX[1:number_of_vibrational_degrees+1], n+2) ]    
+
+    return [''.join(i) for i in combinations_with_replacement(VECTOR_INDEX[1:number_of_vibrational_degrees+1], n+2) ]
 
 def VECTORS_m(n:int, vec, number_of_vibrational_degrees):
   '''генерирует список с возможными значениями k для вектора m_i=n_i+k_i, k_i принимает значение [-n:n] и сумма модулей k_i   меньше или равна n
@@ -22,20 +22,23 @@ def VECTORS_m(n:int, vec, number_of_vibrational_degrees):
   el = np.array(el) + vec
   return list(map(tuple,el))
 
+
 def factor_k(str):
   return(2**(-len(str)/2))
+
 
 def factor_fi(str):
   unique = dict(zip(list(str),[factorial(list(str).count(i)) for i in list(str)]))
   return(2**(-len(str)/2)/reduce(lambda a, b : a * b, unique.values()))
 
-def constant_gen(n, omega, const, constType):
+
+def constant_gen(n, omega, const, constType, order):
   CONST_A_LIST=""
   CONST_n_LIST=""
   CONST_W_LIST=""
   CONST_D_LIST=""
   number_of_vibrational_degrees=len(n)
-  max_indignation_step=2
+  max_indignation_step=order
   TYPE_ANGARMONIC_CONST=constType
   f=open(f'const_new.py','w')
   f.write('import sympy as sy\n')
@@ -63,12 +66,12 @@ def constant_gen(n, omega, const, constType):
     const_list[sy.symbols('A_'+str(const[i]['letIndex']))]=float(const[i]['value'])
 
   const_changed=[*const]
-  if constType=='A':
+  if constType == 'A':
     const_changed=[*const]
-  elif constType=='k':
-    list(map(lambda x: x.update(value=float(x['value'])*factor_k(x['letIndex'])),const_changed))
-  elif constType=='fi':
-    list(map(lambda x: x.update(value=float(x['value'])*factor_fi(x['letIndex'])),const_changed))
+  elif constType == 'k':
+    list(map(lambda x: x.update(value=float(x['value'])*factor_k(x['letIndex'])), const_changed))
+  elif constType == 'fi':
+    list(map(lambda x: x.update(value=float(x['value'])*factor_fi(x['letIndex'])), const_changed))
 
   const_list_changed={}
   for i in range(len(const)):
@@ -78,19 +81,19 @@ def constant_gen(n, omega, const, constType):
   f.write('D_0=sy.symbols(''"D_0"'')'+'\n')
 
   d_list={D_0:0}
-  
+
   CONST_n_LIST='const_n_dict=%s'%(n_list)
   CONST_W_LIST='const_omega_dict=%s'%(omega_list)
   CONST_A_LIST='const_anharmonic_dict=%s'%(const_list)
   CONST_D_LIST='const_dipol_dict=%s'%(d_list)
-  
+
   f.write(CONST_n_LIST+'\n')
   f.write(CONST_W_LIST+'\n')
   f.write(CONST_A_LIST+'\n')
   f.write(CONST_D_LIST+'\n')
 
   ZAMENA = {**n_list, **omega_list, **const_list_changed, **d_list}
-  
+
   f.write("ZAMENA=%s"%(ZAMENA))
   f.close()
   return

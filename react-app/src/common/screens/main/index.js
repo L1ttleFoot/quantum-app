@@ -287,7 +287,7 @@ const Page = (props) => {
                 </Button>
 
                 <Button 
-                    endIcon={load ? <CircularProgress size={20}/> : ''} 
+                    /* endIcon={load ? <CircularProgress size={20}/> : ''}  */
                     fullWidth={true} 
                     variant='contained' 
                     disabled

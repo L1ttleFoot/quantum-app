@@ -26,7 +26,7 @@ const Main = () => {
 
         props.setLoading(true)
 
-        fetch(`https://quantum-app-bf8b.vercel.app/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
+        fetch(`http://localhost:8080/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
         .then(response=>response.json())
         .then(data=>{
             setConstsList(data.consts_list)
@@ -39,14 +39,15 @@ const Main = () => {
 
     const handleClickCalculation = async() => {
         setLoad(l=>!l)
-        await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/calculation`,
+        await fetch(`http://localhost:8080/api/v1/calculation`,
         {   method: 'POST',  
             body: JSON.stringify({
                 numbers1: state.numbers1, 
                 numbers2: state.numbers2, 
                 omegas: state.omegas, 
                 consts: state.consts, 
-                constsType: state.constsType
+                constsType: state.constsType,
+                order: state.order
         })})
         .then(response=>response.json())
         .then(data=>{
