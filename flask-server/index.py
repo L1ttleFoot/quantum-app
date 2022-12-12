@@ -4,10 +4,11 @@ from flask_cors import CORS
 import sympy as sy
 
 # from const_new import *
-import constant_gen_new
+import constant_gen
 import Recurrence_Relations
 
 from dict_gen import dict_gen
+
 
 app = Flask(__name__)
 CORS(app)
@@ -24,7 +25,44 @@ def home():
 def get_test():
     request_data = request.get_json(force=True)
 
-    # constant_gen_new.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['constsType'], request_data['order'])
+    complete_dict = dict_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['constsType'])
+
+    print(complete_dict)
+
+    complete_dict_keys = dict([(i.name,i) for i in complete_dict])
+
+    n_dict = {}
+    
+    for i in range(len(request_data['numbers2'])):
+        n_dict[sy.symbols('n_' + str(request_data['numbers2'][i]['letIndex']))] = 0
+
+    n_list1 = [int(item['value']) for item in request_data['numbers1']]
+    n_list2 = [int(item['value']) for item in request_data['numbers2']]
+
+    n_str1 = ''.join([item['value'] for item in request_data['numbers1']])
+    n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
+
+    constType = request_data['constsType']
+
+    # energy = Recurrence_Relations.AE_BD(n_list, n_list, 2)
+    energy = sum([Recurrence_Relations.AE_BD(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
+    energy -= sum([Recurrence_Relations.AE_BD(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
+
+    #dipole = sum([Recurrence_Relations.MEDMF(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
+    #dipole -= sum([Recurrence_Relations.MEDMF(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
+
+    response = jsonify(transition='%s > %s' % (n_str1, n_str2), energy='%s' % (energy.subs(complete_dict)))
+    response.headers.add("Access-Control-Allow-Origin", "*")
+
+    constant_gen.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['constsType'], request_data['order'])
+
+    return response
+
+@app.route('/api/v1/calculation_resonans', methods=['GET', 'POST'])
+def get_resonans():
+    request_data = request.get_json(force=True)
+
+    #constant_gen_new.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['constsType'], request_data['order'])
 
     complete_dict = dict_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['constsType'])
 
@@ -39,7 +77,7 @@ def get_test():
     n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
 
     constType = request_data['constsType']
-
+    
     # energy = Recurrence_Relations.AE_BD(n_list, n_list, 2)
     energy = sum([Recurrence_Relations.AE_BD(n_list2, n_list2, i, n_dict) for i in range(request_data['order'] + 1)])
     energy -= sum([Recurrence_Relations.AE_BD(n_list1, n_list1, i, n_dict) for i in range(request_data['order'] + 1)])
@@ -51,6 +89,7 @@ def get_test():
 
 @app.route("/api/v1/config", methods=['GET'])
 def config_response():
+
     freedomDegrees = request.args.get('freedomDegrees')
     order = request.args.get('order')
 
@@ -58,10 +97,23 @@ def config_response():
     omegas_list = [{'index': i + 1, 'value': ''} for i in range(int(freedomDegrees))]
     consts_list = sum([[{'index': ''.join(i), 'value': '', 'var': 'const'} for i in
                         combinations_with_replacement(''.join(index_list), j + 3)] for j in range(int(order))], [])
+    dipole_list_x = sum([[{'index': ''.join(i), 'value': '', 'var': 'dipoleX'} for i in
+                        combinations_with_replacement(''.join(index_list), j + 1)] for j in range(int(order)+1)], [])
+
+    dipole_list_y = sum([[{'index': ''.join(i), 'value': '', 'var': 'dipoleY'} for i in
+                        combinations_with_replacement(''.join(index_list), j + 1)] for j in range(int(order)+1)], [])
+
+    dipole_list_z = sum([[{'index': ''.join(i), 'value': '', 'var': 'dipoleZ'} for i in
+                        combinations_with_replacement(''.join(index_list), j + 1)] for j in range(int(order)+1)], [])
+
     data = {
         'omegas_list': omegas_list,
-        'consts_list': consts_list
+        'consts_list': consts_list,
+        'dipole_list_x': dipole_list_x,
+        'dipole_list_y': dipole_list_y,
+        'dipole_list_z': dipole_list_z
     }
+    
     response = jsonify(data)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response

@@ -13,6 +13,10 @@ const Main = () => {
 
     const [omegasList, setOmegasList] = useState([])
     const [constsList, setConstsList] = useState([])
+    const [dipoleXList, setDipoleXList] = useState([])
+    const [dipoleYList, setDipoleYList] = useState([])
+    const [dipoleZList, setDipoleZList] = useState([])
+
     const [loading, setLoading] = useState(false)
 
     const [fileName, setFileName] = useState('')
@@ -29,8 +33,12 @@ const Main = () => {
         fetch(`https://quantum-app-bf8b.vercel.app/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
         .then(response=>response.json())
         .then(data=>{
+            console.log(data)
             setConstsList(data.consts_list)
             setOmegasList(data.omegas_list)
+            setDipoleXList(data.dipole_list_x)
+            setDipoleYList(data.dipole_list_y)
+            setDipoleZList(data.dipole_list_z)
         })
 
         props.setLoading(false)
@@ -46,6 +54,7 @@ const Main = () => {
                 numbers2: state.numbers2, 
                 omegas: state.omegas, 
                 consts: state.consts, 
+                dipoleX: [state.dipole0, ...state.dipoleX],
                 constsType: state.constsType,
                 order: state.order
         })})
@@ -79,6 +88,18 @@ const Main = () => {
 
     const setConsts = (value) => {
         dispatch({type:'SET_CONSTS', payload: value})
+    }
+
+    const setDipoleX = (value) => {
+        dispatch({type:'SET_DIPOLE_X', payload: value})
+    }
+
+    const setDipoleY = (value) => {
+        dispatch({type:'SET_DIPOLE_Y', payload: value})
+    }
+
+    const setDipoleZ = (value) => {
+        dispatch({type:'SET_DIPOLE_Z', payload: value})
     }
 
     const emptyNumbers1 = [undefined, ''].some(item=>state.numbers1.map(el=>el.value).includes(item))
@@ -137,15 +158,34 @@ const Main = () => {
         () => {
             setConstsList(state.consts)
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [state.consts],
+    );
+
+    useEffect(
+        () => {
+            setDipoleX(state.dipoleX)
+        },
+        [state.dipoleX],
+    );
+
+    useEffect(
+        () => {
+            setDipoleY(state.dipoleYList)
+        },
+        [state.dipoleYList],
+    );
+
+    useEffect(
+        () => {
+            setDipoleZ(state.dipoleZList)
+        },
+        [state.dipoleZList],
     );
 
     useEffect(
         () => {
             setOmegasList(state.omegas)
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [state.omegas],
     );
 
@@ -215,12 +255,15 @@ const Main = () => {
             </AppBar>
 
             <MainPage 
-                state={state} 
-                frequencyList={omegasList} 
-                constsList={constsList} 
-                calculation={handleClickCalculation}
+                state = {state} 
+                frequencyList = {omegasList} 
+                constsList = {constsList}
+                dipoleXList = {dipoleXList}
+                dipoleYList = {dipoleYList}
+                dipoleZList = {dipoleZList}
+                calculation = {handleClickCalculation}
                 someEmpty = {someEmpty}
-                load={load}
+                load = {load}
             />
 
         </div>

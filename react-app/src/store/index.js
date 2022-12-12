@@ -11,6 +11,14 @@ const reduser = (state = initialState, action) => {
             return {...state, omegas: action.payload}
         case "SET_CONSTS":
             return {...state, consts: action.payload}
+        case "SET_DIPOLE_0":
+            return {...state, dipole0: action.payload} 
+        case "SET_DIPOLE_X":
+            return {...state, dipoleX: action.payload} 
+        case "SET_DIPOLE_Y":
+            return {...state, dipoleY: action.payload}   
+        case "SET_DIPOLE_Z":
+            return {...state, dipoleZ: action.payload}   
         case "SET_FREEDOM_DEGREES":
             return {...state, freedomDegrees: action.payload}
         case "SET_ORDER":

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- # необходима для ввода коментариев на русском
 
 import numpy as np
-from const_new import *
+#from const_new import *
 ###################### Создал функцию замены n_i на n_i+k   ################
 
 def ZAM(XXX, k, n_dict):
@@ -39,17 +39,22 @@ from collections import namedtuple
 ## В этот объект встроены функции которые могут вызвать информацию хранящююся внутри этого объекта: vec(self), NF(self), const(self)
 #const=reload(const)
 
+#!!!!!! НАДО ИСПРАВИТЬ или не надо
 class Vector():
-	def __init__(self, vec=[0 for i in range(number_of_vibrational_degrees)],Const=1):
-		self._vec = np.array(list(const_n_dict.keys()))+np.array(list(vec))
+	def __init__(self, vec, Const=1):
+        # self._vec = np.array(list(const_n_dict.keys()))+np.array(list(vec))
+		self._vec=np.array(list(vec))
 		self._NF=[]
 		self._const=[Const]
 	def vec(self):
-		return tuple(self._vec-np.array(list(const_n_dict.keys())))
+        # return tuple(self._vec-np.array(list(const_n_dict.keys())))
+		return tuple(self._vec)
 	def NF(self):
 		return prod(self._NF)
 	def const(self):
 		return prod(self._const)
+    
+    
 ## Теперь необходимо создать функции описывающие работу операторов рождения born(vec,i) и  уничтожения dead(vec,i)
 ## в качестве аргументов функция принимает объект класса Vector(), в данном случае обозначенный как vec, и индекс числа в векторе состояния
 ## на которое нужно подействовать
@@ -78,12 +83,12 @@ def ksi_polinom(n:int)->list:
   return [x[::-1] for x in product(ksi,repeat=n)]  # декартово произведение [[z,y,x] for x in a for y in a for z in a ]
 
 
-KEY_key=dict([(i.name,i) for i in list(const_anharmonic_dict.keys())+list(const_dipol_dict.keys())+list(const_omega_dict.keys())])
+#KEY_key=dict([(i.name,i) for i in list(const_anharmonic_dict.keys())+list(const_dipol_dict.keys())+list(const_omega_dict.keys())])
 # Расчет G|KET> где G=G(p)
 #########################
 
 
-def G_KET(KET: list,fksi:list,IJK:list,Factor='A'):
+def G_KET(KET: list, fksi:list, IJK:list, key_dict, Factor='A'):
     '''Factor может принимать три значения 
     A - будет умножение на ангармонические постоянные, 
     D -будет умножение на произмодные дипольного момента, 
@@ -91,10 +96,10 @@ def G_KET(KET: list,fksi:list,IJK:list,Factor='A'):
     def apply(ket) :
         RESULT=[]
         for ijk in IJK:
-            if Factor!='omega': A=KEY_key[f'{Factor}_{ijk}']
+            if Factor!='omega': A=key_dict[f'{Factor}_{ijk}']
             else:
                 if ijk[0]!=ijk[1]:continue
-                A=KEY_key[f'{Factor}_{ijk[0]}']/2
+                A=key_dict[f'{Factor}_{ijk[0]}']/2
             ijk_ind=[ VECTOR_INDEX_MAP[x]-1 for x in ijk]
             result=[Vector(ket[0],ket[1]*A) for i in range(len(fksi))]
             for vec,operations in zip(result,fksi):
@@ -145,7 +150,7 @@ Index2 = namedtuple('Index2','p betta gamma')
 
 #расчет поправки к вектору состояния#
 #calculation Amendment to the Vector (AV)
-def AV(ket, ind, n_dict):
+def AV(ket, ind, n_dict, key_dict):
   AAA = [0 for i in range(len(ket))]
   aaa = tuple(AAA)
   N = select_vector(BD_V, (aaa,ind,))
@@ -159,16 +164,16 @@ def AV(ket, ind, n_dict):
     else:
       N=[]
       for i in [Index(*i) for i in product(range(0,ind+1), repeat=5) if sum(i) == ind and i[1] % 2 == 0 and i[0] > 0]:#(p,q,бетта,гамма,ню)
-        KET = AV(AAA, i.gamma, n_dict)
-        M_BRA = AV(AAA, i.betta, n_dict)
-        M_KET = AV(AAA, i.nu, n_dict)
+        KET = AV(AAA, i.gamma, n_dict, key_dict)
+        M_BRA = AV(AAA, i.betta, n_dict, key_dict)
+        M_KET = AV(AAA, i.nu, n_dict, key_dict)
         fksi = ksi_polinom(i.p+2)
         NF1 = Rational(i.p/ind)
-        G_ket = G_KET(KET, fksi, INDEX(i.p))
-        for bra in VECTORS_m(3*(i.betta+i.gamma)+i.p+2,AAA):
+        G_ket = G_KET(KET, fksi, INDEX(i.p, len(n_dict)), key_dict)
+        for bra in VECTORS_m(3*(i.betta+i.gamma)+i.p+2, AAA, len(n_dict)):
           if list(bra) == list(AAA):continue
           if pravilo_otbora(bra, AAA, i.p+2, i.betta, i.gamma)==0:continue
-          DELTA = delta(AAA, bra, i.q)
+          DELTA = delta(AAA, bra, i.q, n_dict)
           if DELTA == 0: continue #В этом месте буду изменять для вырожденного случая
           NF2=sum(list(map(lambda vec:BRA_G_ket(vec,G_ket),ZAM_ZAM(M_BRA, bra, n_dict))))
           if NF2 == 0:continue
@@ -198,12 +203,12 @@ def DEL(p:list):
         #Расчет поправки к энергии
   # calculation Amendment to the Energy (AE)
 
-def AE(vec1, vec2, ind, n_dict):
+def AE(vec1, vec2, ind, n_dict, key_dict):
     if ind == 0:
         if vec1 != vec2: return sy.symbols("0")
         fksi = ksi_polinom(2)
-        G_ket = G_KET(AV(vec1, 0, n_dict), fksi, INDEX(0), 'omega')
-        return sum([BRA_G_ket(bra, G_ket) for bra in AV(vec1, 0, n_dict)])
+        G_ket = G_KET(AV(vec1, 0, n_dict, key_dict), fksi, INDEX(0, len(n_dict)), key_dict, 'omega')
+        return sum([BRA_G_ket(bra, G_ket) for bra in AV(vec1, 0, n_dict, key_dict)])
     else:
         N=select_energy(BD_E, (tuple(vec1),tuple(vec2),ind,))
         if N or N == 0: return N
@@ -211,12 +216,12 @@ def AE(vec1, vec2, ind, n_dict):
             N = []
             for i in reversed([Index2(*i) for i in product(range(0,ind+1), repeat=3) if sum(i) == ind and i[0] > 0]):
                 if pravilo_otbora(vec1, vec2, i.p+2, i.betta, i.gamma) == 0: continue
-                KET = AV(vec2,i.gamma, n_dict)
-                BRA = AV(vec1,i.betta, n_dict)
+                KET = AV(vec2,i.gamma, n_dict, key_dict)
+                BRA = AV(vec1,i.betta, n_dict, key_dict)
                 if i.gamma > i.betta: KET, BRA = BRA, KET
                 fksi = ksi_polinom(i.p+2)
                 NF1 = Rational(i.p/ind)
-                G_ket = G_KET(KET, fksi, INDEX(i.p))
+                G_ket = G_KET(KET, fksi, INDEX(i.p, len(n_dict)), key_dict)
                 E = sum([BRA_G_ket(vec, G_ket) for vec in BRA])
                 N.append(prod([NF1, E]))
             N = sum(N)
@@ -225,9 +230,9 @@ def AE(vec1, vec2, ind, n_dict):
 
 ####################################################################
 #Вытаскиваем значение Э
-def AE_BD(vec1,vec2,ind, n_dict):
+def AE_BD(vec1,vec2,ind, n_dict, key_dict):
   '''Расчитывает поправку к энергии'''
-  if ind == 0: return AE(vec1, vec2, ind, n_dict)
+  if ind == 0: return AE(vec1, vec2, ind, n_dict, key_dict)
   elif ind % 2 == 1 and vec1 == vec2: return sy.symbols("0")
   elif ind % 2 == 0 and vec1 == vec2:
     AAA = [0 for i in range(len(vec1))]
@@ -238,19 +243,19 @@ def AE_BD(vec1,vec2,ind, n_dict):
       if vec1 == AAA: return N
       else: return ZAM(N, vec1, n_dict)
     if N == None:
-      N = AE(AAA, AAA, ind, n_dict)
+      N = AE(AAA, AAA, ind, n_dict, key_dict)
       return ZAM(N, vec1, n_dict)
   else:
     N = select_energy(BD_E, (tuple(vec1), tuple(vec2), ind))
     if N: return N
-    else: return AE(vec1, vec2, ind, n_dict)
+    else: return AE(vec1, vec2, ind, n_dict, key_dict)
 
 ##################################################
 def pravilo_otbora(bra, ket, nksi, alfa, betta):
     k = sum(bra)-sum(ket)
     return 0 if (alfa+betta+nksi) % 2 != k % 2 else 1
 
-def delta(n = [0,0,0],m = [1,0,0],q=0):
+def delta(n, m, q, n_dict):
     Em = []
     En = []
     lamda = []
@@ -260,8 +265,8 @@ def delta(n = [0,0,0],m = [1,0,0],q=0):
             E_dict[f'Em_{i}'] = 0
             E_dict[f'En_{i}'] = 0
         if i % 2 == 0:
-            E_dict[f'Em_{i}'] = AE_BD(m, m, i)
-            E_dict[f'En_{i}'] = AE_BD(n, n, i)
+            E_dict[f'Em_{i}'] = AE_BD(m, m, i, n_dict)
+            E_dict[f'En_{i}'] = AE_BD(n, n, i, n_dict)
         Em.append(eval(f'sy.symbols("Em_{i}")'))
         En.append(eval(f'sy.symbols("En_{i}")'))
         lamda.append(eval(f'sy.symbols("L")')**i)
@@ -279,15 +284,15 @@ def delta(n = [0,0,0],m = [1,0,0],q=0):
 
 # расчет матричного элемента функции дипольного момента
 # calculation the Matrix Element of the Dipole Moment Function (MEDMF)
-def MEDMF(bra, ket, max_indignation_step):
+def MEDMF(bra, ket, max_indignation_step, n_dict, key_dict):
     result = []
     for i in reversed([Index2(*i) for i in product(range(0, max_indignation_step+1), repeat=3) if sum(i[1:]) < max_indignation_step]):
         if pravilo_otbora(bra, ket, i.p+2, i.betta, i.gamma) == 0: continue
-        KET = AV(ket, i.betta)
-        BRA = AV(bra, i.gamma)
+        KET = AV(ket, i.betta, n_dict, key_dict)
+        BRA = AV(bra, i.gamma, n_dict, key_dict)
         fksi=ksi_polinom(i.p)
-        IJK = INDEX(i.p-2)
-        GKET = G_KET(KET, fksi, IJK, 'D')
+        IJK = INDEX(i.p-2, key_dict)
+        GKET = G_KET(KET, fksi, IJK, 'D', key_dict)
         BGK = sum([BRA_G_ket(vec, GKET) for vec in BRA])
         result.append(sy.simplify(BGK))
     return sy.simplify(sum(result))
