@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import './style.css'
-import {TextField, Paper, Stack, Typography, Button, IconButton, CircularProgress } from '@mui/material'
+import {TextField, Paper, Stack, Typography, Button, IconButton, CircularProgress, Tabs, Tab } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import Chart from "../../../components/Charts"
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,9 +12,13 @@ const Page = (props) => {
 
     const dispatch = useDispatch()
 
-    const {state, constsList, calculation, someEmpty, load} = props
+    const {state, constsList, dipoleXList, dipoleYList, dipoleZList, calculation, someEmpty, load} = props
 
     const [selectedRows, setSelectedRows] = useState([])
+
+    //const [dipole0, setDipole0] = useState({index: '0', value: '', var: 'dipole0', letIndex: '0'})
+
+    const [tab, setTab] = useState('x')
 
     const setRows = (value) => {
         dispatch({type:'SET_ROWS', payload: value})
@@ -78,6 +82,10 @@ const Page = (props) => {
     const omegasArr = new Array(Number(state.freedomDegrees)).fill(undefined).map((item, index)=>({var: 'omega', index: index+1, value: '', letIndex: letterIndexes[index]}))
     const constsArr = [...constsList]   
 
+    const dipoleXArr = [...dipoleXList]
+    const dipoleYArr = [...dipoleYList]
+    const dipoleZArr = [...dipoleZList]
+
     const [numbersList1, setNumbersList] = useState([])
     const [numbersList2, setNumbersList2] = useState([])
     const [omegasList, setOmegasList] = useState([])
@@ -97,6 +105,22 @@ const Page = (props) => {
 
     const setConst = (value) => {
         dispatch({type:'SET_CONSTS', payload:value})    
+    }
+
+    const setDipole0 = (value) => {
+        dispatch({type:'SET_DIPOLE_0', payload:value})    
+    }
+
+    const setDipoleX = (value) => {
+        dispatch({type:'SET_DIPOLE_X', payload:value})    
+    }
+
+    const setDipoleY = (value) => {
+        dispatch({type:'SET_DIPOLE_Y', payload:value})    
+    }
+
+    const setDipoleZ = (value) => {
+        dispatch({type:'SET_DIPOLE_Z', payload:value})    
     }
 
     useEffect(
@@ -132,6 +156,10 @@ const Page = (props) => {
         [state.omegas],
     );
 
+    const onChangeTab = (e, value) => {
+        setTab(value)
+    }
+
     const handleChangeNumbers = index => event => {
         let newArr=[...numbersList1]
         newArr[index].value=event.target.value
@@ -156,12 +184,36 @@ const Page = (props) => {
         setConst(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
     };
 
+    const handleChangeDipoleX = index => event => {
+        let newArr=[...dipoleXArr]
+        newArr[index].value=event.target.value
+        setDipoleX(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
+    };
+
+    const handleChangeDipoleY = index => event => {
+        let newArr=[...dipoleYArr]
+        newArr[index].value=event.target.value
+        setDipoleY(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
+    };
+
+    const handleChangeDipoleZ = index => event => {
+        let newArr=[...dipoleZArr]
+        newArr[index].value=event.target.value
+        setDipoleZ(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
+    };
+
+    const handleChangeDipole0 = (e) => {
+        setDipole0({...state.dipole0, value: e.target.value})
+    }
+
+    console.log(state.dipoleX, state.dipole0)
+
     return(
         <div className={'container'}>
 
             <Paper className={'box1'}>
                 <div className='block'>
-                    <Typography variant="subtitle2">Начальное состояние</Typography>
+                    <Typography variant="subtitle">Начальное состояние</Typography>
                     <Stack direction={'column'} alignItems={'center'}>
                         
                         {numbersList1.map((item,index)=>
@@ -179,7 +231,7 @@ const Page = (props) => {
                 </div>
 
                 <div className='block'>
-                    <Typography variant="subtitle2">Конечное состояние</Typography>
+                    <Typography variant="subtitle">Конечное состояние</Typography>
                     <Stack direction={'column'} alignItems={'center'}>
                     
                         {numbersList2.map((item,index)=>
@@ -199,7 +251,7 @@ const Page = (props) => {
 
             <Paper className={'box2'}>
                 <div className='block'>
-                    <Typography variant="subtitle2">Гармонические частоты</Typography>
+                    <Typography variant="subtitle">Гармонические частоты</Typography>
                     <Stack direction={'column'} alignItems={'center'}>
                         
                         {omegasList.map((item, index)=>
@@ -219,7 +271,7 @@ const Page = (props) => {
             
             <Paper className={'box3'}>
                 <div className='block'>
-                    <Typography variant="subtitle2">Силовые постоянные</Typography>
+                    <Typography variant="subtitle">Силовые постоянные</Typography>
                     <div style={{display: 'flex',
                                 flexDirection: 'row',
                                 flexWrap: 'wrap',
@@ -244,13 +296,64 @@ const Page = (props) => {
 
             <Paper className={'box4'}>
                 <div className='block'>
-                    <Typography variant="subtitle2">Производные дипольного момента</Typography>
+                    <Typography variant="subtitle">Производные дипольного момента</Typography>
+
+                    <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}>
+                        <Tabs value={tab} onChange={onChangeTab} variant="fullWidth">
+                            <Tab label="X" value="x" />
+                            <Tab label="Y" value="y" />
+                            <Tab label="Z" value="z" />
+                        </Tabs>
+                    </div>
+
                     <div style={{display: 'flex',
                                 flexDirection: 'row',
                                 flexWrap: 'wrap',
                                 justifyContent: 'center'
                             }} 
                     >
+
+                        <TextField
+                            key={'dipole0'}
+                            size={'small'} 
+                            style={{margin:10, width:'20%', minWidth:80}} 
+                            label={<span>d<sub>0</sub></span>} 
+                            value={state.dipole0.value}
+                            onChange={handleChangeDipole0}
+                        />
+
+                        {tab === 'x' && dipoleXArr.map((item, index)=>
+                            <TextField
+                                key={item.index+'dipoleY'}
+                                size={'small'} 
+                                style={{margin:10, width:'20%', minWidth:80}} 
+                                label={<span>d<sub>{item.index}</sub></span>} 
+                                value={item.value}
+                                onChange={handleChangeDipoleX(index)}
+                            />
+                        )}
+
+                        {tab === 'y' && dipoleYArr.map((item, index)=>
+                            <TextField
+                                key={item.index+'dipoleY'}
+                                size={'small'} 
+                                style={{margin:10, width:'20%', minWidth:80}} 
+                                label={<span>d<sub>{item.index}</sub></span>} 
+                                value={item.value}
+                                onChange={handleChangeDipoleY(index)}
+                            />
+                        )}
+
+                        {tab === 'z' && dipoleZArr.map((item, index)=>
+                            <TextField
+                                key={item.index+'dipoleZ'}
+                                size={'small'} 
+                                style={{margin:10, width:'20%', minWidth:80}} 
+                                label={<span>d<sub>{item.index}</sub></span>} 
+                                value={item.value}
+                                onChange={handleChangeDipoleZ(index)}
+                            />
+                        )}
 
                     </div>
                 </div>
