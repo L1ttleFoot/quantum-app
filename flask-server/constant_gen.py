@@ -7,7 +7,6 @@ absolute_path = os.path.dirname(__file__)
 relative_path = "tmp"
 full_path = os.path.join(absolute_path, relative_path)
 
-
 def factor_k(str):
   return(2**(-len(str)/2))
 
@@ -18,7 +17,6 @@ def factor_fi(str):
 
 
 def constant_gen(n, omega, const, dipoleX, dipoleY, dipoleZ, constType, order):
-  print(absolute_path)
   CONST_A_LIST=""
   CONST_n_LIST=""
   CONST_W_LIST=""
