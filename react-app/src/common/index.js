@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Divider } from '@mui/material';
 import './style.css'
-import StartPage from './screens/startPage'
+import StartPage from './screens/StartPage'
 import CalculationPage from './screens/calculationPage'
 import { useNavigate } from "react-router";
 import ArticleIcon from '@mui/icons-material/Article';
