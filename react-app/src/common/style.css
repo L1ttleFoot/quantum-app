@@ -1,3 +1,7 @@
+.drawer {
+    width: 50px !important;
+}
+
 .appbar{
     display: flex;
     align-items: center;

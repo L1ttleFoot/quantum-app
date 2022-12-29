@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Divider } from '@mui/material';
 import './style.css'
-import StartPage from './screens/StartPage'
+import StartPage from './screens/startPage'
 import CalculationPage from './screens/calculationPage'
 import { useNavigate } from "react-router";
 import ArticleIcon from '@mui/icons-material/Article';
@@ -27,27 +27,28 @@ const Main = () => {
     const navigate = useNavigate()
 
     return(
-        <div sx={{ display: 'flex' }}>
+        <div >
 
             <Drawer
-                style={{width:50}}
+                className='drawer'
                 variant='permanent'
                 anchor='left'
             >
                 <Toolbar />
                 <Divider />
 
-                <List>
-                {menuItems.map(item => (
-                    <ListItem
-                        button
-                        key={item.text}
-                        onClick={() => navigate(item.path)}
-                    >
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.text}/>
-                    </ListItem>
-                ))}
+                <List style={{width: 50}}>
+                    {menuItems.map(item => (
+                        <ListItem
+                            
+                            button
+                            key={item.text}
+                            onClick={() => navigate(item.path)}
+                        >
+                            <ListItemIcon>{item.icon}</ListItemIcon>
+                            <ListItemText primary={item.text}/>
+                        </ListItem>
+                    ))}
                 </List>
 
             </Drawer>
