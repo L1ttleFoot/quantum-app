@@ -7,7 +7,7 @@ import sympy as sy
 import constant_gen
 import Recurrence_Relations
 
-from dict_gen import dict_gen
+from dict_gen import dict_gen, dict_dipole_x_gen, dict_dipole_y_gen, dict_dipole_z_gen
 
 
 app = Flask(__name__)
@@ -25,14 +25,21 @@ def home():
 def get_test():
     request_data = request.get_json(force=True)
 
-    complete_dict = dict_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['constsType'])
+    complete_dict = dict_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['constsType'], request_data['dipoleX'])
+
+    dict_dipole_X = dict_dipole_x_gen(request_data['dipoleX'])
+    dict_dipole_Y = dict_dipole_y_gen(request_data['dipoleY'])
+    dict_dipole_Z = dict_dipole_z_gen(request_data['dipoleZ'])
 
     print(complete_dict)
 
     complete_dict_keys = dict([(i.name,i) for i in complete_dict])
+    dict_dipole_keys = dict([(i.name,i) for i in dict_dipole_X])
+
+    print(complete_dict_keys)
+    print(dict_dipole_keys)
 
     n_dict = {}
-    
     for i in range(len(request_data['numbers2'])):
         n_dict[sy.symbols('n_' + str(request_data['numbers2'][i]['letIndex']))] = 0
 
@@ -42,19 +49,24 @@ def get_test():
     n_str1 = ''.join([item['value'] for item in request_data['numbers1']])
     n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
 
-    constType = request_data['constsType']
-
     # energy = Recurrence_Relations.AE_BD(n_list, n_list, 2)
     energy = sum([Recurrence_Relations.AE_BD(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
     energy -= sum([Recurrence_Relations.AE_BD(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
 
+    #dipole = Recurrence_Relations.MEDMF(n_list2, n_list2, 2, n_dict, complete_dict_keys)
     #dipole = sum([Recurrence_Relations.MEDMF(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
     #dipole -= sum([Recurrence_Relations.MEDMF(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
 
-    response = jsonify(transition='%s > %s' % (n_str1, n_str2), energy='%s' % (energy.subs(complete_dict)))
+    dipole = Recurrence_Relations.MEDMF(n_list1, n_list2, 2, n_dict, complete_dict_keys)
+    
+    X = dipole.subs({**complete_dict,**dict_dipole_X})
+    Y = dipole.subs({**complete_dict,**dict_dipole_Y})
+    Z = dipole.subs({**complete_dict,**dict_dipole_Z})
+
+    response = jsonify(transition='%s > %s' % (n_str1, n_str2), energy='%s' % (energy.subs(complete_dict)), matrix='%s' % (((X**2+Y**2+Z**2)**(1/2))*1000))
     response.headers.add("Access-Control-Allow-Origin", "*")
 
-    constant_gen.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['constsType'], request_data['order'])
+    constant_gen.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['dipoleY'], request_data['dipoleZ'], request_data['constsType'], request_data['order'])
 
     return response
 
@@ -97,13 +109,13 @@ def config_response():
     omegas_list = [{'index': i + 1, 'value': ''} for i in range(int(freedomDegrees))]
     consts_list = sum([[{'index': ''.join(i), 'value': '', 'var': 'const'} for i in
                         combinations_with_replacement(''.join(index_list), j + 3)] for j in range(int(order))], [])
-    dipole_list_x = sum([[{'index': ''.join(i), 'value': '', 'var': 'dipoleX'} for i in
+    dipole_list_x = sum([[{'index': ''.join(i), 'value': '0', 'var': 'dipoleX'} for i in
                         combinations_with_replacement(''.join(index_list), j + 1)] for j in range(int(order)+1)], [])
 
-    dipole_list_y = sum([[{'index': ''.join(i), 'value': '', 'var': 'dipoleY'} for i in
+    dipole_list_y = sum([[{'index': ''.join(i), 'value': '0', 'var': 'dipoleY'} for i in
                         combinations_with_replacement(''.join(index_list), j + 1)] for j in range(int(order)+1)], [])
 
-    dipole_list_z = sum([[{'index': ''.join(i), 'value': '', 'var': 'dipoleZ'} for i in
+    dipole_list_z = sum([[{'index': ''.join(i), 'value': '0', 'var': 'dipoleZ'} for i in
                         combinations_with_replacement(''.join(index_list), j + 1)] for j in range(int(order)+1)], [])
 
     data = {

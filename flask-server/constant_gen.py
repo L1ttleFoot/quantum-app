@@ -17,22 +17,25 @@ def factor_fi(str):
   return(2**(-len(str)/2)/reduce(lambda a, b : a * b, unique.values()))
 
 
-def constant_gen(n, omega, const, dipoleX, constType, order):
+def constant_gen(n, omega, const, dipoleX, dipoleY, dipoleZ, constType, order):
   print(absolute_path)
   CONST_A_LIST=""
   CONST_n_LIST=""
   CONST_W_LIST=""
   CONST_D_LIST=""
+  CONST_DX_LIST=""
+  CONST_DY_LIST=""
+  CONST_DZ_LIST=""
   number_of_vibrational_degrees=len(n)
   max_indignation_step=order
-  TYPE_ANGARMONIC_CONST=constType
+  type_anharmonic_const=constType
   f=open(f'{full_path}/const_new.py','w')
   f.write('import sympy as sy\n')
   f.write('\n')
 
   f.write('number_of_vibrational_degrees=%s'%(number_of_vibrational_degrees) + '\n')
   f.write('max_indignation_step=%s'%(max_indignation_step) + '\n')
-  f.write('TYPE_ANGARMONIC_CONST="%s"'%(TYPE_ANGARMONIC_CONST) + '\n')
+  f.write('type_anharmonic_const="%s"'%(type_anharmonic_const) + '\n')
 
   n_list={}
   for i in range(len(n)):
@@ -68,25 +71,57 @@ def constant_gen(n, omega, const, dipoleX, constType, order):
     f.write('D_%s=sy.symbols(''"D_%s"'')'%(dipoleX[i]['letIndex'], dipoleX[i]['letIndex'])+'\n')
     dipoleX_list[sy.symbols('D_'+str(dipoleX[i]['letIndex']))]=float(dipoleX[i]['value'])
 
-  #D_0=sy.symbols('D_0')
-  #f.write('D_0=sy.symbols(''"D_0"'')'+'\n')
+  dipoleY_list={}
+  for i in range(len(dipoleY)):
+    dipoleY_list[sy.symbols('D_'+str(dipoleY[i]['letIndex']))]=float(dipoleY[i]['value'])
 
-  #d_list={D_0:0}
+  dipoleZ_list={}
+  for i in range(len(dipoleZ)):
+    dipoleZ_list[sy.symbols('D_'+str(dipoleZ[i]['letIndex']))]=float(dipoleZ[i]['value'])
+
+  dipoleX_changed=[*dipoleX]
+  list(map(lambda x: x.update(value=float(x['value'])*factor_fi(x['letIndex'])), dipoleX_changed))
+
+  dipoleX_list_changed={}
+  for i in range(len(dipoleX)):
+    dipoleX_list_changed[sy.symbols('D_'+str(dipoleX[i]['letIndex']))]=float(dipoleX[i]['value'])
+
+  dipoleY_changed=[*dipoleY]
+  list(map(lambda x: x.update(value=float(x['value'])*factor_fi(x['letIndex'])), dipoleY_changed))
+
+  dipoleY_list_changed={}
+  for i in range(len(dipoleY)):
+    dipoleY_list_changed[sy.symbols('D_'+str(dipoleY[i]['letIndex']))]=float(dipoleY[i]['value'])
+
+  dipoleZ_changed=[*dipoleZ]
+  list(map(lambda x: x.update(value=float(x['value'])*factor_fi(x['letIndex'])), dipoleZ_changed))
+
+  dipoleZ_list_changed={}
+  for i in range(len(dipoleZ)):
+    dipoleZ_list_changed[sy.symbols('D_'+str(dipoleZ[i]['letIndex']))]=float(dipoleZ[i]['value'])
 
   CONST_n_LIST='const_n_dict=%s'%(n_list)
   CONST_W_LIST='const_omega_dict=%s'%(omega_list)
   CONST_A_LIST='const_anharmonic_dict=%s'%(const_list)
-  CONST_D_LIST='const_dipoleX_dict=%s'%(dipoleX_list)
+  CONST_DX_LIST='const_dipoleX_dict=%s'%(dipoleX_list)
+  CONST_DY_LIST='const_dipoleY_dict=%s'%(dipoleY_list)
+  CONST_DZ_LIST='const_dipoleZ_dict=%s'%(dipoleZ_list)
 
   f.write(CONST_n_LIST+'\n')
   f.write(CONST_W_LIST+'\n')
   f.write(CONST_A_LIST+'\n')
-  f.write(CONST_D_LIST+'\n')
+  f.write(CONST_DX_LIST+'\n')
+  f.write(CONST_DY_LIST+'\n')
+  f.write(CONST_DZ_LIST+'\n')
 
   ZAMENA = {**n_list, **omega_list, **const_list_changed}
-  ZAMENA_DX = {dipoleX_list}
+  ZAMENA_DX = {**dipoleX_list_changed}
+  ZAMENA_DY = {**dipoleY_list_changed}
+  ZAMENA_DZ = {**dipoleZ_list_changed}
 
-  f.write("ZAMENA=%s"%(ZAMENA))
-  f.write("ZAMENA_DX=%s"%(ZAMENA_DX))
+  f.write("ZAMENA=%s\n"%(ZAMENA))
+  f.write("ZAMENA_DX=%s\n"%(ZAMENA_DX))
+  f.write("ZAMENA_DY=%s\n"%(ZAMENA_DY))
+  f.write("ZAMENA_DZ=%s\n"%(ZAMENA_DZ))
   f.close()
   return

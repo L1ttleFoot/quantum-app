@@ -7,6 +7,7 @@ VECTOR_INDEX_MAP = {k:i for i,k in enumerate(VECTOR_INDEX)} # словарь и�
 
 def INDEX(n:int,number_of_vibrational_degrees)->list:
     ''' Индексы вектора vec, степени возмущения n, vec дб tuple для хэширования '''
+
     if n==-2:return [('0')] # добавил так как в VECTOR_INDEX добавил 0
     
     return [''.join(i) for i in combinations_with_replacement(VECTOR_INDEX[1:number_of_vibrational_degrees+1], n+2) ]    

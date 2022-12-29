@@ -24,7 +24,7 @@ const Page = (props) => {
         dispatch({type:'SET_ROWS', payload: value})
     }
 
-    const rows=[...state.rows].map((item, index)=>({...item, id: index+1, matrix: 1}))
+    const rows=[...state.rows].map((item, index)=>({...item, id: index+1}))
 
     const columns = [
         {
@@ -205,8 +205,6 @@ const Page = (props) => {
     const handleChangeDipole0 = (e) => {
         setDipole0({...state.dipole0, value: e.target.value})
     }
-
-    console.log(state.dipoleX, state.dipole0)
 
     return(
         <div className={'container'}>

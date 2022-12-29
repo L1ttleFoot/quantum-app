@@ -13,7 +13,7 @@ export default function Chart (props) {
 
   const {data} = props
 
-  const newData = data.map(n => ({...n, intensity:(n.matrix*n.matrix)}))
+  const newData = data.map(n => ({...n, intensity:(n.matrix**2)}))
 
   const maxValue = newData.map(item=>parseFloat(item.energy)).reduce((a, b) => b > a ? b : a, 0)
 
