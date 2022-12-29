@@ -55,6 +55,8 @@ const Main = () => {
                 omegas: state.omegas, 
                 consts: state.consts, 
                 dipoleX: [state.dipole0, ...state.dipoleX],
+                dipoleY: [state.dipole0, ...state.dipoleY],
+                dipoleZ: [state.dipole0, ...state.dipoleZ],
                 constsType: state.constsType,
                 order: state.order
         })})
@@ -132,17 +134,33 @@ const Main = () => {
 
             let objOrder = event.target.result.split('\n').filter(item=>item.includes('max_indignation'))[0].trim().split('=')[1]
 
+            let objConstType = event.target.result.split('\n').filter(item=>item.includes('type_anharmonic_const'))[0].trim().split('=')[1].replace(/["']/g,'')
+
             let objOmegas = JSON.parse(event.target.result.split('\n').filter(item=>item.includes('const_omega'))[0].trim().split('=')[1].replace(/omega_[a-z]/g, x=> `"${x}"`))
         
             let objConsts = JSON.parse(event.target.result.split('\n').filter(item=>item.includes('const_anharmonic'))[0].trim().split('=')[1].replace(/A_[a-z]{0,4}/g, x=> `"${x}"`))
-        
+
+            let objDipoleX = JSON.parse(event.target.result.split('\n').filter(item=>item.includes('const_dipoleX_dict'))[0].trim().split('=')[1].replace(/D_[0-9,a-z]{0,4}/g, x=> `"${x}"`))
+
+            let objDipoleY = JSON.parse(event.target.result.split('\n').filter(item=>item.includes('const_dipoleY_dict'))[0].trim().split('=')[1].replace(/D_[0-9,a-z]{0,4}/g, x=> `"${x}"`))
+
+            let objDipoleZ = JSON.parse(event.target.result.split('\n').filter(item=>item.includes('const_dipoleZ_dict'))[0].trim().split('=')[1].replace(/D_[0-9,a-z]{0,4}/g, x=> `"${x}"`))
+
             dispatch({type:'SET_FREEDOM_DEGREES', payload: parseInt(objFreedomDegrees)})
 
             dispatch({type:'SET_ORDER', payload: parseInt(objOrder)})
 
+            dispatch({type:'SET_CONSTS_TYPE', payload: objConstType})
+
             setOmegas([...Object.values(objOmegas).map((item, index)=>({var: 'number', index: index+1, value: `${item}`, letIndex: letterIndexes[index]}))])
 
             setConsts([...Object.entries(objConsts).map(item=>({var:'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x=>numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1]}))])
+
+            setDipoleX([...Object.entries(objDipoleX).map(item=>({var:'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x=>numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1]}))].slice(1))
+
+            setDipoleY([...Object.entries(objDipoleY).map(item=>({var:'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x=>numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1]}))].slice(1))
+
+            setDipoleZ([...Object.entries(objDipoleZ).map(item=>({var:'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x=>numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1]}))].slice(1))
 
         }
         
@@ -163,23 +181,23 @@ const Main = () => {
 
     useEffect(
         () => {
-            setDipoleX(state.dipoleX)
+            setDipoleXList(state.dipoleX)
         },
         [state.dipoleX],
     );
 
     useEffect(
         () => {
-            setDipoleY(state.dipoleYList)
+            setDipoleYList(state.dipoleY)
         },
-        [state.dipoleYList],
+        [state.dipoleY],
     );
 
     useEffect(
         () => {
-            setDipoleZ(state.dipoleZList)
+            setDipoleZList(state.dipoleZ)
         },
-        [state.dipoleZList],
+        [state.dipoleZ],
     );
 
     useEffect(
@@ -205,7 +223,7 @@ const Main = () => {
                                 <FormControl style={{marginLeft: 10, padding: '0 10px', border: '1px solid #c4c4c4', borderRadius: 4,}}>
                                     <RadioGroup
                                         row
-                                        defaultValue="A"
+                                        value={state.constsType}
                                         onChange={(e)=>setConstsType(e)}
                                     >
                                         <FormControlLabel style={{color:'#0E76BB'}} value="A" control={<Radio size='small' />} label="a"/>
