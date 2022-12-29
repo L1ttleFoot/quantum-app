@@ -22,7 +22,7 @@ def home():
 
 
 @app.route('/api/v1/calculation', methods=['GET', 'POST'])
-def get_test():
+def get_calculation():
     request_data = request.get_json(force=True)
 
     complete_dict = dict_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['constsType'], request_data['dipoleX'])
@@ -54,14 +54,16 @@ def get_test():
     energy -= sum([Recurrence_Relations.AE_BD(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
 
     #dipole = Recurrence_Relations.MEDMF(n_list2, n_list2, 2, n_dict, complete_dict_keys)
-    #dipole = sum([Recurrence_Relations.MEDMF(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
-    #dipole -= sum([Recurrence_Relations.MEDMF(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
-
-    dipole = Recurrence_Relations.MEDMF(n_list1, n_list2, 2, n_dict, complete_dict_keys)
+   
+    #dipole = Recurrence_Relations.MEDMF(n_list1, n_list2, 2, n_dict, complete_dict_keys)
     
-    X = dipole.subs({**complete_dict,**dict_dipole_X})
-    Y = dipole.subs({**complete_dict,**dict_dipole_Y})
-    Z = dipole.subs({**complete_dict,**dict_dipole_Z})
+    #X = dipole.subs({**complete_dict,**dict_dipole_X})
+    #Y = dipole.subs({**complete_dict,**dict_dipole_Y})
+    #Z = dipole.subs({**complete_dict,**dict_dipole_Z})
+
+    X=1
+    Y=1
+    Z=1
 
     response = jsonify(transition='%s > %s' % (n_str1, n_str2), energy='%s' % (energy.subs(complete_dict)), matrix='%s' % (((X**2+Y**2+Z**2)**(1/2))*1000))
     response.headers.add("Access-Control-Allow-Origin", "*")

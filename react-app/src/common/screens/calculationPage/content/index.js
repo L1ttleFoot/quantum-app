@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import './style.css'
+import '../style.css'
 import {TextField, Paper, Stack, Typography, Button, IconButton, CircularProgress, Tabs, Tab } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
-import Chart from "../../../components/Charts"
+import Chart from "../../../../components/Charts"
 import DeleteIcon from '@mui/icons-material/Delete';
 
 //mport Field from "../components/ConstantsFields"
 
-const Page = (props) => {
+const CalculationPage = (props) => {
 
     const dispatch = useDispatch()
 
@@ -403,4 +403,4 @@ const Page = (props) => {
     )
 }
 
-export default Page
+export default CalculationPage
