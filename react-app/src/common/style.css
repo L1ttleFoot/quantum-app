@@ -1,5 +1,10 @@
-.drawer {
-    width: 50px !important;
+.item {
+    color: #0E76BB;
+}
+  
+  /* Increase the specificity */
+.item.Mui-selected:hover {
+    color: #0E76BB;
 }
 
 .appbar{

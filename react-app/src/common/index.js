@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { Routes, Route } from 'react-router-dom'
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Divider } from '@mui/material';
+import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Divider } from '@mui/material';
 import './style.css'
 import StartPage from './screens/startPage'
 import CalculationPage from './screens/calculationPage'
@@ -9,6 +9,8 @@ import ArticleIcon from '@mui/icons-material/Article';
 import CalculateIcon from '@mui/icons-material/Calculate';
 
 const Main = () => {
+
+    const [tab, setTab] = useState('Info')
 
     const menuItems = [
         {
@@ -37,17 +39,30 @@ const Main = () => {
                 <Toolbar />
                 <Divider />
 
-                <List style={{width: 50}}>
+                <List
+                    sx={{
+                        width:50,
+                        // selected and (selected + hover) states
+                        '&& .Mui-selected, && .Mui-selected:hover': {
+                          bgcolor: '#0E76BB',
+                          '&, & .MuiListItemIcon-root': {
+                           color: 'white',
+                          },
+                        },
+                        // hover states
+                       
+                      }}
+                
+                >
                     {menuItems.map(item => (
-                        <ListItem
-                            
-                            button
+                        <ListItemButton
+                            selected={item.text===tab}
                             key={item.text}
-                            onClick={() => navigate(item.path)}
+                            onClick={() => {navigate(item.path);setTab(item.text)}}
                         >
                             <ListItemIcon>{item.icon}</ListItemIcon>
                             <ListItemText primary={item.text}/>
-                        </ListItem>
+                        </ListItemButton>
                     ))}
                 </List>
 
