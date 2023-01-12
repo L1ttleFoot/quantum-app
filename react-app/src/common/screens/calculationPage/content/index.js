@@ -46,7 +46,7 @@ const CalculationPage = (props) => {
             sortable: false,
         },
         {
-            field: 'delet',
+            field: 'delete',
             headerName: '',
             width: 60,
             sortable: false,

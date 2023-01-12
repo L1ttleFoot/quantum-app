@@ -233,16 +233,16 @@ const CalculationPage = () => {
                         </div>
                     </div>
 
-                        <div className='buttons'>
+                    <div className='buttons'>
 
-                            <Button 
-                                onClick={()=>handleClickConfig({setLoading})} 
-                                variant={"outlined"}
-                                style={{background: 'white', margin: 10}}
-                                disabled={loading}
-                            >
-                                Параметры
-                            </Button>
+                        <Button
+                            onClick={()=>handleClickConfig({setLoading})}
+                            variant={"outlined"}
+                            style={{background: 'white', margin: 10}}
+                            disabled={loading}
+                        >
+                            Параметры
+                        </Button>
 
                             <Tooltip title="Загрузить файл" placement="right">
                                 <IconButton onClick={onClick} color="primary" component="label">

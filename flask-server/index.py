@@ -57,8 +57,8 @@ def get_calculation():
     #Z = dipole.subs({**complete_dict,**dict_dipole_Z})
 
     X=1
-    Y=1
-    Z=1
+    Y=0
+    Z=0
 
     response = jsonify(transition='%s > %s' % (n_str1, n_str2), energy='%s' % (energy.subs(complete_dict)), matrix='%s' % (((X**2+Y**2+Z**2)**(1/2))*1000))
     response.headers.add("Access-Control-Allow-Origin", "*")
