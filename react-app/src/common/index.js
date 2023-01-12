@@ -51,9 +51,12 @@ const Main = () => {
                 anchor='left'
             >
                 <Toolbar />
-                <Divider />
 
                 <List
+                    style={{
+                        paddingTop:0,
+                        overflow:'hidden'
+                    }}
                     sx={{
                         width:50,
                         // selected and (selected + hover) states
@@ -64,9 +67,7 @@ const Main = () => {
                           },
                         },
                         // hover states
-                       
-                      }}
-                
+                    }}
                 >
                     {menuItems.map(item => (
                         <ListItemButton
