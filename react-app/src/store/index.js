@@ -1,7 +1,8 @@
-import { createStore } from 'redux'
 import { initialState } from '../common/initialState'
+import {configureStore} from "@reduxjs/toolkit";
+import thunk from "redux-thunk";
 
-const reduser = (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
     switch (action.type) {
         case "SET_NUMBERS1":
             return {...state, numbers1: action.payload}
@@ -35,4 +36,7 @@ const reduser = (state = initialState, action) => {
     }
 }
 
-export const store = createStore(reduser)
+export const store = configureStore({
+    reducer: reducer,
+    middleware: [thunk]
+});

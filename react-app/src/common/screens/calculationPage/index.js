@@ -211,27 +211,27 @@ const CalculationPage = () => {
             <AppBar style={{background: 'white', width: `calc(100% - 50px)`, }}>
                 <Toolbar style={{display: 'flex' }}>
                     
-                        <div className='input'>
+                    <div className='input'>
 
-                            <TextField value={state.freedomDegrees} style={{margin: 10, width: 130}} label={'Степени свободы'} size='small' onChange={setFreedomDegrees}></TextField>
+                        <TextField value={state.freedomDegrees} style={{margin: 10, width: 130}} label={'Степени свободы'} size='small' onChange={setFreedomDegrees}/>
 
-                            <TextField value={state.order} style={{margin: 10, width: 80}} label={'Порядок'} size='small' onChange={setOrder}></TextField>
+                        <TextField value={state.order} style={{margin: 10, width: 80}} label={'Порядок'} size='small' onChange={setOrder}/>
 
-                            <div>
-                                <div className='radio-lable'>Тип констант</div>
-                                <FormControl style={{marginLeft: 10, padding: '0 10px', border: '1px solid #c4c4c4', borderRadius: 4,}}>
-                                    <RadioGroup
-                                        row
-                                        value={state.constsType}
-                                        onChange={(e)=>setConstsType(e)}
-                                    >
-                                        <FormControlLabel style={{color:'#0E76BB'}} value="A" control={<Radio size='small' />} label="a"/>
-                                        <FormControlLabel style={{color:'#0E76BB'}} value="k" control={<Radio size='small' />} label="k" />
-                                        <FormControlLabel style={{color:'#0E76BB'}} value="fi" control={<Radio size='small' />} label={<span>&phi;</span>}  />
-                                    </RadioGroup>
-                                </FormControl> 
-                            </div>
+                        <div>
+                            <div className='radio-label'>Тип констант</div>
+                            <FormControl style={{marginLeft: 10, padding: '0 10px', border: '1px solid #c4c4c4', borderRadius: 4,}}>
+                                <RadioGroup
+                                    row
+                                    value={state.constsType}
+                                    onChange={(e)=>setConstsType(e)}
+                                >
+                                    <FormControlLabel style={{color:'#0E76BB'}} value="A" control={<Radio size='small' />} label="a"/>
+                                    <FormControlLabel style={{color:'#0E76BB'}} value="k" control={<Radio size='small' />} label="k" />
+                                    <FormControlLabel style={{color:'#0E76BB'}} value="fi" control={<Radio size='small' />} label={<span>&phi;</span>}  />
+                                </RadioGroup>
+                            </FormControl>
                         </div>
+                    </div>
 
                         <div className='buttons'>
 

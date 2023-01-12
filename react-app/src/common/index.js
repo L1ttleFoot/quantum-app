@@ -69,8 +69,8 @@ const Main = () => {
             </Drawer>
 
             <Routes>
-                    <Route path='/' element={<StartPage/>}></Route>
-                    <Route path='/calculation' element={<CalculationPage/>}></Route>
+                <Route path='/' element={<StartPage/>}/>
+                <Route path='/calculation' element={<CalculationPage/>}/>
             </Routes>
 
         </div>
