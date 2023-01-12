@@ -244,29 +244,18 @@ const CalculationPage = () => {
                             Параметры
                         </Button>
 
-                            <Tooltip title="Загрузить файл" placement="right">
-                                <IconButton onClick={onClick} color="primary" component="label">
-                                    <input
-                                        onChange={onChange}
-                                        
-                                        accept="application/json,.py,.txt"
-                                        type="file"
-                                        hidden
-                                    />
-                                    <UploadFileIcon />
-                                </IconButton>
-                            </Tooltip>
+                        <Tooltip title="Загрузить файл" placement="right">
+                            <IconButton onClick={onClick} color="primary" component="label">
+                                <input
+                                    onChange={onChange}
+                                    accept="application/json,.py,.txt"
+                                    type="file"
+                                    hidden
+                                />
 
-                           {/*  <Button 
-                                disabled={emptyNumbers1 || emptyNumbers2 || emptyOmegas || emptyConsts} 
-                                onClick={handleClickCalculation} 
-                                variant="outlined" 
-                                style={{background: 'white', margin: 10}}
-                            >
-                                Расчет
-                            </Button> */}
-                            
-                        </div>
+                            </IconButton>
+                        </Tooltip>
+                    </div>
 
                 </Toolbar>
             </AppBar>
