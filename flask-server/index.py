@@ -56,7 +56,7 @@ def get_calculation():
     #Y = dipole.subs({**complete_dict,**dict_dipole_Y})
     #Z = dipole.subs({**complete_dict,**dict_dipole_Z})
 
-    X=1
+    X=0.01
     Y=0
     Z=0
 
