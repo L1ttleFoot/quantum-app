@@ -252,7 +252,7 @@ const CalculationPage = () => {
                                     type="file"
                                     hidden
                                 />
-
+                                <UploadFileIcon/>
                             </IconButton>
                         </Tooltip>
                     </div>
