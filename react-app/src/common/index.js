@@ -58,6 +58,8 @@ const Main = () => {
                         overflow:'hidden'
                     }}
                     sx={{
+                        overflow:'hidden',
+                        padding:0,
                         width:50,
                         // selected and (selected + hover) states
                         '&& .Mui-selected, && .Mui-selected:hover': {
@@ -76,7 +78,7 @@ const Main = () => {
                             onClick={() => {navigate(item.path);setTab(item.text)}}
                         >
                             <ListItemIcon>{item.icon}</ListItemIcon>
-                            <ListItemText primary={item.text}/>
+                            {/* <ListItemText primary={item.text}/> */}
                         </ListItemButton>
                     ))}
                 </List>
