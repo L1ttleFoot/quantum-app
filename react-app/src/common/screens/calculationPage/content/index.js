@@ -1,30 +1,40 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
 import '../style.css'
-import {TextField, Paper, Stack, Typography, Button, IconButton, CircularProgress, Tabs, Tab } from '@mui/material'
+import {TextField, Paper, Stack, Typography, Button, IconButton, CircularProgress, Tabs, Tab} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import Chart from "../../../../components/Charts"
-import DeleteIcon from '@mui/icons-material/Delete';
-
-//mport Field from "../components/ConstantsFields"
 
 const CalculationPage = (props) => {
 
-    const dispatch = useDispatch()
+    const {state, calculation, someEmpty, load, dispatchHelpers} = props
 
-    const {state, constsList, dipoleXList, dipoleYList, dipoleZList, calculation, someEmpty, load} = props
+    const {omegas, consts, freedomDegrees, dipole0, dipoleX, dipoleY, dipoleZ} = state
 
-    const [selectedRows, setSelectedRows] = useState([])
-
-    //const [dipole0, setDipole0] = useState({index: '0', value: '', var: 'dipole0', letIndex: '0'})
+    const {
+        dispatchConsts,
+        dispatchOmegas,
+        dispatchNumbers1,
+        dispatchNumbers2,
+        dispatchDipole0,
+        dispatchDipoleX,
+        dispatchDipoleY,
+        dispatchDipoleZ,
+        dispatchRows
+    } = dispatchHelpers
 
     const [tab, setTab] = useState('x')
 
-    const setRows = (value) => {
-        dispatch({type:'SET_ROWS', payload: value})
-    }
+    const [selectedRows, setSelectedRows] = useState([])
 
     const rows=[...state.rows].map((item, index)=>({...item, id: index+1}))
+
+    useEffect(
+        () => {
+            setSelectedRows(rows)
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [state.rows],
+    );
 
     const columns = [
         {
@@ -52,74 +62,33 @@ const CalculationPage = (props) => {
             sortable: false,
             renderCell: (params) => {
 
-              const onClick = (e) => {
-                e.stopPropagation(); // don't select this row after clicking
-            
-                setRows([...rows].filter(item=>item.id !== params.id))
-                
-              };
-        
-              return <IconButton onClick={onClick}>
-                        <DeleteIcon/>
-                    </IconButton>
+                const onClick = (e) => {
+                    e.stopPropagation(); // don't select this row after clicking
+                    dispatchRows([...rows].filter(item=>item.id !== params.id))
+                };
+
+                return <IconButton onClick={onClick}>
+
+                        </IconButton>
             },
           },
       ];
 
     const letterIndexes='ijkl'
 
-    const numbersArr1 = new Array(Number(state.freedomDegrees)).fill(undefined).map((item, index)=>({var: 'number', index: index+1, value: '', letIndex: letterIndexes[index]}))
-    const numbersArr2 = new Array(Number(state.freedomDegrees)).fill(undefined).map((item, index)=>({var: 'number', index: index+1, value: '', letIndex: letterIndexes[index]}))
-    const omegasArr = new Array(Number(state.freedomDegrees)).fill(undefined).map((item, index)=>({var: 'omega', index: index+1, value: '', letIndex: letterIndexes[index]}))
-    const constsArr = [...constsList]   
-
-    const dipoleXArr = [...dipoleXList]
-    const dipoleYArr = [...dipoleYList]
-    const dipoleZArr = [...dipoleZList]
+    const numbersArr1 = new Array(Number(freedomDegrees)).fill(undefined).map((item, index)=>({var: 'number', index: index+1, value: '', letIndex: letterIndexes[index]}))
+    const numbersArr2 = new Array(Number(freedomDegrees)).fill(undefined).map((item, index)=>({var: 'number', index: index+1, value: '', letIndex: letterIndexes[index]}))
 
     const [numbersList1, setNumbersList] = useState([])
     const [numbersList2, setNumbersList2] = useState([])
     const [omegasList, setOmegasList] = useState([])
-    //const [newConstList, setNewConstList] = useState([])
-
-    const setNumbers = (value) => {
-        dispatch({type:'SET_NUMBERS1', payload:value})    
-    }
-
-    const setNumbers2 = (value) => {
-        dispatch({type:'SET_NUMBERS2', payload:value})    
-    }
-
-    const setOmegas = (value) => {
-        dispatch({type:'SET_OMEGAS', payload:value})    
-    }
-
-    const setConst = (value) => {
-        dispatch({type:'SET_CONSTS', payload:value})    
-    }
-
-    const setDipole0 = (value) => {
-        dispatch({type:'SET_DIPOLE_0', payload:value})    
-    }
-
-    const setDipoleX = (value) => {
-        dispatch({type:'SET_DIPOLE_X', payload:value})    
-    }
-
-    const setDipoleY = (value) => {
-        dispatch({type:'SET_DIPOLE_Y', payload:value})    
-    }
-
-    const setDipoleZ = (value) => {
-        dispatch({type:'SET_DIPOLE_Z', payload:value})    
-    }
 
     useEffect(
         () => {
             setNumbersList(numbersArr1)
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [state.freedomDegrees],
+        [freedomDegrees],
     );
 
     useEffect(
@@ -127,24 +96,24 @@ const CalculationPage = (props) => {
             setNumbersList2(numbersArr2)
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [state.freedomDegrees],
+        [freedomDegrees],
     );
 
     useEffect(
         () => {
-            setOmegasList(new Array(Number(state.freedomDegrees)).fill(undefined).map((item, index)=>({var: 'omega', index: index+1, value: '', letIndex: letterIndexes[index]}))
+            setOmegasList(new Array(Number(freedomDegrees)).fill(undefined).map((item, index)=>({var: 'omega', index: index+1, value: '', letIndex: letterIndexes[index]}))
             )
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [state.freedomDegrees],
+        [freedomDegrees],
     );
 
     useEffect(
         () => {
-            setOmegasList(state.omegas)
+            setOmegasList(omegas)
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [state.omegas],
+        [omegas],
     );
 
     const onChangeTab = (e, value) => {
@@ -154,47 +123,47 @@ const CalculationPage = (props) => {
     const handleChangeNumbers = index => event => {
         let newArr=[...numbersList1]
         newArr[index].value=event.target.value
-        setNumbers(newArr)
+        dispatchNumbers1(newArr)
     };
 
     const handleChangeNumbers2 = index => event => {
         let newArr=[...numbersList2]
         newArr[index].value=event.target.value
-        setNumbers2(newArr)
+        dispatchNumbers2(newArr)
     };
 
     const handleChangeOmegas = index => event => {
-        let newArr=[...omegasList]
+        let newArr=[...omegas]
         newArr[index].value=event.target.value
-        setOmegas(newArr)
+        dispatchOmegas(newArr)
     };
 
     const handleChangeConst = index => event => {
-        let newArr=[...constsArr]
+        let newArr=[...consts]
         newArr[index].value=event.target.value
-        setConst(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
+        dispatchConsts(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
     };
 
     const handleChangeDipoleX = index => event => {
-        let newArr=[...dipoleXArr]
+        let newArr=[...dipoleX]
         newArr[index].value=event.target.value
-        setDipoleX(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
+        dispatchDipoleX(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
     };
 
     const handleChangeDipoleY = index => event => {
-        let newArr=[...dipoleYArr]
+        let newArr=[...dipoleY]
         newArr[index].value=event.target.value
-        setDipoleY(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
+        dispatchDipoleY(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
     };
 
     const handleChangeDipoleZ = index => event => {
-        let newArr=[...dipoleZArr]
+        let newArr=[...dipoleZ]
         newArr[index].value=event.target.value
-        setDipoleZ(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
+        dispatchDipoleZ(newArr.map(item=>({...item, letIndex: item.index.replace(/1/g,'i').replace(/2/g,'j').replace(/3/g,'k')})))
     };
 
     const handleChangeDipole0 = (e) => {
-        setDipole0({...state.dipole0, value: e.target.value})
+        dispatchDipole0({...dipole0, value: e.target.value})
     }
 
     return(
@@ -268,7 +237,7 @@ const CalculationPage = (props) => {
                             }} 
                     >
 
-                        {constsArr.map((item, index)=>
+                        {consts.map((item, index)=>
                             <TextField
                                 key={item.index+'const'}
                                 size={'small'} 
@@ -307,11 +276,11 @@ const CalculationPage = (props) => {
                             size={'small'} 
                             style={{margin:10, width:'20%', minWidth:80}} 
                             label={<span>d<sub>0</sub></span>} 
-                            value={state.dipole0.value}
+                            value={dipole0.value}
                             onChange={handleChangeDipole0}
                         />
 
-                        {tab === 'x' && dipoleXArr.map((item, index)=>
+                        {tab === 'x' && dipoleX.map((item, index)=>
                             <TextField
                                 key={item.index+'dipoleY'}
                                 size={'small'} 
@@ -322,7 +291,7 @@ const CalculationPage = (props) => {
                             />
                         )}
 
-                        {tab === 'y' && dipoleYArr.map((item, index)=>
+                        {tab === 'y' && dipoleY.map((item, index)=>
                             <TextField
                                 key={item.index+'dipoleY'}
                                 size={'small'} 
@@ -333,7 +302,7 @@ const CalculationPage = (props) => {
                             />
                         )}
 
-                        {tab === 'z' && dipoleZArr.map((item, index)=>
+                        {tab === 'z' && dipoleZ.map((item, index)=>
                             <TextField
                                 key={item.index+'dipoleZ'}
                                 size={'small'} 
@@ -357,7 +326,11 @@ const CalculationPage = (props) => {
                         checkboxSelection
                         disableColumnMenu
                         hideFooter
-                        onSelectionModelChange={(x) => {setSelectedRows(x.map(item=>rows.find(obj=>obj.id===Number(item))))}}
+                        selectionModel={selectedRows.map(item=>item.id)}
+                        onSelectionModelChange={x=>
+                        {
+                            setSelectedRows(x.map(item=>rows.find(obj=>obj.id===Number(item))))
+                        }}
                     />
                 </div>
             </Paper>
