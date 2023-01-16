@@ -36,7 +36,9 @@ const reducer = (state = initialState, action) => {
     }
 }
 
-export const store = configureStore({
+const store = configureStore({
     reducer: reducer,
     middleware: [thunk]
 });
+
+export {reducer, store}
