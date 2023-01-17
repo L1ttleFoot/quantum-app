@@ -145,8 +145,8 @@ const CalculationPage = () => {
 
     return(
         <div style={{marginLeft: 50}}>
-            <AppBar style={{background: 'white', width: `calc(100% - 50px)`, }}>
-                <Toolbar style={{display: 'flex' }}>
+            <AppBar style={{background: 'white', width: `calc(100% - 60px)`, }}>
+                <Toolbar style={{display: 'flex'}}>
                     
                     <div className='input'>
 
