@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import '../style.css'
 import {TextField, Paper, Stack, Typography, Button, IconButton, CircularProgress, Tabs, Tab} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
-import Chart from "../../../../components/Charts"
+import Chart from "../components/Charts"
 
 const CalculationPage = (props) => {
 
     const {state, calculation, someEmpty, load, dispatchHelpers} = props
 
-    const {omegas, consts, freedomDegrees, dipole0, dipoleX, dipoleY, dipoleZ} = state
+    const {omegas, numbers1, numbers2, consts, freedomDegrees, dipole0, dipoleX, dipoleY, dipoleZ} = state
 
     const {
         dispatchConsts,
@@ -76,44 +76,14 @@ const CalculationPage = (props) => {
 
     const letterIndexes='ijkl'
 
-    const numbersArr1 = new Array(Number(freedomDegrees)).fill(undefined).map((item, index)=>({var: 'number', index: index+1, value: '', letIndex: letterIndexes[index]}))
-    const numbersArr2 = new Array(Number(freedomDegrees)).fill(undefined).map((item, index)=>({var: 'number', index: index+1, value: '', letIndex: letterIndexes[index]}))
-
-    const [numbersList1, setNumbersList] = useState([])
-    const [numbersList2, setNumbersList2] = useState([])
-    const [omegasList, setOmegasList] = useState([])
-
     useEffect(
         () => {
-            setNumbersList(numbersArr1)
+            dispatchNumbers1(new Array(Number(freedomDegrees)).fill(undefined).map((item, index)=>({var: 'number', index: index+1, value: '', letIndex: letterIndexes[index]})))
+            dispatchNumbers2(new Array(Number(freedomDegrees)).fill(undefined).map((item, index)=>({var: 'number', index: index+1, value: '', letIndex: letterIndexes[index]})))
+            dispatchOmegas(new Array(Number(freedomDegrees)).fill(undefined).map((item, index)=>({var: 'omega', index: index+1, value: '', letIndex: letterIndexes[index]})))
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [freedomDegrees],
-    );
-
-    useEffect(
-        () => {
-            setNumbersList2(numbersArr2)
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [freedomDegrees],
-    );
-
-    useEffect(
-        () => {
-            setOmegasList(new Array(Number(freedomDegrees)).fill(undefined).map((item, index)=>({var: 'omega', index: index+1, value: '', letIndex: letterIndexes[index]}))
-            )
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [freedomDegrees],
-    );
-
-    useEffect(
-        () => {
-            setOmegasList(omegas)
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [omegas],
     );
 
     const onChangeTab = (e, value) => {
@@ -121,13 +91,13 @@ const CalculationPage = (props) => {
     }
 
     const handleChangeNumbers = index => event => {
-        let newArr=[...numbersList1]
+        let newArr=[...numbers1]
         newArr[index].value=event.target.value
         dispatchNumbers1(newArr)
     };
 
     const handleChangeNumbers2 = index => event => {
-        let newArr=[...numbersList2]
+        let newArr=[...numbers2]
         newArr[index].value=event.target.value
         dispatchNumbers2(newArr)
     };
@@ -174,7 +144,7 @@ const CalculationPage = (props) => {
                     <Typography variant="subtitle">Начальное состояние</Typography>
                     <Stack direction={'column'} alignItems={'center'}>
                         
-                        {numbersList1.map((item,index)=>
+                        {numbers1.map((item,index)=>
                             <TextField 
                                 key={item.index+'omega'} 
                                 size={'small'} 
@@ -192,7 +162,7 @@ const CalculationPage = (props) => {
                     <Typography variant="subtitle">Конечное состояние</Typography>
                     <Stack direction={'column'} alignItems={'center'}>
                     
-                        {numbersList2.map((item,index)=>
+                        {numbers2.map((item,index)=>
                             <TextField 
                                 key={item.index+'omega'} 
                                 size={'small'} 
@@ -212,7 +182,7 @@ const CalculationPage = (props) => {
                     <Typography variant="subtitle">Гармонические частоты</Typography>
                     <Stack direction={'column'} alignItems={'center'}>
                         
-                        {omegasList.map((item, index)=>
+                        {omegas.map((item, index)=>
                             <TextField 
                                 key={item.index+'omega'} 
                                 size={'small'} 
