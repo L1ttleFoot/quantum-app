@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import {Routes, Route, useLocation} from 'react-router-dom'
-import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Divider } from '@mui/material';
+import { Drawer, List, ListItemButton, ListItemIcon, } from '@mui/material';
 import './style.css'
 import StartPage from './screens/startPage'
 import CalculationPage from './screens/calculationPage'
 import { useNavigate } from "react-router";
 import ArticleIcon from '@mui/icons-material/Article';
 import CalculateIcon from '@mui/icons-material/Calculate';
+import logo from '../imges/Logo-shot.png'
 
 const Main = () => {
 
@@ -50,8 +51,11 @@ const Main = () => {
                 variant='permanent'
                 anchor='left'
             >
-                <Toolbar />
 
+                <div>
+                    <img src={logo} width="60" height="60" alt='logo'/>
+                </div>   
+                
                 <List
                     style={{
                         paddingTop:0,
@@ -60,7 +64,7 @@ const Main = () => {
                     sx={{
                         overflow:'hidden',
                         padding:0,
-                        width:50,
+                        width:60,
                         // selected and (selected + hover) states
                         '&& .Mui-selected, && .Mui-selected:hover': {
                           bgcolor: '#0E76BB',
