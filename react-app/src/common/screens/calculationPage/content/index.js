@@ -3,6 +3,7 @@ import '../style.css'
 import {TextField, Paper, Stack, Typography, Button, IconButton, CircularProgress, Tabs, Tab} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import Chart from "../components/Charts"
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const CalculationPage = (props) => {
 
@@ -68,7 +69,7 @@ const CalculationPage = (props) => {
                 };
 
                 return <IconButton onClick={onClick}>
-
+                            <DeleteIcon/>
                         </IconButton>
             },
           },
