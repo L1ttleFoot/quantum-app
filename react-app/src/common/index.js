@@ -52,7 +52,7 @@ const Main = () => {
                 anchor='left'
             >
 
-                <div>
+                <div className='logo'>
                     <img src={logo} width="60" height="60" alt='logo'/>
                 </div>   
                 
