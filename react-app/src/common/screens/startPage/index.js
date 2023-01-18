@@ -5,7 +5,7 @@ import './style.css'
 const StartPage = (props) => {
 
     return(
-        <div style={{marginLeft: 50}}>
+        <div style={{marginLeft: 60}}>
             <AppBar style={{background: 'white', position:'absolute'}}>
                 <Toolbar style={{display: 'flex' }}>
 

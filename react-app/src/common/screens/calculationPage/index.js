@@ -144,7 +144,7 @@ const CalculationPage = () => {
     }
 
     return(
-        <div style={{marginLeft: 50}}>
+        <div style={{marginLeft: 60}}>
             <AppBar style={{background: 'white', width: `calc(100% - 60px)`, }}>
                 <Toolbar style={{display: 'flex'}}>
                     
