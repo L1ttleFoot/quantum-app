@@ -17,17 +17,25 @@
     align-items: center;
 }
 
-.box1{
-    grid-area: a;
+.stateField{
     display: flex;
     /* min-height: 210px; */
     height: fit-content;
 }
 
+.calcFields{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    height: 40px;
+}
+
+.box1{
+    grid-area: a;
+}
+
 .box2{
     grid-area: b;
-    /* min-height: 210px; */
-    height: fit-content;
 }
 
 .box3{
@@ -97,13 +105,4 @@
 
 .box7{
     grid-area: g;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    height: 40px;
 }
-
-/*.box6{
-    grid-area: e;
-    grid-column: span 3;
-}*/
