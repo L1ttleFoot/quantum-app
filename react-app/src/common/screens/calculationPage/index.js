@@ -1,55 +1,53 @@
-import React, {useState, useReducer} from 'react'
-import { AppBar, Toolbar, Button, TextField, FormControl, FormControlLabel, RadioGroup, Radio, IconButton, Tooltip } from '@mui/material';
+import React, {useState} from 'react'
+import { AppBar, Toolbar, Button, TextField, FormControl, FormControlLabel, RadioGroup, Radio, IconButton, Tooltip, CircularProgress } from '@mui/material';
 import Content from "./content"
 import './style.css'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
-import {initialState} from "../../initialState";
-import {reducer} from "../../../store";
+import {UsePage} from "../../../store/redusers"
+import { useSelector } from 'react-redux';
 
 const CalculationPage = () => {
 
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const state = useSelector(state=>state)
 
-    const dispatchHelpers = {
-        dispatchFreedomDegrees: (value) => dispatch({type:'SET_FREEDOM_DEGREES', payload: value}),
-        dispatchOrder: (value) => dispatch({type:'SET_ORDER', payload: value}),
-        dispatchConstsType: (value) => dispatch({type:'SET_CONSTS_TYPE', payload: value}),
-        dispatchConsts: (value) => dispatch({type:'SET_CONSTS', payload: value}),
-        dispatchOmegas: (value) => dispatch({type:'SET_OMEGAS', payload: value}),
-        dispatchNumbers1: (value) => dispatch({type:'SET_NUMBERS1', payload: value}),
-        dispatchNumbers2: (value) => dispatch({type:'SET_NUMBERS2', payload: value}),
-        dispatchDipole0: (value) => dispatch({type:'SET_DIPOLE_0', payload: value}),
-        dispatchDipoleX: (value) => dispatch({type:'SET_DIPOLE_X', payload: value}),
-        dispatchDipoleY: (value) => dispatch({type:'SET_DIPOLE_Y', payload: value}),
-        dispatchDipoleZ: (value) => dispatch({type:'SET_DIPOLE_Z', payload: value}),
-        dispatchRows: (value) => dispatch({type:'SET_ROWS', payload: value}),
-    }
+    const dispatchHelpers = UsePage()
+
+    const {
+        dispatchConsts,
+        dispatchDipoleX,
+        dispatchDipoleY,
+        dispatchDipoleZ,
+        dispatchRows
+    } = dispatchHelpers
 
     const [loading, setLoading] = useState(false)
 
     const [fileName, setFileName] = useState('')
     const [load, setLoad] = useState(false)
 
-    const handleClickConfig = (props) => {
+    const handleClickConfig = async(props) => {
 
-        props.setLoading(true)
+        setLoad(l=>!l)
 
-        fetch(`https://quantum-app-bf8b.vercel.app/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
+        await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
         .then(response=>response.json())
         .then(data=>{
-            dispatchHelpers.dispatchConsts(data.consts_list)
-            //dispatchHelpers.dispatchOmegas(data.omegas_list)
-            dispatchHelpers.dispatchDipoleX(data.dipole_list_x)
-            dispatchHelpers.dispatchDipoleY(data.dipole_list_y)
-            dispatchHelpers.dispatchDipoleZ(data.dipole_list_z)
-        })
+            dispatchConsts(data.consts_list)
+            dispatchDipoleX(data.dipole_list_x)
+            dispatchDipoleY(data.dipole_list_y)
+            dispatchDipoleZ(data.dipole_list_z)
+        }).catch(error => {
+            console.log(error)
+        });
 
-        props.setLoading(false)
+        setLoad(l=>!l)
 
     };
 
     const handleClickCalculation = async() => {
+
         setLoad(l=>!l)
+
         await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/calculation`,
         {method: 'POST',
             body: JSON.stringify({
@@ -65,7 +63,7 @@ const CalculationPage = () => {
         })})
         .then(response=>response.json())
         .then(data=>{
-            dispatchHelpers.dispatchRows([...state.rows, data])
+            dispatchRows([...state.rows, data])
         })
         .catch(error => {
             console.log(error)
@@ -185,6 +183,7 @@ const CalculationPage = () => {
                     <div className='buttons'>
 
                         <Button
+                            endIcon={load ? <CircularProgress size={20}/> : ''} 
                             onClick={()=>handleClickConfig({setLoading})}
                             variant={"outlined"}
                             style={{background: 'white', margin: 10}}
