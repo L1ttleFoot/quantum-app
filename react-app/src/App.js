@@ -4,13 +4,13 @@ import './App.css';
 import Main from './common'
 
 function App() {
-  return (
-    <div className="App">
-      <Router>
-        <Main/>
-      </Router>
-    </div>
-  );
+    return (
+        <div className="App">
+            <Router>
+                <Main />
+            </Router>
+        </div>
+    );
 }
 
 export default App;
