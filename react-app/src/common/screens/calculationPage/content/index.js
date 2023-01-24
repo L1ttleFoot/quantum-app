@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 import '../style.css'
-import {Paper} from '@mui/material'
+import { Paper } from '@mui/material'
 import Chart from "../components/Charts"
 import DipoleField from '../components/DipoleField';
 import Table from '../components/Table';
@@ -12,17 +12,17 @@ import CalculationFiled from '../components/CalculationField'
 
 const CalculationPage = (props) => {
 
-    const {calculation, someEmpty, load} = props
+    const { calculation, someEmpty, load } = props
 
-    const state = useSelector(state=>state)
+    const state = useSelector(state => state)
 
     const [selectedRows, setSelectedRows] = useState([])
 
-    const updateSelectedRows = (rows)=>{
+    const updateSelectedRows = (rows) => {
         setSelectedRows(rows)
     }
 
-    const rows=[...state.rows].map((item, index)=>({...item, id: index+1}))
+    const rows = [...state.rows].map((item, index) => ({ ...item, id: index + 1 }))
 
     useEffect(
         () => {
@@ -32,37 +32,37 @@ const CalculationPage = (props) => {
         [state.rows],
     );
 
-    return(
+    return (
         <div className={'container'}>
 
             <Paper className={'box1'}>
-                <StateField/>
+                <StateField />
             </Paper>
 
             <Paper className={'box2'}>
-                <OmegasField/>
+                <OmegasField />
             </Paper>
-            
+
             <Paper className={'box3'}>
-                <ConstsField/>
+                <ConstsField />
             </Paper>
 
             <Paper className={'box4'}>
-                <DipoleField/>
+                <DipoleField />
             </Paper>
-            
+
             <Paper className={'box5'}>
-                <Table selectedRows={selectedRows} updateSelectedRows={updateSelectedRows}/>
+                <Table selectedRows={selectedRows} updateSelectedRows={updateSelectedRows} />
             </Paper>
 
             <Paper className={'box6'}>
-                <Chart data={selectedRows}/>
+                <Chart data={selectedRows} />
             </Paper>
 
             <Paper className={'box7'}>
-                <CalculationFiled calculation={calculation} someEmpty={someEmpty} load={load}/>
+                <CalculationFiled calculation={calculation} someEmpty={someEmpty} load={load} />
             </Paper>
-            
+
         </div>
     )
 }

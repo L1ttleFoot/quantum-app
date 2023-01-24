@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 import { IconButton } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,19 +7,19 @@ import { UsePage } from '../../../../../store/redusers';
 
 const Table = (props) => {
 
-    const {updateSelectedRows, selectedRows} = props
+    const { updateSelectedRows, selectedRows } = props
 
     const dispatchHelpers = UsePage()
 
-    const state = useSelector(state=>state)
+    const state = useSelector(state => state)
 
-    const {rows} = state
+    const { rows } = state
 
     const {
         dispatchRows
     } = dispatchHelpers
 
-    const myRows = [...rows].map((item, index)=>({...item, id: index+1}))
+    const myRows = [...rows].map((item, index) => ({ ...item, id: index + 1 }))
 
     useEffect(
         () => {
@@ -31,10 +31,10 @@ const Table = (props) => {
 
     const columns = [
         {
-            field: 'transition', 
-            headerName: 'Переход', 
+            field: 'transition',
+            headerName: 'Переход',
             width: 90,
-            sortable: false 
+            sortable: false
         },
         {
             field: 'energy',
@@ -57,17 +57,17 @@ const Table = (props) => {
 
                 const onClick = (e) => {
                     e.stopPropagation(); // don't select this row after clicking
-                    dispatchRows([...myRows].filter(item=>item.id !== params.id))
+                    dispatchRows([...myRows].filter(item => item.id !== params.id))
                 };
 
                 return <IconButton onClick={onClick}>
-                            <DeleteIcon/>
-                        </IconButton>
+                    <DeleteIcon />
+                </IconButton>
             },
-          },
+        },
     ];
 
-    return(
+    return (
         <div >
             <DataGrid
                 autoHeight
@@ -76,10 +76,9 @@ const Table = (props) => {
                 checkboxSelection
                 disableColumnMenu
                 hideFooter
-                selectionModel={selectedRows.map(item=>item.id)}
-                onSelectionModelChange={x=>
-                {
-                    updateSelectedRows(x.map(item=>myRows.find(obj=>obj.id===Number(item))))
+                selectionModel={selectedRows.map(item => item.id)}
+                onSelectionModelChange={x => {
+                    updateSelectedRows(x.map(item => myRows.find(obj => obj.id === Number(item))))
                 }}
             />
         </div>

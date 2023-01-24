@@ -1,31 +1,31 @@
 import React from 'react'
 import '../../style.css'
-import {Button, CircularProgress} from '@mui/material'
+import { Button, CircularProgress } from '@mui/material'
 
 const CalculationFiled = (props) => {
 
-    const {calculation, someEmpty, load} = props
+    const { calculation, someEmpty, load } = props
 
-    return(
+    return (
         <div className={'calcFields'}>
-            <Button 
-                endIcon={load ? <CircularProgress size={20}/> : ''} 
-                fullWidth={true} 
-                variant='contained' 
-                onClick={calculation} 
+            <Button
+                endIcon={load ? <CircularProgress size={20} /> : ''}
+                fullWidth={true}
+                variant='contained'
+                onClick={calculation}
                 disabled={someEmpty || load}
-                style={{margin:'0px 5px'}}
+                style={{ margin: '0px 5px' }}
             >
                 Расчет
             </Button>
 
-            <Button 
+            <Button
                 /* endIcon={load ? <CircularProgress size={20}/> : ''}  */
-                fullWidth={true} 
-                variant='contained' 
+                fullWidth={true}
+                variant='contained'
                 disabled
                 /* disabled={someEmpty || load} */
-                style={{margin:'0px 5px'}}
+                style={{ margin: '0px 5px' }}
             >
                 Резонанс
             </Button>

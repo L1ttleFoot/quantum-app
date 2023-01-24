@@ -4,41 +4,41 @@
     /* grid-template-columns: 1fr 38% 38%; */
     /* grid-template-rows: 1fr 1fr 1fr; */
     padding: 20px;
-    grid-template: 
-    'b c c d' 
-    'a c c d' 0.1fr
-    'g c c d' 60px
-    'e e f f' 320px / 330px 1fr 2fr 3fr
+    grid-template:
+        'b c c d'
+        'a c c d' 0.1fr
+        'g c c d' 60px
+        'e e f f' 320px / 330px 1fr 2fr 3fr
 }
 
-.block{
+.block {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.stateField{
+.stateField {
     display: flex;
     /* min-height: 210px; */
     height: fit-content;
 }
 
-.calcFields{
+.calcFields {
     padding: 10px;
     display: flex;
     justify-content: center;
     height: 40px;
 }
 
-.box1{
+.box1 {
     grid-area: a;
 }
 
-.box2{
+.box2 {
     grid-area: b;
 }
 
-.box3{
+.box3 {
     grid-area: c;
     overflow-y: auto;
     scrollbar-gutter: stable;
@@ -49,7 +49,8 @@
     /* display: none; */
     width: 5px;
     height: 8px;
-    background-color: #aaa; /* or add it to the track */
+    background-color: #aaa;
+    /* or add it to the track */
     border-radius: 0px 4px 4px 0px;
 }
 
@@ -63,7 +64,8 @@
     /* display: none; */
     width: 5px;
     height: 8px;
-    background-color: #aaa; /* or add it to the track */
+    background-color: #aaa;
+    /* or add it to the track */
     border-radius: 0px 4px 4px 0px;
 }
 
@@ -72,7 +74,7 @@
     border-radius: 0px 3px 3px 0px;
 }
 
-.box4{
+.box4 {
     grid-area: d;
     overflow-y: auto;
     scrollbar-gutter: stable;
@@ -83,7 +85,8 @@
     /* display: none; */
     width: 5px;
     height: 8px;
-    background-color: #aaa; /* or add it to the track */
+    background-color: #aaa;
+    /* or add it to the track */
     border-radius: 0px 4px 4px 0px;
 }
 
@@ -92,17 +95,17 @@
     border-radius: 0px 3px 3px 0px;
 }
 
-.box5{
+.box5 {
     grid-area: e;
     overflow-y: auto;
     scrollbar-gutter: stable;
 }
 
-.box6{
+.box6 {
     grid-area: f;
     min-height: 250px;
 }
 
-.box7{
+.box7 {
     grid-area: g;
 }

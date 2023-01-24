@@ -1,33 +1,33 @@
 .item {
     color: #0E76BB;
 }
-  
-  /* Increase the specificity */
+
+/* Increase the specificity */
 .item.Mui-selected:hover {
     color: #0E76BB;
 }
 
-.appbar{
+.appbar {
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
 
-.buttons{
+.buttons {
     background: white;
 }
 
-.input{
+.input {
     display: flex;
     align-items: center;
 }
 
-.radio-group{
+.radio-group {
     display: flex;
     align-items: center;
 }
 
-.radio-label{
+.radio-label {
     position: absolute;
     font-size: 12px;
     top: 5px;
@@ -38,11 +38,11 @@
     z-index: 1;
 }
 
-.logo{
+.logo {
     transition: .2s;
 }
 
-.logo:hover{
+.logo:hover {
     transform: scale(1.05);
     cursor: pointer;
 }
