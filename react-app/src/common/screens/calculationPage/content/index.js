@@ -12,7 +12,7 @@ import CalculationFiled from '../components/CalculationField'
 
 const CalculationPage = (props) => {
 
-    const { calculation, someEmpty, load } = props
+    const { calculation, resonans, someEmpty, load } = props
 
     const state = useSelector(state => state)
 
@@ -60,7 +60,7 @@ const CalculationPage = (props) => {
             </Paper>
 
             <Paper className={'box7'}>
-                <CalculationFiled calculation={calculation} someEmpty={someEmpty} load={load} />
+                <CalculationFiled calculation={calculation} resonans={resonans} someEmpty={someEmpty} load={load} />
             </Paper>
 
         </div>
