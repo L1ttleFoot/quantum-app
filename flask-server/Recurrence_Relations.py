@@ -297,10 +297,10 @@ def MEDMF(bra, ket, max_indignation_step, n_dict, key_dict):
         result.append(sy.simplify(BGK))
     return sy.simplify(sum(result))
 
-def Resonance(levels, zamena, max_indignation_step):
+def Resonance(levels, zamena, max_indignation_step, n_dict, key_dict):
     vec = [0 for i in levels[0]]
     dimensions = len(levels)
-    E0 = [AE_BD(vec, vec, k) for k in range(max_indignation_step+1)]
+    E0 = [AE_BD(vec, vec, k, n_dict, key_dict) for k in range(max_indignation_step+1)]
     E0 = sum([i.subs(zamena) for i in E0 if i != 0])
     matrixbase = []
     matrixrow = []
@@ -311,7 +311,7 @@ def Resonance(levels, zamena, max_indignation_step):
             matrixbase.append(list(matrixrow))
             matrixrow = []
             j = 0
-        AA= [AE_BD(i[0],i[1],k) for k in range(max_indignation_step+1)]
+        AA= [AE_BD(i[0],i[1], k, n_dict, key_dict) for k in range(max_indignation_step+1)]
         AA1= [k.subs(zamena) for k in AA if k != 0]
         matrixrow.append(sum(AA1))
         j += 1

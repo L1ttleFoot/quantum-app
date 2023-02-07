@@ -30,6 +30,7 @@ const CalculationPage = () => {
         setLoad(l => !l)
 
         await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
+        //await fetch(`http://localhost:8080/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
             .then(response => response.json())
             .then(data => {
                 dispatchConsts(data.consts_list)
@@ -49,6 +50,38 @@ const CalculationPage = () => {
         setLoad(l => !l)
 
         await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/calculation`,
+        //await fetch(`http://localhost:8080/api/v1/calculation`,
+            {
+                method: 'POST',
+                body: JSON.stringify({
+                    numbers1: state.numbers1,
+                    numbers2: state.numbers2,
+                    omegas: state.omegas,
+                    consts: state.consts,
+                    dipoleX: [state.dipole0, ...state.dipoleX],
+                    dipoleY: [state.dipole0, ...state.dipoleY],
+                    dipoleZ: [state.dipole0, ...state.dipoleZ],
+                    constsType: state.constsType,
+                    order: state.order
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                dispatchRows([...state.rows, data])
+            })
+            .catch(error => {
+                console.log(error)
+            });
+
+        setLoad(l => !l)
+
+    };
+
+    const handleClickResonans = async () => {
+
+        setLoad(l => !l)
+
+        await fetch(`http://localhost:8080/api/v1/calculation_resonans`,
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -214,6 +247,7 @@ const CalculationPage = () => {
                 state={state}
                 dispatchHelpers={dispatchHelpers}
                 calculation={handleClickCalculation}
+                resonans={handleClickResonans}
                 someEmpty={someEmpty}
                 load={load}
             />

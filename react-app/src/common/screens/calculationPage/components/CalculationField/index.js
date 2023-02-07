@@ -4,7 +4,7 @@ import { Button, CircularProgress } from '@mui/material'
 
 const CalculationFiled = (props) => {
 
-    const { calculation, someEmpty, load } = props
+    const { calculation, resonans, someEmpty, load } = props
 
     return (
         <div className={'calcFields'}>
@@ -23,7 +23,7 @@ const CalculationFiled = (props) => {
                 /* endIcon={load ? <CircularProgress size={20}/> : ''}  */
                 fullWidth={true}
                 variant='contained'
-                disabled
+                onClick={resonans}
                 /* disabled={someEmpty || load} */
                 style={{ margin: '0px 5px' }}
             >
