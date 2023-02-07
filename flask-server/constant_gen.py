@@ -6,7 +6,7 @@ import os
 absolute_path = os.path.dirname(__file__)
 relative_path = "tmp"
 full_path = os.path.join(absolute_path, relative_path)
-a_path =os.path.dirname(os.path.dirname(__file__))
+a_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 f_path = os.path.join(a_path, relative_path)
 
 def factor_k(str):
