@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { AppBar, Toolbar, Button, TextField, FormControl, FormControlLabel, RadioGroup, Radio, IconButton, Tooltip, CircularProgress } from '@mui/material';
 import Content from "./content"
 import './style.css'
-import UploadFileIcon from '@mui/icons-material/UploadFile'
+import { Upload, Download } from '@mui/icons-material'
 import { UsePage } from "../../../store/redusers"
 import { useSelector } from 'react-redux';
+import { saveAs } from 'file-saver'
 
 const CalculationPage = () => {
 
@@ -81,7 +82,8 @@ const CalculationPage = () => {
 
         setLoad(l => !l)
 
-        await fetch(`http://localhost:8080/api/v1/calculation_resonans`,
+        await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/calculation_resonans`,
+        //await fetch(`http://localhost:8080/api/v1/calculation_resonans`,
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -105,6 +107,34 @@ const CalculationPage = () => {
             });
 
         setLoad(l => !l)
+
+    };
+
+    const handleClickGetFile = async () => {
+
+        await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/get_file`,
+        //await fetch(`http://localhost:8080/api/v1/get_file`,
+            {
+                method: 'POST',
+                body: JSON.stringify({
+                    numbers1: state.numbers1,
+                    numbers2: state.numbers2,
+                    omegas: state.omegas,
+                    consts: state.consts,
+                    dipoleX: [state.dipole0, ...state.dipoleX],
+                    dipoleY: [state.dipole0, ...state.dipoleY],
+                    dipoleZ: [state.dipole0, ...state.dipoleZ],
+                    constsType: state.constsType,
+                    order: state.order
+                })
+            })
+            .then(response => 
+                response.blob())
+            .then(myBlob => 
+                saveAs(myBlob,'test.py'))
+            .catch(error => {
+                console.log(error)
+            });
 
     };
 
@@ -235,9 +265,16 @@ const CalculationPage = () => {
                                     type="file"
                                     hidden
                                 />
-                                <UploadFileIcon />
+                                <Upload />
                             </IconButton>
                         </Tooltip>
+
+                        <Tooltip title="Скачать файл" placement="right">
+                            <IconButton onClick={handleClickGetFile} color="primary" component="label">
+                                <Download />
+                            </IconButton>
+                        </Tooltip>
+
                     </div>
 
                 </Toolbar>

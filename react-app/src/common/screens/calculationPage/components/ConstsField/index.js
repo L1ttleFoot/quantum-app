@@ -5,7 +5,7 @@ import { TextField, Typography } from '@mui/material'
 import { UsePage } from '../../../../../store/redusers';
 
 
-const ConstsField = (props) => {
+const ConstsField = () => {
 
     const dispatchHelpers = UsePage()
 
@@ -19,7 +19,7 @@ const ConstsField = (props) => {
 
 
     const handleChangeConst = index => event => {
-        let newArr = [...consts]
+        let newArr = consts.map(item=>({...item}))
         newArr[index].value = event.target.value
         dispatchConsts(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
     };

@@ -3,11 +3,10 @@ from functools import reduce
 from math import factorial
 import os
 
-absolute_path = os.path.dirname(__file__)
 relative_path = "tmp"
+#absolute_path = os.path.dirname(os.path.dirname(__file__))
+absolute_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 full_path = os.path.join(absolute_path, relative_path)
-a_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-f_path = os.path.join(a_path, relative_path)
 
 def factor_k(str):
     return(2**(-len(str)/2))
@@ -21,7 +20,7 @@ def factor_fi(str):
 
 def constant_gen(n, omega, const, dipoleX, dipoleY, dipoleZ, constType, order):
 
-    print(full_path, absolute_path, a_path, f_path)
+    print(full_path, absolute_path)
 
     CONST_A_LIST = ""
     CONST_n_LIST = ""
@@ -33,7 +32,7 @@ def constant_gen(n, omega, const, dipoleX, dipoleY, dipoleZ, constType, order):
     number_of_vibrational_degrees = len(n)
     max_indignation_step = order
     type_anharmonic_const = constType
-    f = open(f'{f_path}/const_new.py', 'w')
+    f = open(f'{full_path}/const_new.py', 'w')
     f.write('import sympy as sy\n')
     f.write('\n')
 
