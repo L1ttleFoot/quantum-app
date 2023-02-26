@@ -30,7 +30,7 @@ def constant_gen(n, omega, const, dipoleX, dipoleY, dipoleZ, constType, order):
     number_of_vibrational_degrees = len(n)
     max_indignation_step = order
     type_anharmonic_const = constType
-    f = open(f'{full_path}/const.py', 'w')
+    f = open(f'{full_path}/const.py', 'w+')
     f.write('import sympy as sy\n')
     f.write('\n')
 

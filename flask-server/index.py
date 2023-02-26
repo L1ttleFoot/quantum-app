@@ -139,7 +139,13 @@ def get_file():
 
     constant_gen.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['dipoleY'], request_data['dipoleZ'], request_data['constsType'], request_data['order'])
 
-    print(request_data)
+    #print(request_data)
+
+    for root, dirs, files in os.walk('.'):
+        for d in dirs:
+            print(os.path.join(root, d))
+        for f in files:
+            print(os.path.join(root, f))
 
     return send_file(f'{full_path}/const.py',)
 
