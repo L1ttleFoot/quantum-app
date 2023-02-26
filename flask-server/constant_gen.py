@@ -20,7 +20,7 @@ def factor_fi(str):
 
 
 def constant_gen(n, omega, const, dipoleX, dipoleY, dipoleZ, constType, order):
-    print(absolute_path)
+    print(absolute_path, os.path.dirname(os.path.dirname(__file__)), os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
     CONST_A_LIST = ""
     CONST_n_LIST = ""
