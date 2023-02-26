@@ -12,9 +12,9 @@ import Recurrence_Relations
 from dict_gen import dict_gen, dict_dipole_x_gen, dict_dipole_y_gen, dict_dipole_z_gen
 
 relative_path = "tmp"
-absolute_path = os.path.dirname(__file__)
+#absolute_path = os.path.dirname(__file__)
 #absolute_path = os.path.dirname(os.path.dirname(__file__))
-#absolute_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+absolute_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 full_path = os.path.join(absolute_path, relative_path)
 
 app = Flask(__name__)
