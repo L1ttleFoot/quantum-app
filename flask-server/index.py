@@ -12,8 +12,8 @@ import Recurrence_Relations
 from dict_gen import dict_gen, dict_dipole_x_gen, dict_dipole_y_gen, dict_dipole_z_gen
 
 relative_path = "tmp"
-#absolute_path = os.path.dirname(os.path.dirname(__file__))
-absolute_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+absolute_path = os.path.dirname(os.path.dirname(__file__))
+#absolute_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 full_path = os.path.join(absolute_path, relative_path)
 
 app = Flask(__name__)
@@ -140,12 +140,6 @@ def get_file():
     constant_gen.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['dipoleY'], request_data['dipoleZ'], request_data['constsType'], request_data['order'])
 
     #print(request_data)
-
-    for root, dirs, files in os.walk('.'):
-        for d in dirs:
-            print(os.path.join(root, d))
-        for f in files:
-            print(os.path.join(root, f))
 
     return send_file(f'{full_path}/const.py',)
 
