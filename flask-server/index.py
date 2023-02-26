@@ -139,7 +139,9 @@ def get_file():
 
     constant_gen.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['dipoleY'], request_data['dipoleZ'], request_data['constsType'], request_data['order'])
 
-    return send_file(f'{full_path}/const_new.py',)
+    print(request_data)
+
+    return send_file(f'{full_path}/const.py',)
 
 
 if __name__ == "__main__":
