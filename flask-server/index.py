@@ -142,7 +142,7 @@ def get_file():
 
     print(absolute_path)
 
-    return send_file(f'{full_path}/const.py',)
+    return send_file('/tmp/const.py',)
 
 
 if __name__ == "__main__":
