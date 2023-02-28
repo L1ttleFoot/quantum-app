@@ -20,7 +20,6 @@ def factor_fi(str):
 
 
 def constant_gen(n, omega, const, dipoleX, dipoleY, dipoleZ, constType, order):
-    print(absolute_path, os.path.dirname(os.path.dirname(__file__)), os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
     CONST_A_LIST = ""
     CONST_n_LIST = ""
@@ -32,7 +31,7 @@ def constant_gen(n, omega, const, dipoleX, dipoleY, dipoleZ, constType, order):
     number_of_vibrational_degrees = len(n)
     max_indignation_step = order
     type_anharmonic_const = constType
-    f = open(f'{full_path}/const.py', 'w+')
+    f = open('/tmp/const.py', 'w+')
     f.write('import sympy as sy\n')
     f.write('\n')
 
