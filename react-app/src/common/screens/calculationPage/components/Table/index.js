@@ -19,7 +19,7 @@ const Table = (props) => {
         dispatchRows
     } = dispatchHelpers
 
-    const myRows = [...rows].map((item, index) => ({ ...item, id: index + 1 }))
+    const myRows = [...rows].map((item, index) => ({ ...item, id: index + 1, energy: parseFloat(item.energy).toFixed(2) }))
 
     useEffect(
         () => {

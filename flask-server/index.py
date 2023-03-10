@@ -2,6 +2,7 @@ from itertools import combinations_with_replacement, combinations
 from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 import sympy as sy
+from numpy import sqrt
 import json
 
 # from const_new import *
@@ -47,8 +48,8 @@ def get_calculation():
     energy = sum([Recurrence_Relations.AE_BD(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
     energy -= sum([Recurrence_Relations.AE_BD(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
 
-    dipole = Recurrence_Relations.MEDMF(n_list1, n_list2, 2, n_dict, complete_dict_keys)
-    
+    #dipole = Recurrence_Relations.MEDMF(n_list1, n_list2, 2, n_dict, complete_dict_keys)
+
     #X = dipole.subs({**complete_dict,**dict_dipole_X})
     #Y = dipole.subs({**complete_dict,**dict_dipole_Y})
     #Z = dipole.subs({**complete_dict,**dict_dipole_Z})
@@ -84,15 +85,15 @@ def get_resonans():
 
     resonans = Recurrence_Relations.Resonance([n_list1, n_list2], complete_dict, request_data['order'], n_dict, complete_dict_keys)
 
-    result = [{'transition': f"000 > {''.join([str(value) for value in key])}", 
-               'energy': eval(str(values)), 
+    result = [{'transition': f"000 > {''.join([str(value) for value in key])}",
+               'energy': eval(str(values)),
                'matrix': 10} for key, values in resonans.items()]
-   
+
     #k = [''.join([str(value) for value in key]) for key in resonans.keys()]
     k = [key for key in resonans.keys()]
 
     for i in range(len(list(combinations(k,2)))):
-        result.append({'transition':f'{"".join([str(value) for value in list(combinations(k,2))[i][0]])} > {"".join([str(value) for value in list(combinations(k,2))[i][1]])}', 
+        result.append({'transition':f'{"".join([str(value) for value in list(combinations(k,2))[i][0]])} > {"".join([str(value) for value in list(combinations(k,2))[i][1]])}',
                 'energy': eval(str(resonans[list(combinations(k,2))[i][0]]))-eval(str(resonans[list(combinations(k,2))[i][1]])),
                 'matrix':10})
 
@@ -132,7 +133,7 @@ def config_response():
         'dipole_list_y': dipole_list_y,
         'dipole_list_z': dipole_list_z
     }
-    
+
     response = jsonify(data)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
