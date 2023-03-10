@@ -26,8 +26,8 @@ const CalculationPage = () => {
     const [fileName, setFileName] = useState('')
     const [load, setLoad] = useState(false)
 
-    //const url = 'https://quantum-app-bf8b.vercel.app'
-    const url = 'http://localhost:8080'
+    const url = 'https://quantum-app-bf8b.vercel.app'
+    //const url = 'http://localhost:8080'
 
     const handleClickConfig = async () => {
 
