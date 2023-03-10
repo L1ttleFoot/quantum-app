@@ -320,5 +320,20 @@ def Resonance(levels, zamena, max_indignation_step, n_dict, key_dict):
     M = sy.Matrix(matrixbase)
     E = sy.eye(dimensions)*E0
     M = M-E
-    result = M.eigenvals()
-    return dict(zip([tuple(i) for i in levels], list(result.keys())))
+    D = list(M.eigenvals().keys())
+    M = np.array(M)
+    M = [M[i][i] for i in range(len(levels))]
+
+    def SORT(D, M):
+        s = [0 for i in M]
+        for i in range(len(M)):
+            for j in D:
+                print(i,j,s)
+                print(D, M)
+                print(M[i])
+                #if sqrt((M[i] - j) ** 2) < sqrt((M[i] - s[i]) ** 2): s[i] = j
+        return s
+    
+    #print(SORT(D,M))
+
+    return dict(zip([tuple(i) for i in levels], D))

@@ -14,22 +14,22 @@ const StartPage = (props) => {
 
             <div>
 
-                <Paper style={{ margin: 20 }}>
+                <Paper style={{ margin: 20, color: '#49acff',textShadow: '4px 4px #558ABB' }}>
                     <Typography variant="h2" style={{ textAlign: 'center' }} >
-                        Тут будет какая то информация
+                        Институт квантовой физики
                     </Typography>
                 </Paper>
 
                 <Paper style={{ margin: 20, padding: 20, display: 'flex' }}>
 
-                    <Typography variant="h4" style={{ textAlign: 'center' }} >
-                        Вот тут будет блок информации возможно
+                    <Typography variant="h4" style={{ textAlign: 'center', width: '50%' }} >
+                        Блок с информацией
                     </Typography>
 
                     <Divider orientation='vertical' flexItem />
 
-                    <Typography variant="h4" style={{ textAlign: 'center' }} >
-                        И вот тут их можно типа разделить на столбцы
+                    <Typography variant="h4" style={{ textAlign: 'center', width: '50%'  }} >
+                        Другой блок с информацией
                     </Typography>
 
                 </Paper>

@@ -20,11 +20,11 @@ const CalculationFiled = (props) => {
             </Button>
 
             <Button
-                /* endIcon={load ? <CircularProgress size={20}/> : ''}  */
+                endIcon={load ? <CircularProgress size={20}/> : ''}
                 fullWidth={true}
                 variant='contained'
                 onClick={resonans}
-                /* disabled={someEmpty || load} */
+                disabled={someEmpty || load}
                 style={{ margin: '0px 5px' }}
             >
                 Резонанс
