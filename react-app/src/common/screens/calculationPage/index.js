@@ -26,12 +26,14 @@ const CalculationPage = () => {
     const [fileName, setFileName] = useState('')
     const [load, setLoad] = useState(false)
 
+    //const url = 'https://quantum-app-bf8b.vercel.app'
+    const url = 'http://localhost:8080'
+
     const handleClickConfig = async () => {
 
         setLoad(l => !l)
 
-        await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
-        //await fetch(`http://localhost:8080/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
+        await fetch(`${url}/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
             .then(response => response.json())
             .then(data => {
                 dispatchConsts(data.consts_list)
@@ -50,8 +52,7 @@ const CalculationPage = () => {
 
         setLoad(l => !l)
 
-        await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/calculation`,
-        //await fetch(`http://localhost:8080/api/v1/calculation`,
+        await fetch(`${url}/api/v1/calculation`,
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -82,8 +83,7 @@ const CalculationPage = () => {
 
         setLoad(l => !l)
 
-        await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/calculation_resonans`,
-        //await fetch(`http://localhost:8080/api/v1/calculation_resonans`,
+        await fetch(`${url}/api/v1/calculation_resonans`,
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -100,7 +100,7 @@ const CalculationPage = () => {
             })
             .then(response => response.json())
             .then(data => {
-                dispatchRows([...state.rows, data])
+                dispatchRows([...state.rows, ...data])
             })
             .catch(error => {
                 console.log(error)
@@ -112,8 +112,7 @@ const CalculationPage = () => {
 
     const handleClickGetFile = async () => {
 
-        await fetch(`https://quantum-app-bf8b.vercel.app/api/v1/get_file`,
-        //await fetch(`http://localhost:8080/api/v1/get_file`,
+        await fetch(`${url}/api/v1/get_file`,
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -257,7 +256,7 @@ const CalculationPage = () => {
                             Параметры
                         </Button>
 
-                        <Tooltip title="Загрузить файл" placement="right">
+                        <Tooltip title="Загрузить файл" placement="bottom">
                             <IconButton onClick={onClick} color="primary" component="label">
                                 <input
                                     onChange={onChange}
@@ -269,7 +268,7 @@ const CalculationPage = () => {
                             </IconButton>
                         </Tooltip>
 
-                        <Tooltip title="Скачать файл" placement="right">
+                        <Tooltip title="Скачать файл" placement="bottom">
                             <IconButton onClick={handleClickGetFile} color="primary" component="label">
                                 <Download />
                             </IconButton>

@@ -1,21 +1,13 @@
 import sympy as sy
 from functools import reduce
 from math import factorial
-import os
-
-relative_path = "tmp"
-#absolute_path = os.path.dirname(__file__)
-#absolute_path = os.path.dirname(os.path.dirname(__file__))
-absolute_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-full_path = os.path.join(absolute_path, relative_path)
 
 def factor_k(str):
     return(2**(-len(str)/2))
 
 
 def factor_fi(str):
-    unique = dict(
-        zip(list(str), [factorial(list(str).count(i)) for i in list(str)]))
+    unique = dict(zip(list(str), [factorial(list(str).count(i)) for i in list(str)]))
     return(2**(-len(str)/2)/reduce(lambda a, b: a * b, unique.values()))
 
 
