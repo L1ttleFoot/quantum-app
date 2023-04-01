@@ -23,6 +23,7 @@ from MAKE_DB import *
 #################библиотеки##############################
 from itertools import product
 
+from numpy import sqrt
 import sympy as sy
 from sympy import sqrt, prod, Rational, diff, factorial
 from apendix import *
@@ -306,7 +307,6 @@ def Resonance(levels, zamena, max_indignation_step, n_dict, key_dict):
     matrixrow = []
     j=0
     for i in product(levels, repeat=2):
-
         if j == dimensions:
             matrixbase.append(list(matrixrow))
             matrixrow = []
@@ -324,6 +324,12 @@ def Resonance(levels, zamena, max_indignation_step, n_dict, key_dict):
     M = np.array(M)
     M = [M[i][i] for i in range(len(levels))]
 
+    print((M))
+    print((D))
+
+    print(type(M[0]))
+    print(type(D[0]), eval(str(D[0])))
+
     def SORT(D, M):
         s = [0 for i in M]
         for i in range(len(M)):
@@ -333,6 +339,8 @@ def Resonance(levels, zamena, max_indignation_step, n_dict, key_dict):
                 print(M[i])
                 #if sqrt((M[i] - j) ** 2) < sqrt((M[i] - s[i]) ** 2): s[i] = j
         return s
+    
+    print()
     
     #print(SORT(D,M))
 

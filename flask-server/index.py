@@ -89,7 +89,6 @@ def get_resonans():
                'energy': eval(str(values)),
                'matrix': 10} for key, values in resonans.items()]
 
-    #k = [''.join([str(value) for value in key]) for key in resonans.keys()]
     k = [key for key in resonans.keys()]
 
     for i in range(len(list(combinations(k,2)))):

@@ -9,6 +9,7 @@ import StateField from '../components/StateField'
 import OmegasField from '../components/OmegasField'
 import ConstsField from '../components/ConstsField'
 import CalculationFiled from '../components/CalculationField'
+import RickRoll from '../components/RickRoll'
 
 const CalculationPage = (props) => {
 
@@ -31,6 +32,8 @@ const CalculationPage = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [state.rows],
     );
+
+    const [open, setOpen] = useState(false)
 
     return (
         <div className={'container'}>
@@ -60,7 +63,11 @@ const CalculationPage = (props) => {
             </Paper>
 
             <Paper className={'box7'}>
-                <CalculationFiled calculation={calculation} resonans={resonans} someEmpty={someEmpty} load={load} />
+                <CalculationFiled calculation={calculation} resonans={()=>setOpen(true)} someEmpty={someEmpty} load={load} />
+            </Paper>
+
+            <Paper>
+                <RickRoll open={open}/>
             </Paper>
 
         </div>
