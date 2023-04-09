@@ -1,27 +1,21 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import '../../style.css'
 import { TextField, Typography } from '@mui/material'
-import { UsePage } from '../../../../../store/redusers';
-
+import { setConsts } from '../../../../../store/redusers'
 
 const ConstsField = () => {
 
-    const dispatchHelpers = UsePage()
+    const dispatch = useDispatch()
 
-    const state = useSelector(state => state)
+    const state = useSelector(state => state.data)
 
     const { consts } = state
-
-    const {
-        dispatchConsts,
-    } = dispatchHelpers
-
 
     const handleChangeConst = index => event => {
         let newArr = consts.map(item=>({...item}))
         newArr[index].value = event.target.value
-        dispatchConsts(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
+        dispatch(setConsts(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') }))))
     };
 
     return (

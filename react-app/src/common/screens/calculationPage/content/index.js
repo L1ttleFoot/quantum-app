@@ -13,9 +13,9 @@ import RickRoll from '../components/RickRoll'
 
 const CalculationPage = (props) => {
 
-    const { calculation, resonans, someEmpty, load } = props
+    const { someEmpty } = props
 
-    const state = useSelector(state => state)
+    const state = useSelector(state => state.data)
 
     const [selectedRows, setSelectedRows] = useState([])
 
@@ -63,7 +63,7 @@ const CalculationPage = (props) => {
             </Paper>
 
             <Paper className={'box7'}>
-                <CalculationFiled calculation={calculation} resonans={()=>setOpen(true)} someEmpty={someEmpty} load={load} />
+                <CalculationFiled resonans={()=>setOpen(true)} someEmpty={someEmpty}/>
             </Paper>
 
             <Paper>
