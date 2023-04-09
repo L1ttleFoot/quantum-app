@@ -3,139 +3,29 @@ import { AppBar, Toolbar, Button, TextField, FormControl, FormControlLabel, Radi
 import Content from "./content"
 import './style.css'
 import { Upload, Download } from '@mui/icons-material'
-import { UsePage } from "../../../store/redusers"
-import { useSelector } from 'react-redux';
-import { saveAs } from 'file-saver'
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchConfig, fetchFile } from './actions';
+import {
+    setFreedomDegrees,
+    setOrder,
+    setConstsType,
+    setOmegas,
+    setConsts,
+    setDipoleX,
+    setDipoleY,
+    setDipoleZ
+} from '../../../store/redusers';
 
 const CalculationPage = () => {
 
-    const state = useSelector(state => state)
+    const dispatch = useDispatch()
 
-    const dispatchHelpers = UsePage()
+    const state = useSelector(state => state.data)
+    const http = useSelector(state => state.http)
 
-    const {
-        dispatchConsts,
-        dispatchDipoleX,
-        dispatchDipoleY,
-        dispatchDipoleZ,
-        dispatchRows
-    } = dispatchHelpers
-
-    const [loading, setLoading] = useState(false)
+    console.log(state, http)
 
     const [fileName, setFileName] = useState('')
-    const [load, setLoad] = useState(false)
-
-    const url = 'https://quantum-app-bf8b.vercel.app'
-    //const url = 'http://localhost:8080'
-
-    const handleClickConfig = async () => {
-
-        setLoad(l => !l)
-
-        await fetch(`${url}/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
-            .then(response => response.json())
-            .then(data => {
-                dispatchConsts(data.consts_list)
-                dispatchDipoleX(data.dipole_list_x)
-                dispatchDipoleY(data.dipole_list_y)
-                dispatchDipoleZ(data.dipole_list_z)
-            }).catch(error => {
-                console.log(error)
-            });
-
-        setLoad(l => !l)
-
-    };
-
-    const handleClickCalculation = async () => {
-
-        setLoad(l => !l)
-
-        await fetch(`${url}/api/v1/calculation`,
-            {
-                method: 'POST',
-                body: JSON.stringify({
-                    numbers1: state.numbers1,
-                    numbers2: state.numbers2,
-                    omegas: state.omegas,
-                    consts: state.consts,
-                    dipoleX: [state.dipole0, ...state.dipoleX],
-                    dipoleY: [state.dipole0, ...state.dipoleY],
-                    dipoleZ: [state.dipole0, ...state.dipoleZ],
-                    constsType: state.constsType,
-                    order: state.order
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                dispatchRows([...state.rows, data])
-            })
-            .catch(error => {
-                console.log(error)
-            });
-
-        setLoad(l => !l)
-
-    };
-
-    const handleClickResonans = async () => {
-
-        setLoad(l => !l)
-
-        await fetch(`${url}/api/v1/calculation_resonans`,
-            {
-                method: 'POST',
-                body: JSON.stringify({
-                    numbers1: state.numbers1,
-                    numbers2: state.numbers2,
-                    omegas: state.omegas,
-                    consts: state.consts,
-                    dipoleX: [state.dipole0, ...state.dipoleX],
-                    dipoleY: [state.dipole0, ...state.dipoleY],
-                    dipoleZ: [state.dipole0, ...state.dipoleZ],
-                    constsType: state.constsType,
-                    order: state.order
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                dispatchRows([...state.rows, ...data])
-            })
-            .catch(error => {
-                console.log(error)
-            });
-
-        setLoad(l => !l)
-
-    };
-
-    const handleClickGetFile = async () => {
-
-        await fetch(`${url}/api/v1/get_file`,
-            {
-                method: 'POST',
-                body: JSON.stringify({
-                    numbers1: state.numbers1,
-                    numbers2: state.numbers2,
-                    omegas: state.omegas,
-                    consts: state.consts,
-                    dipoleX: [state.dipole0, ...state.dipoleX],
-                    dipoleY: [state.dipole0, ...state.dipoleY],
-                    dipoleZ: [state.dipole0, ...state.dipoleZ],
-                    constsType: state.constsType,
-                    order: state.order
-                })
-            })
-            .then(response => 
-                response.blob())
-            .then(myBlob => 
-                saveAs(myBlob,'test.py'))
-            .catch(error => {
-                console.log(error)
-            });
-
-    };
 
     const emptyNumbers1 = [undefined, ''].some(item => state.numbers1.map(el => el.value).includes(item))
     const emptyNumbers2 = [undefined, ''].some(item => state.numbers2.map(el => el.value).includes(item))
@@ -179,21 +69,21 @@ const CalculationPage = () => {
 
             let objDipoleZ = JSON.parse(event.target.result.split('\n').filter(item => item.includes('const_dipoleZ_dict'))[0].trim().split('=')[1].replace(/D_[0-9,a-z]{0,4}/g, x => `"${x}"`))
 
-            dispatchHelpers.dispatchFreedomDegrees(objFreedomDegrees)
+            dispatch(setFreedomDegrees(objFreedomDegrees))
 
-            dispatchHelpers.dispatchOrder(parseInt(objOrder))
+            dispatch(setOrder(parseInt(objOrder)))
 
-            dispatchHelpers.dispatchConstsType(objConstType)
+            dispatch(setConstsType(objConstType))
 
-            dispatchHelpers.dispatchOmegas([...Object.values(objOmegas).map((item, index) => ({ var: 'number', index: index + 1, value: `${item}`, letIndex: letterIndexes[index] }))])
+            dispatch(setOmegas([...Object.values(objOmegas).map((item, index) => ({ var: 'number', index: index + 1, value: `${item}`, letIndex: letterIndexes[index] }))]))
 
-            dispatchHelpers.dispatchConsts([...Object.entries(objConsts).map(item => ({ var: 'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x => numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1] }))])
+            dispatch(setConsts([...Object.entries(objConsts).map(item => ({ var: 'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x => numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1] }))]))
 
-            dispatchHelpers.dispatchDipoleX([...Object.entries(objDipoleX).map(item => ({ var: 'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x => numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1] }))].slice(1))
+            dispatch(setDipoleX([...Object.entries(objDipoleX).map(item => ({ var: 'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x => numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1] }))].slice(1)))
 
-            dispatchHelpers.dispatchDipoleY([...Object.entries(objDipoleY).map(item => ({ var: 'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x => numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1] }))].slice(1))
+            dispatch(setDipoleY([...Object.entries(objDipoleY).map(item => ({ var: 'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x => numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1] }))].slice(1)))
 
-            dispatchHelpers.dispatchDipoleZ([...Object.entries(objDipoleZ).map(item => ({ var: 'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x => numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1] }))].slice(1))
+            dispatch(setDipoleZ([...Object.entries(objDipoleZ).map(item => ({ var: 'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x => numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1] }))].slice(1)))
 
         }
 
@@ -217,7 +107,7 @@ const CalculationPage = () => {
                             style={{ margin: 10, width: 130 }}
                             label={'Степени свободы'}
                             size='small'
-                            onChange={e => dispatchHelpers.dispatchFreedomDegrees(e.target.value)}
+                            onChange={e => dispatch(setFreedomDegrees(e.target.value))}
                         />
 
                         <TextField
@@ -225,7 +115,7 @@ const CalculationPage = () => {
                             style={{ margin: 10, width: 80 }}
                             label={'Порядок'}
                             size='small'
-                            onChange={e => dispatchHelpers.dispatchOrder(e.target.value)}
+                            onChange={e => dispatch(setOrder(e.target.value))}
                         />
 
                         <div>
@@ -234,7 +124,7 @@ const CalculationPage = () => {
                                 <RadioGroup
                                     row
                                     value={state.constsType}
-                                    onChange={e => dispatchHelpers.dispatchConstsType(e.target.value)}
+                                    onChange={e => dispatch(setConstsType(e.target.value))}
                                 >
                                     <FormControlLabel style={{ color: '#0E76BB' }} value="A" control={<Radio size='small' />} label="a" />
                                     <FormControlLabel style={{ color: '#0E76BB' }} value="k" control={<Radio size='small' />} label="k" />
@@ -247,11 +137,11 @@ const CalculationPage = () => {
                     <div className='buttons'>
 
                         <Button
-                            endIcon={load ? <CircularProgress size={20} /> : ''}
-                            onClick={() => handleClickConfig({ setLoading })}
+                            endIcon={http.loadingConfig ? <CircularProgress size={20} /> : ''}
+                            onClick={() => fetchConfig(dispatch, state)}
                             variant={"outlined"}
                             style={{ background: 'white', margin: 10 }}
-                            disabled={loading}
+                            disabled={http.loadingConfig}
                         >
                             Параметры
                         </Button>
@@ -269,7 +159,7 @@ const CalculationPage = () => {
                         </Tooltip>
 
                         <Tooltip title="Скачать файл" placement="bottom">
-                            <IconButton onClick={handleClickGetFile} color="primary" component="label">
+                            <IconButton onClick={()=>fetchFile(state)} color="primary" component="label">
                                 <Download />
                             </IconButton>
                         </Tooltip>
@@ -280,12 +170,7 @@ const CalculationPage = () => {
             </AppBar>
 
             <Content
-                state={state}
-                dispatchHelpers={dispatchHelpers}
-                calculation={handleClickCalculation}
-                resonans={handleClickResonans}
                 someEmpty={someEmpty}
-                load={load}
             />
 
         </div>

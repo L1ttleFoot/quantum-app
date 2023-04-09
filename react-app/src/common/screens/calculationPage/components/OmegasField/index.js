@@ -1,26 +1,22 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import '../../style.css'
 import { TextField, Stack, Typography } from '@mui/material'
-import { UsePage } from '../../../../../store/redusers';
+import { setOmegas } from '../../../../../store/redusers'
 
 const OmegasField = (props) => {
 
-    const dispatchHelpers = UsePage()
+    const dispatch = useDispatch()
 
-    const state = useSelector(state => state)
+    const state = useSelector(state => state.data)
 
     const { omegas, freedomDegrees } = state
-
-    const {
-        dispatchOmegas,
-    } = dispatchHelpers
 
     const letterIndexes = 'ijkl'
 
     useEffect(
         () => {
-            dispatchOmegas(new Array(Number(freedomDegrees)).fill(undefined).map((item, index) => ({ var: 'omega', index: index + 1, value: '', letIndex: letterIndexes[index] })))
+            dispatch(setOmegas(new Array(Number(freedomDegrees)).fill(undefined).map((item, index) => ({ var: 'omega', index: index + 1, value: '', letIndex: letterIndexes[index] }))))
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [freedomDegrees],
@@ -28,7 +24,7 @@ const OmegasField = (props) => {
 
     const handleChangeOmegas = index => event => {
         const newOmegas = omegas.map((item, indexItem) => index === indexItem ? ({ ...item, value: event.target.value }) : item)
-        dispatchOmegas(newOmegas)
+        dispatch(setOmegas(newOmegas))
     };
 
     return (

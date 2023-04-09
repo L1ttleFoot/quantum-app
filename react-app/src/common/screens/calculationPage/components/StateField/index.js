@@ -1,28 +1,24 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import '../../style.css'
 import { TextField, Stack, Typography } from '@mui/material'
-import { UsePage } from '../../../../../store/redusers';
+import { setNumbers1, setNumbers2 } from '../../../../../store/redusers';
 
 const StateField = (props) => {
 
-    const dispatchHelpers = UsePage()
+    const dispatch = useDispatch()
 
-    const state = useSelector(state => state)
+    const state = useSelector(state => state.data)
 
     const { numbers1, numbers2, freedomDegrees } = state
 
-    const {
-        dispatchNumbers1,
-        dispatchNumbers2,
-    } = dispatchHelpers
 
     const letterIndexes = 'ijkl'
 
     useEffect(
         () => {
-            dispatchNumbers1(new Array(Number(freedomDegrees)).fill(undefined).map((item, index) => ({ var: 'number', index: index + 1, value: '', letIndex: letterIndexes[index] })))
-            dispatchNumbers2(new Array(Number(freedomDegrees)).fill(undefined).map((item, index) => ({ var: 'number', index: index + 1, value: '', letIndex: letterIndexes[index] })))
+            dispatch(setNumbers1(new Array(Number(freedomDegrees)).fill(undefined).map((item, index) => ({ var: 'number', index: index + 1, value: '', letIndex: letterIndexes[index] }))))
+            dispatch(setNumbers2(new Array(Number(freedomDegrees)).fill(undefined).map((item, index) => ({ var: 'number', index: index + 1, value: '', letIndex: letterIndexes[index] }))))
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [freedomDegrees],
@@ -30,12 +26,12 @@ const StateField = (props) => {
 
     const handleChangeNumbers1 = index => event => {
         const newNumbers1 = numbers1.map((item, indexItem) => index === indexItem ? ({ ...item, value: event.target.value }) : item)
-        dispatchNumbers1(newNumbers1)
+        dispatch(setNumbers1(newNumbers1))
     };
 
     const handleChangeNumbers2 = index => event => {
         const newNumbers2 = numbers2.map((item, indexItem) => index === indexItem ? ({ ...item, value: event.target.value }) : item)
-        dispatchNumbers2(newNumbers2)
+        dispatch(setNumbers2(newNumbers2))
     };
 
     return (

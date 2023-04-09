@@ -1,9 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { myReduser } from "./redusers"
-//import reducer from './redusers';
+import { calcPageData, calcPageHttp } from "./redusers"
+
+const calcData = calcPageData.reducer
+const calcHttp = calcPageHttp.reducer
 
 const store = configureStore({
-    reducer: myReduser,
+    reducer: {
+        data: calcData,
+        http: calcHttp
+    },
 });
 
-export { myReduser, store }
+export { store }

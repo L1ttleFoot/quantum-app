@@ -1,23 +1,16 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import '../../style.css'
 import { TextField, Typography, Tabs, Tab } from '@mui/material'
-import { UsePage } from '../../../../../store/redusers';
+import { setDipole0, setDipoleX, setDipoleY, setDipoleZ } from '../../../../../store/redusers'
 
 const DipoleField = (props) => {
 
-    const dispatchHelpers = UsePage()
+    const dispatch = useDispatch()
 
-    const state = useSelector(state => state)
+    const state = useSelector(state => state.data)
 
     const { dipole0, dipoleX, dipoleY, dipoleZ } = state
-
-    const {
-        dispatchDipole0,
-        dispatchDipoleX,
-        dispatchDipoleY,
-        dispatchDipoleZ,
-    } = dispatchHelpers
 
     const [tab, setTab] = useState('x')
 
@@ -28,23 +21,23 @@ const DipoleField = (props) => {
     const handleChangeDipoleX = index => event => {
         let newArr = [...dipoleX]
         newArr[index].value = event.target.value
-        dispatchDipoleX(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
+        dispatch(setDipoleX(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') }))))
     };
 
     const handleChangeDipoleY = index => event => {
         let newArr = [...dipoleY]
         newArr[index].value = event.target.value
-        dispatchDipoleY(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
+        dispatch(setDipoleY(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') }))))
     };
 
     const handleChangeDipoleZ = index => event => {
         let newArr = [...dipoleZ]
         newArr[index].value = event.target.value
-        dispatchDipoleZ(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
+        dispatch(setDipoleZ(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') }))))
     };
 
     const handleChangeDipole0 = (e) => {
-        dispatchDipole0({ ...dipole0, value: e.target.value })
+        dispatch(setDipole0({ ...dipole0, value: e.target.value }))
     }
 
     return (
