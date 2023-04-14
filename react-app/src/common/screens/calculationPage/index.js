@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppBar, Toolbar, Button, TextField, FormControl, FormControlLabel, RadioGroup, Radio, IconButton, Tooltip, CircularProgress } from '@mui/material';
 import Content from "./content"
 import './style.css'
@@ -22,6 +22,12 @@ const CalculationPage = () => {
 
     const state = useSelector(state => state.data)
     const http = useSelector(state => state.http)
+
+    const {freedomDegrees, order} = state
+
+    useEffect(()=>{
+        fetchConfig(dispatch, {freedomDegrees, order})
+    }, [dispatch, freedomDegrees, order])
 
     console.log(state, http)
 
@@ -107,7 +113,7 @@ const CalculationPage = () => {
                             style={{ margin: 10, width: 130 }}
                             label={'Степени свободы'}
                             size='small'
-                            onChange={e => dispatch(setFreedomDegrees(e.target.value))}
+                            onChange={e => dispatch(setFreedomDegrees(parseInt(e.target.value)))}
                         />
 
                         <TextField
@@ -115,7 +121,7 @@ const CalculationPage = () => {
                             style={{ margin: 10, width: 80 }}
                             label={'Порядок'}
                             size='small'
-                            onChange={e => dispatch(setOrder(e.target.value))}
+                            onChange={e => dispatch(setOrder(parseInt(e.target.value)))}
                         />
 
                         <div>
@@ -136,7 +142,7 @@ const CalculationPage = () => {
 
                     <div className='buttons'>
 
-                        <Button
+                        {/* <Button
                             endIcon={http.loadingConfig ? <CircularProgress size={20} /> : ''}
                             onClick={() => fetchConfig(dispatch, state)}
                             variant={"outlined"}
@@ -144,7 +150,7 @@ const CalculationPage = () => {
                             disabled={http.loadingConfig}
                         >
                             Параметры
-                        </Button>
+                        </Button> */}
 
                         <Tooltip title="Загрузить файл" placement="bottom">
                             <IconButton onClick={onClick} color="primary" component="label">

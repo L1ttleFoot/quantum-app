@@ -4,7 +4,7 @@ import '../../style.css'
 import { TextField, Stack, Typography } from '@mui/material'
 import { setOmegas } from '../../../../../store/redusers'
 
-const OmegasField = (props) => {
+const OmegasField = () => {
 
     const dispatch = useDispatch()
 
