@@ -8,6 +8,8 @@ import Table from '../components/Table';
 import StateField from '../components/StateField'
 import OmegasField from '../components/OmegasField'
 import ConstsField from '../components/ConstsField'
+import ConstsSkeleton from '../components/ConstsSkeleton'
+import DipoleSkeleton from '../components/DipoleSkeleton'
 import CalculationFiled from '../components/CalculationField'
 import RickRoll from '../components/RickRoll'
 
@@ -16,6 +18,9 @@ const CalculationPage = (props) => {
     const { someEmpty } = props
 
     const state = useSelector(state => state.data)
+    const http  = useSelector(state => state.http)
+
+    console.log(http.loadingConfig)
 
     const [selectedRows, setSelectedRows] = useState([])
 
@@ -47,11 +52,11 @@ const CalculationPage = (props) => {
             </Paper>
 
             <Paper className={'box3'}>
-                <ConstsField />
+                {!http.loadingConfig ? <ConstsField /> :  <ConstsSkeleton />}
             </Paper>
 
             <Paper className={'box4'}>
-                <DipoleField />
+                {!http.loadingConfig ? <DipoleField /> :  <DipoleSkeleton />}
             </Paper>
 
             <Paper className={'box5'}>

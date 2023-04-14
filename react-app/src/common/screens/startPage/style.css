@@ -1,0 +1,26 @@
+p {
+    text-align: justify;
+    padding: 15px;
+    font-size: 22px;
+}
+
+img{
+    align-self: center;
+}
+
+.directions{
+    display: flex;
+    margin: 40px 10px
+}
+
+.main {
+    font-size: 22px;
+    margin: 5px;
+    text-align: justify;
+}
+
+.additional {
+    font-size: 16px;
+    margin: 5px;
+    text-align: left;
+}
