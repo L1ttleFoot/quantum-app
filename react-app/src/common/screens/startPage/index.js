@@ -1,6 +1,5 @@
 import React from 'react'
 import { AppBar, Toolbar, Paper, Typography, Divider } from '@mui/material'
-import 'typeface-roboto';
 import './style.css'
 import img1 from '../../../imges/Label1.png'
 import img2 from '../../../imges/Label2.png'
