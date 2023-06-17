@@ -9,7 +9,7 @@ import ArticleIcon from '@mui/icons-material/Article';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import logo from '../imges/Logo-shot.png'
 
-const Main = () => {
+const Main:React.FC = () => {
 
     const [tab, setTab] = useState('Info')
 

@@ -6,11 +6,18 @@ p {
 
 img{
     align-self: center;
+    z-index: 3;
 }
 
 .directions{
     display: flex;
-    margin: 40px 10px
+    margin: 40px 10px;
+    position: relative;
+    cursor: default;
+}
+
+.description{
+    z-index: 3;
 }
 
 .main {
@@ -23,4 +30,26 @@ img{
     font-size: 16px;
     margin: 5px;
     text-align: left;
+}
+
+.directions::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    inset: 0 0 0 0;
+    background: hsl(200 100% 80%);
+    z-index: 0;
+    transition: transform .3s ease;
+    border-radius: 8px;
+}
+
+.directions::before {  
+    transform: scaleX(0);
+    transform-origin: bottom right;
+}
+  
+.directions:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
 }
