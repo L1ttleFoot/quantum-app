@@ -57,7 +57,7 @@ const StartPage = () => {
                         <div className='directions'>
                             <img src={img1} width="90" height="90" alt='logo' />
 
-                            <div>
+                            <div className='description'>
                                 <div className={'main'}>МОДЕЛИРОВАНИЕ ФУНДАМЕНТАЛЬНЫХ ПРОЦЕССОВ</div>
                                 <div className={'additional'}>РАЗВИТИЕ ТЕОРИИ И НОВЫХ МЕТОДОВ ДЛЯ РЕШЕНИЯ КВАНТОВОМЕХАНИЧЕСКИХ ПРОБЛЕМ МОЛЕКУЛЯРНОЙФИЗИКИ</div>
                             </div>
@@ -66,7 +66,7 @@ const StartPage = () => {
                         <div className='directions'>
                             <img src={img2} width="90" height="90" alt='logo' />
 
-                            <div>
+                            <div className='description'>
                                 <div className={'main'}>АСТРОФИЗИКА</div>
                                 <div className={'additional'}>ОПИСАНИЕ ЯВЛЕНИЙ, ПРОТЕКАЮЩИХ В МЕЖЗВЕЗДНЫХ ОБЛАКАХ, АТМОСФЕРАХ ЭКЗОПЛАНЕТ, ПЛАНЕТ СОЛНЕЧНОЙ СИСТЕМЫ, ВНУТРИ ХОЛОДНЫХ ЗВЕЗД</div>
                             </div>
@@ -75,7 +75,7 @@ const StartPage = () => {
                         <div className='directions'>
                             <img src={img3} width="90" height="90" alt='logo' />
 
-                            <div>
+                            <div className='description'>
                                 <div className={'main'}>ГЛОБАЛЬНОЕ ПОТЕПЛЕНИЕ</div>
                                 <div className={'additional'}>МОДЕЛИРОВАНИЕ ЭФФЕКТОВ РАДИАЦИОННОГО БАЛАНСА В АТМОСФЕРЕ ЗЕМЛИ И ИССЛЕДОВАНИЕ ФАКТОРОВ, ВЫЗЫВАЮЩИХ ПАРНИКОВЫЙ ЭФФЕКТ</div>
                             </div>
@@ -84,7 +84,7 @@ const StartPage = () => {
                         <div className='directions'>
                             <img src={img4} width="90" height="90" alt='logo' />
 
-                            <div>
+                            <div className='description'>
                                 <div className={'main'}>АТОМЫ И МОЛЕКУЛЫ В ЭКСТРЕМАЛЬНЫХ УСЛОВИЯХ</div>
                                 <div className={'additional'}>ИЗУЧЕНИЕ РАДИАЦИОННЫХ ПРОЦЕССОВ И ХИМИЧЕСКИХ ПРЕВРАЩЕНИЙ В МОЛЕКУЛЯРНЫХ ГАЗАХ ПРИ ЭКСТРЕМАЛЬНО ВЫСОКИХ ТЕМПЕРАТУРАХ И В УСЛОВИЯХ СВЕРХЗВУКОВЫХ ГАЗОВЫХ ПОТОКОВ</div>
                             </div>
