@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AppBar, Toolbar, Button, TextField, FormControl, FormControlLabel, RadioGroup, Radio, IconButton, Tooltip, CircularProgress } from '@mui/material';
+import { AppBar, Toolbar, Button, TextField, FormControl, FormControlLabel, RadioGroup, Radio, IconButton, Tooltip } from '@mui/material';
 import Content from "./content"
 import './style.css'
 import { Upload, Download } from '@mui/icons-material'
@@ -25,13 +25,15 @@ const CalculationPage = () => {
 
     const {freedomDegrees, order} = state
 
+    const [fileName, setFileName] = useState('')
+    const [loadFromFile, setLoadFromFile] = useState(false)
+
     useEffect(()=>{
+
+        if (loadFromFile) return
+
         fetchConfig(dispatch, {freedomDegrees, order})
     }, [dispatch, freedomDegrees, order])
-
-    console.log(state, http)
-
-    const [fileName, setFileName] = useState('')
 
     const emptyNumbers1 = [undefined, ''].some(item => state.numbers1.map(el => el.value).includes(item))
     const emptyNumbers2 = [undefined, ''].some(item => state.numbers2.map(el => el.value).includes(item))
@@ -55,9 +57,8 @@ const CalculationPage = () => {
 
         reader.onload = function (event) {
 
-            console.log(e.target.files[0].name, fileName)
-
             setFileName(e.target.files[0].name)
+            setLoadFromFile(true)
 
             let objFreedomDegrees = event.target.result.split('\n').filter(item => item.includes('number_of_vibrational_degrees'))[0].trim().split('=')[1]
 
@@ -91,6 +92,7 @@ const CalculationPage = () => {
 
             dispatch(setDipoleZ([...Object.entries(objDipoleZ).map(item => ({ var: 'const', index: item[0].split('_')[1].replace(/[i,j,k,l]/g, x => numberIndex[x]), value: `${item[1]}`, letIndex: item[0].split('_')[1] }))].slice(1)))
 
+            setLoadFromFile(false)
         }
 
         reader.readAsText(e.target.files[0])
