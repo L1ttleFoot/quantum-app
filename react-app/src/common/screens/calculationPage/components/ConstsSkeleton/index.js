@@ -35,10 +35,6 @@ const ConstsField = () => {
 
     const sum = Array.from({ length: parseInt(order) }, (_, i) => i).map(item => permutationsWithoutMirror(parseInt(freedomDegrees), item + 3)).reduce((acc, curr) => acc + curr, 0);
 
-    console.log(permutationsWithoutMirror(3,1))
-    console.log(permutationsWithoutMirror(3,2))
-    console.log(permutationsWithoutMirror(3,3))
-
     const myArray = Array.from({ length: sum }, (_, index) => index + 1);
 
     return (

@@ -20,8 +20,6 @@ const CalculationPage = (props) => {
     const state = useSelector(state => state.data)
     const http  = useSelector(state => state.http)
 
-    console.log(http.loadingConfig)
-
     const [selectedRows, setSelectedRows] = useState([])
 
     const updateSelectedRows = (rows) => {
