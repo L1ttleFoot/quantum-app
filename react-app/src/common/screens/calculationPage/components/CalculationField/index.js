@@ -29,7 +29,7 @@ const CalculationFiled = (props) => {
                 endIcon={http.loadingRes ? <CircularProgress size={20}/> : ''}
                 fullWidth={true}
                 variant='contained'
-                onClick={resonans}
+                onClick={() => fetchRes(dispatch, state)}
                 disabled={someEmpty || http.loadingCalc}
                 style={{ margin: '0px 5px' }}
             >

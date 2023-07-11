@@ -2,20 +2,152 @@ from itertools import combinations_with_replacement, combinations
 from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 import sympy as sy
-from numpy import sqrt
+from sympy import sqrt
 import json
+import pickle
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+FIREBASE_CONFIG = os.environ.get("FIREBASE_CONFIG")
+
+import firebase_admin
+from firebase_admin import credentials, db
+
+if not firebase_admin._apps:
+    cred = credentials.Certificate(json.loads(FIREBASE_CONFIG))
+    my_app = firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://quantum-app-4b8ae-default-rtdb.europe-west1.firebasedatabase.app'
+})
+
 
 # from const_new import *
 import constant_gen
-import Recurrence_Relations
+import Recurrence_Relations as RR
+
 
 from dict_gen import dict_gen, dict_dipole_x_gen, dict_dipole_y_gen, dict_dipole_z_gen
 
+
 app = Flask(__name__)
 CORS(app)
-app.config["DEBUG"] = False
+app.config["DEBUG"] = True
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+def getVector(ket, ind):
+
+    print('here Vector')
+
+    if(db.reference("/").get()==None):
+        return None
+
+    ref = db.reference("/Vector")
+
+    vector = ref.get()
+
+    if(vector==None):
+        return None
+
+    if(vector==''):
+        return None
+
+    for key, value in vector.items():
+        if('ket' in value and 'ind' in value and 
+            value["ket"] == ''.join(str(x) for x in ket) and 
+            value["ind"] == ind):
+            #ref.child(key).update({"bra":5})
+            return pickle.loads(eval(value['v']))
+
+    return None
+
+def insertVector(ket, ind, v):
+
+    if(db.reference("/").get()==None):
+        db.reference("/").update({'Vector':''})
+
+    if(db.reference("/Vector").get()==None):
+        db.reference("/").update({'Vector':''})
+
+    ref = db.reference("/Vector")
+
+    vector = ref.get()
+
+    if(vector==None):
+        return None
+
+    if(vector==''):
+        ref.push().update({'ket':''.join(str(x) for x in ket), 'ind': ind, 'v': str(pickle.dumps(v))})
+        return
+
+    for key, value in vector.items():
+        if('ket' in value and 'ind' in value and 
+            value["ket"] == ''.join(str(x) for x in ket) and 
+            value["ind"] == ind):
+            #ref.child(key).update({"bra":5})
+            break
+    else:
+        ref.push().update({'ket':''.join(str(x) for x in ket), 'ind': ind, 'v': str(pickle.dumps(v))})
+
+    return
+
+def getEnergy(bra, ket, ind):
+
+    print('here Energy')
+
+    if(db.reference("/").get()==None):
+        return None
+
+    ref = db.reference("/Energy")
+
+    energy = ref.get()
+
+    if(energy==None):
+        return None
+
+    if(energy==''):
+        return None
+
+    #(key==f"{''.join(str(x) for x in bra)}{''.join(str(x) for x in ket)}{ind}" альтернативный поиск
+
+    for key, value in energy.items():
+        if('bra' in value and 'ket' in value and 'ind' in value and 
+            value["bra"] == ''.join(str(x) for x in bra) and 
+            value["ket"] == ''.join(str(x) for x in ket) and 
+            value["ind"] == ind):
+            #ref.child(key).update({"bra":5})
+            return pickle.loads(eval(value['e']))
+
+    return None
+
+def insertEnergy(bra, ket, ind, e):
+
+    if(db.reference("/").get()==None):
+        db.reference("/").update({'Energy':''})
+
+    if(db.reference("/Energy").get()==None):
+        db.reference("/").update({'Energy':''})
+
+    ref = db.reference("/Energy")
+
+    energy = ref.get()
+
+    if(energy==''):
+        ref.push().set({'bra': ''.join(str(x) for x in bra),'ket':''.join(str(x) for x in ket), 'ind': ind, 'e': str(pickle.dumps(e))})
+        return
+
+    for key, value in energy.items():
+        if('bra' in value and 'ket' in value and 'ind' in value and 
+            value["bra"] == ''.join(str(x) for x in bra) and 
+            value["ket"] == ''.join(str(x) for x in ket) and 
+            value["ind"] == ind):
+            #ref.child(key).update({"bra":5})
+            break
+    else:
+        ref.push().update({'bra': ''.join(str(x) for x in bra),'ket':''.join(str(x) for x in ket), 'ind': ind, 'e': str(pickle.dumps(e))})
+        #ref.update({f"{''.join(str(x) for x in bra)}{''.join(str(x) for x in ket)}{ind}":{'bra': ''.join(str(x) for x in bra),'ket':''.join(str(x) for x in ket), 'ind': ind, 'e': str(pickle.dumps(e))}})
+
+    return
 
 @app.route('/')
 def home():
@@ -45,10 +177,15 @@ def get_calculation():
     n_str1 = ''.join([item['value'] for item in request_data['numbers1']])
     n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
 
-    energy = sum([Recurrence_Relations.AE_BD(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
-    energy -= sum([Recurrence_Relations.AE_BD(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
+    energy = sum([RR.AE(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
+    energy -= sum([RR.AE(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
 
-    #dipole = Recurrence_Relations.MEDMF(n_list1, n_list2, 2, n_dict, complete_dict_keys)
+    #energy1 = sum([RR.AE(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
+    #energy2 = sum([RR.AE(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
+
+    print(energy.subs(complete_dict))
+
+    #dipole = RR.MEDMF(n_list1, n_list2, 2, n_dict, complete_dict_keys)
 
     #X = dipole.subs({**complete_dict,**dict_dipole_X})
     #Y = dipole.subs({**complete_dict,**dict_dipole_Y})
@@ -83,7 +220,7 @@ def get_resonans():
     n_str1 = ''.join([item['value'] for item in request_data['numbers1']])
     n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
 
-    resonans = Recurrence_Relations.Resonance([n_list1, n_list2], complete_dict, request_data['order'], n_dict, complete_dict_keys)
+    resonans = RR.Resonance([n_list1, n_list2], complete_dict, request_data['order'], n_dict, complete_dict_keys)
 
     result = [{'transition': f"000 > {''.join([str(value) for value in key])}",
                'energy': eval(str(values)),
