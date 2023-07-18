@@ -22,7 +22,6 @@ if not firebase_admin._apps:
 })
 
 
-# from const_new import *
 import constant_gen
 import Recurrence_Relations as RR
 
