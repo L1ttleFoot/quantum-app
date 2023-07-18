@@ -22,10 +22,12 @@ if not firebase_admin._apps:
 
 
 import constant_gen
-import Recurrence_Relations as RR
+import recurrence_relations as RR
+
 
 from dict_gen import dict_gen, dict_dipole_x_gen, dict_dipole_y_gen, dict_dipole_z_gen
 
+print('start')
 
 app = Flask(__name__)
 CORS(app)
@@ -179,8 +181,6 @@ def get_calculation():
 
     #energy1 = sum([RR.AE(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
     #energy2 = sum([RR.AE(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
-
-    print(energy.subs(complete_dict))
 
     #dipole = RR.MEDMF(n_list1, n_list2, 2, n_dict, complete_dict_keys)
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*- # необходима для ввода коментариев на русском
 
-from MAKE_DB import *
+#from MAKE_DB import *
 from collections import namedtuple
 from apendix import *
 from sympy import sqrt, prod, Rational, diff, factorial
@@ -156,8 +156,8 @@ def BRA_G_ket(bra, G_ket):
 
 
 # создадим базы данных для векторов BD_V  и энергий BD_E
-create_VECTOR_BD(BD_V)
-create_ENERGY_BD(BD_E)
+#create_VECTOR_BD(BD_V)
+#create_ENERGY_BD(BD_E)
 
 ##################################################
 
