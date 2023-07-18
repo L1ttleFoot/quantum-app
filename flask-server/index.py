@@ -22,7 +22,7 @@ if not firebase_admin._apps:
 
 
 import constant_gen
-import recurrence_relations as RR
+import Recurrence_Relations as RR
 
 
 from dict_gen import dict_gen, dict_dipole_x_gen, dict_dipole_y_gen, dict_dipole_z_gen
@@ -52,8 +52,8 @@ def getVector(ket, ind):
         return None
 
     for key, value in vector.items():
-        if('ket' in value and 'ind' in value and 
-            value["ket"] == ''.join(str(x) for x in ket) and 
+        if('ket' in value and 'ind' in value and
+            value["ket"] == ''.join(str(x) for x in ket) and
             value["ind"] == ind):
             #ref.child(key).update({"bra":5})
             return pickle.loads(eval(value['v']))
@@ -80,8 +80,8 @@ def insertVector(ket, ind, v):
         return
 
     for key, value in vector.items():
-        if('ket' in value and 'ind' in value and 
-            value["ket"] == ''.join(str(x) for x in ket) and 
+        if('ket' in value and 'ind' in value and
+            value["ket"] == ''.join(str(x) for x in ket) and
             value["ind"] == ind):
             #ref.child(key).update({"bra":5})
             break
@@ -110,9 +110,9 @@ def getEnergy(bra, ket, ind):
     #(key==f"{''.join(str(x) for x in bra)}{''.join(str(x) for x in ket)}{ind}" альтернативный поиск
 
     for key, value in energy.items():
-        if('bra' in value and 'ket' in value and 'ind' in value and 
-            value["bra"] == ''.join(str(x) for x in bra) and 
-            value["ket"] == ''.join(str(x) for x in ket) and 
+        if('bra' in value and 'ket' in value and 'ind' in value and
+            value["bra"] == ''.join(str(x) for x in bra) and
+            value["ket"] == ''.join(str(x) for x in ket) and
             value["ind"] == ind):
             #ref.child(key).update({"bra":5})
             return pickle.loads(eval(value['e']))
@@ -136,9 +136,9 @@ def insertEnergy(bra, ket, ind, e):
         return
 
     for key, value in energy.items():
-        if('bra' in value and 'ket' in value and 'ind' in value and 
-            value["bra"] == ''.join(str(x) for x in bra) and 
-            value["ket"] == ''.join(str(x) for x in ket) and 
+        if('bra' in value and 'ket' in value and 'ind' in value and
+            value["bra"] == ''.join(str(x) for x in bra) and
+            value["ket"] == ''.join(str(x) for x in ket) and
             value["ind"] == ind):
             #ref.child(key).update({"bra":5})
             break
