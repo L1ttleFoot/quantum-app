@@ -2,7 +2,6 @@ from itertools import combinations_with_replacement, combinations
 from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 import sympy as sy
-from sympy import sqrt
 import json
 import pickle
 
@@ -24,7 +23,6 @@ if not firebase_admin._apps:
 
 import constant_gen
 import Recurrence_Relations as RR
-
 
 from dict_gen import dict_gen, dict_dipole_x_gen, dict_dipole_y_gen, dict_dipole_z_gen
 
