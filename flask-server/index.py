@@ -36,7 +36,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 def getVector(ket, ind):
 
-    print('here Vector')
+    print('here get Vector:', ket, ind)
 
     if(db.reference("/").get()==None):
         return None
@@ -61,6 +61,8 @@ def getVector(ket, ind):
     return None
 
 def insertVector(ket, ind, v):
+
+    print('here insert Vector:', ket, ind)
 
     if(db.reference("/").get()==None):
         db.reference("/").update({'Vector':''})
@@ -92,7 +94,7 @@ def insertVector(ket, ind, v):
 
 def getEnergy(bra, ket, ind):
 
-    print('here Energy')
+    print('here get Energy:', bra, ket, ind)
 
     if(db.reference("/").get()==None):
         return None
@@ -120,6 +122,8 @@ def getEnergy(bra, ket, ind):
     return None
 
 def insertEnergy(bra, ket, ind, e):
+
+    print('here insert Energy:', bra, ket, ind)
 
     if(db.reference("/").get()==None):
         db.reference("/").update({'Energy':''})
