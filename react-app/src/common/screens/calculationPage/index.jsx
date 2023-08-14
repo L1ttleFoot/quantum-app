@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { AppBar, Toolbar, Button, TextField, FormControl, FormControlLabel, RadioGroup, Radio, IconButton, Tooltip } from '@mui/material';
+import { AppBar, Toolbar, TextField, FormControl, FormControlLabel, RadioGroup, Radio, IconButton, Tooltip } from '@mui/material';
 import Content from "./content"
 import './style.css'
 import { Upload, Download } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchConfig, fetchFile } from './actions';
+import { fetchConfig, fetchFile } from './requests';
 import {
     setFreedomDegrees,
     setOrder,
@@ -21,7 +21,6 @@ const CalculationPage = () => {
     const dispatch = useDispatch()
 
     const state = useSelector(state => state.data)
-    const http = useSelector(state => state.http)
 
     const {freedomDegrees, order} = state
 
@@ -143,16 +142,6 @@ const CalculationPage = () => {
                     </div>
 
                     <div className='buttons'>
-
-                        {/* <Button
-                            endIcon={http.loadingConfig ? <CircularProgress size={20} /> : ''}
-                            onClick={() => fetchConfig(dispatch, state)}
-                            variant={"outlined"}
-                            style={{ background: 'white', margin: 10 }}
-                            disabled={http.loadingConfig}
-                        >
-                            Параметры
-                        </Button> */}
 
                         <Tooltip title="Загрузить файл" placement="bottom">
                             <IconButton onClick={onClick} color="primary" component="label">

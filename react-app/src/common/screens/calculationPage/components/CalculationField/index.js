@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../style.css'
 import { Button, CircularProgress } from '@mui/material'
-import { fetchCalc, fetchRes } from '../../actions'
+import { fetchCalc, fetchRes } from '../../requests'
 import { useDispatch, useSelector } from 'react-redux'
 
 const CalculationFiled = (props) => {
