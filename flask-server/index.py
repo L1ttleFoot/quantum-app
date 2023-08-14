@@ -5,28 +5,31 @@ import sympy as sy
 import json
 import pickle
 
-import os
-from dotenv import load_dotenv
-load_dotenv()
-
-FIREBASE_CONFIG = os.environ.get("FIREBASE_CONFIG")
-
 import firebase_admin
 from firebase_admin import credentials, db
 
-if not firebase_admin._apps:
-    cred = credentials.Certificate(json.loads(FIREBASE_CONFIG))
-    my_app = firebase_admin.initialize_app(cred, {
-        'databaseURL': 'https://quantum-app-4b8ae-default-rtdb.europe-west1.firebasedatabase.app'
-})
+import os
+from dotenv import load_dotenv
 
 
 import constant_gen
 import Recurrence_Relations as RR
 
-
 from dict_gen import dict_gen, dict_dipole_x_gen, dict_dipole_y_gen, dict_dipole_z_gen
 
+load_dotenv()
+FIREBASE_CONFIG = os.environ.get("FIREBASE_CONFIG")
+
+
+if not firebase_admin._apps:
+    cred = credentials.Certificate(json.loads(FIREBASE_CONFIG))
+    my_app = firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://quantum-app-4b8ae-default-rtdb.europe-west1.firebasedatabase.app'
+    })
+
+
+print(firebase_admin._apps)
+print(firebase_admin)
 print('start')
 
 app = Flask(__name__)
