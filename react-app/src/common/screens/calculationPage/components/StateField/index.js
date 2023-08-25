@@ -2,16 +2,15 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import '../../style.css'
 import { TextField, Stack, Typography } from '@mui/material'
-import { setNumbers1, setNumbers2 } from '../../../../../store/redusers';
+import { setNumbers1, setNumbers2 } from '../../slice';
 
-const StateField = (props) => {
+const StateField = () => {
 
     const dispatch = useDispatch()
 
     const state = useSelector(state => state.data)
 
     const { numbers1, numbers2, freedomDegrees } = state
-
 
     const letterIndexes = 'ijkl'
 

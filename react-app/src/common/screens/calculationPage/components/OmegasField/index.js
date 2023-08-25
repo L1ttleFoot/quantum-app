@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import '../../style.css'
 import { TextField, Stack, Typography } from '@mui/material'
-import { setOmegas } from '../../../../../store/redusers'
+import { setOmegas } from '../../slice'
 
 const OmegasField = () => {
 

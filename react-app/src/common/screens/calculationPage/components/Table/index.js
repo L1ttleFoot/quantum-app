@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IconButton } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { setRows } from '../../../../../store/redusers'
+import { setRows } from '../../slice'
 
 const Table = (props) => {
 

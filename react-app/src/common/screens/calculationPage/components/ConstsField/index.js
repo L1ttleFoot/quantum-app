@@ -2,7 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import '../../style.css'
 import { TextField, Typography } from '@mui/material'
-import { setConsts } from '../../../../../store/redusers'
+import { setConsts } from '../../slice'
+import { constsDict } from '../../consts'
 
 const ConstsField = () => {
 
@@ -18,6 +19,12 @@ const ConstsField = () => {
         dispatch(setConsts(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') }))))
     };
 
+    console.log(constsDict[state.constsType])
+    console.log(state.constsType)
+
+
+    const phi = decodeURI('%CF%86')
+
     return (
         <div className='block'>
             <Typography variant="subtitle">Силовые постоянные</Typography>
@@ -28,18 +35,16 @@ const ConstsField = () => {
                 justifyContent: 'center',
             }}
             >
-
                 {consts.map((item, index) =>
                     <TextField
                         key={item.index + 'const'}
                         size={'small'}
                         style={{ margin: 10, width: '15%', minWidth: 80 }}
-                        label={<span>a<sub>{item.index}</sub></span>}
+                        label={<span>{constsDict[state.constsType]}<sub>{item.index}</sub></span>}
                         value={item.value}
                         onChange={handleChangeConst(index)}
                     />
                 )}
-
             </div>
         </div>
     )

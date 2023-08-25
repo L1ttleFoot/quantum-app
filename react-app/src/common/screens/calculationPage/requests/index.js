@@ -7,9 +7,8 @@ import {
     setRequestConfig,
     setRequestCalc,
     setRequestRes
-} from "../../../../store/redusers";
+} from "../slice";
 import { saveAs } from 'file-saver'
-
 
 //const url = 'https://quantum-app-backend.onrender.com/'
 //const url = 'https://quantum-app-bf8b.vercel.app'
@@ -17,7 +16,7 @@ import { saveAs } from 'file-saver'
 
 const url = process.env.REACT_APP_ENV === 'development' ? 'http://localhost:8080' : 'https://quantum-app-backend.onrender.com/'
 
-const fetchConfig = async (dispatch, state) => {
+const fetchConfig = (state) => async(dispatch) => {
 
     dispatch(setRequestConfig({ status: 202, loading: true }))
 
@@ -42,7 +41,7 @@ const fetchConfig = async (dispatch, state) => {
         });
 }
 
-const fetchCalc = async (dispatch, state) => {
+const fetchCalc = (state) => async (dispatch) => {
 
     dispatch(setRequestCalc({ status: 202, loading: true }))
 
@@ -50,6 +49,8 @@ const fetchCalc = async (dispatch, state) => {
         {
             method: 'POST',
             body: JSON.stringify({
+                freedomDegrees: state.freedomDegrees,
+                order: state.order,
                 numbers1: state.numbers1,
                 numbers2: state.numbers2,
                 omegas: state.omegas,
@@ -58,7 +59,6 @@ const fetchCalc = async (dispatch, state) => {
                 dipoleY: [state.dipole0, ...state.dipoleY],
                 dipoleZ: [state.dipole0, ...state.dipoleZ],
                 constsType: state.constsType,
-                order: state.order
             })
         })
         .then(response => response.json())
@@ -72,7 +72,7 @@ const fetchCalc = async (dispatch, state) => {
     dispatch(setRequestCalc({ status: 200, loading: false }))
 }
 
-const fetchRes = async (dispatch, state) => {
+const fetchRes = (state) => async (dispatch) => {
 
     dispatch(setRequestRes({ status: 202, loading: true }))
 

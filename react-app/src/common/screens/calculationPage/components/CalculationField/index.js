@@ -18,18 +18,25 @@ const CalculationFiled = (props) => {
                 endIcon={http.loadingCalc ? <CircularProgress size={20} /> : ''}
                 fullWidth={true}
                 variant='contained'
-                onClick={() => fetchCalc(dispatch, state)}
+                onClick={() => dispatch(fetchCalc(state))}
                 disabled={someEmpty || http.loadingCalc}
                 style={{ margin: '0px 5px' }}
             >
                 Расчет
             </Button>
 
+            {/* <MyButton 
+                onClick={() => console.log('test')}
+                disabled={someEmpty || http.loadingCalc}
+            >
+                Расчет
+            </MyButton> */}
+
             <Button
                 endIcon={http.loadingRes ? <CircularProgress size={20}/> : ''}
                 fullWidth={true}
                 variant='contained'
-                onClick={() => fetchRes(dispatch, state)}
+                onClick={() => dispatch(fetchRes(state))}
                 disabled={someEmpty || http.loadingCalc}
                 style={{ margin: '0px 5px' }}
             >

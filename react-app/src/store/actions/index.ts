@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setConsts, setNumbers1, setNumbers2, setOmegas } from "../redusers";
+import { setNumbers1, setNumbers2, setOmegas, setConsts } from "../../common/screens/calculationPage/slice";
 
 const dispatch = useDispatch()
 

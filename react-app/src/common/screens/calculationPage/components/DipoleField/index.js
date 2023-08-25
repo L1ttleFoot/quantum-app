@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import '../../style.css'
 import { TextField, Typography, Tabs, Tab } from '@mui/material'
-import { setDipole0, setDipoleX, setDipoleY, setDipoleZ } from '../../../../../store/redusers'
+import { setDipole0, setDipoleX, setDipoleY, setDipoleZ } from '../../slice'
 
 const DipoleField = (props) => {
 
