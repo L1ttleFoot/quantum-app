@@ -19,12 +19,6 @@ const ConstsField = () => {
         dispatch(setConsts(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') }))))
     };
 
-    console.log(constsDict[state.constsType])
-    console.log(state.constsType)
-
-
-    const phi = decodeURI('%CF%86')
-
     return (
         <div className='block'>
             <Typography variant="subtitle">Силовые постоянные</Typography>

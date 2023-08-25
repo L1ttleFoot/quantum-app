@@ -31,7 +31,7 @@ const CalculationPage = () => {
 
         if (loadFromFile) return
 
-        fetchConfig(dispatch, {freedomDegrees, order})
+        dispatch(fetchConfig({freedomDegrees, order}))
         // eslint-disable-next-line
     }, [dispatch, freedomDegrees, order])
 
