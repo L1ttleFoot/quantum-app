@@ -14,7 +14,7 @@ import {
     setDipoleX,
     setDipoleY,
     setDipoleZ
-} from '../../../store/redusers';
+} from './slice';
 
 const CalculationPage = () => {
 
@@ -32,6 +32,7 @@ const CalculationPage = () => {
         if (loadFromFile) return
 
         fetchConfig(dispatch, {freedomDegrees, order})
+        // eslint-disable-next-line
     }, [dispatch, freedomDegrees, order])
 
     const emptyNumbers1 = [undefined, ''].some(item => state.numbers1.map(el => el.value).includes(item))
