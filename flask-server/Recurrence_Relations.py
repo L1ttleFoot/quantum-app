@@ -7,7 +7,8 @@ from apendix import *
 from sympy import sqrt, prod, Rational, diff, factorial
 import sympy as sy
 from itertools import product
-from index import getEnergy, insertEnergy, getVector, insertVector
+from db_functions import getEnergy, insertEnergy, getVector, insertVector, getDipole, insertDipole, getPolynomial, insertPolynomial
+
 
 import numpy as np
 #from const_new import *
@@ -15,14 +16,14 @@ import numpy as np
 
 
 def ZAM(XXX, k, n_dict):
-    Z1 = np.array(list(n_dict.keys()))
-    Z2 = np.array(list(n_dict.keys()))+np.array(list(k))
+    Z1 = np.array((n_dict))
+    Z2 = np.array((n_dict))+np.array(list(k))
     return XXX.subs([(Z1[i], Z2[i]) for i in range(len(k))])
 
 
 def ZAM_ZAM(VEC, k, n_dict):
-    Z1 = np.array(list(n_dict.keys()))
-    Z2 = np.array(list(n_dict.keys()))+np.array(list(k))
+    Z1 = np.array((n_dict))
+    Z2 = np.array((n_dict))+np.array(list(k))
 
     def zam(vec):
         if isinstance(vec[1], int):
@@ -174,6 +175,7 @@ def BRA_G_ket(bra, G_ket):
 
 Index = namedtuple('Index', 'p q betta gamma nu')
 Index2 = namedtuple('Index2', 'p betta gamma')
+Index3 = namedtuple('Index3', 'p alfa')
 
 #расчет поправки к вектору состояния#
 # calculation Amendment to the Vector (AV)
@@ -285,7 +287,6 @@ def AE(vec1, vec2, ind, n_dict, key_dict):
 
 def AE_BD(vec1, vec2, ind, n_dict, key_dict):
     '''Расчитывает поправку к энергии'''
-    #insertEnergy(tuple(vec1), tuple(vec2), ind, AE(vec1, vec2, ind, n_dict, key_dict))
 
     if ind == 0:
         return AE(vec1, vec2, ind, n_dict, key_dict)
@@ -367,6 +368,60 @@ def MEDMF(bra, ket, max_indignation_step, n_dict, key_dict):
         result.append(sy.simplify(BGK))
     return sy.simplify(sum(result))
 
+def MEDMF_BD(bra, ket, max_indignation_step, n_dict, key_dict):
+    print('MEDMF_BD')
+    def medmf_bd(bra, ket, max_indignation_step, n_dict, key_dict):
+        #D = select_dipol(BD_D, (tuple(bra), tuple(ket), max_indignation_step,))
+        #D = getDipole(tuple(bra), tuple(ket), max_indignation_step)
+        D = None
+        if D or D == 0:
+            return D
+        else:
+            D = 0
+            for i in reversed([Index3(*i) for i in product(range(0, max_indignation_step + 2), repeat=2) if
+                               sum(i[1:]) < max_indignation_step + 1]):
+                #N = select_polinom(BD_P, (tuple(bra), tuple(ket), i.p, i.alfa,))
+                N = getPolynomial(tuple(bra), tuple(ket), i.p, i.alfa)
+                N = None
+                if N:
+                    D += N
+                else:
+                    D += Polinom(bra, ket, i.p, i.alfa, n_dict, key_dict, 'D')
+            insertDipole(tuple(bra), tuple(ket), max_indignation_step, D)
+            return D
+    Z = bra
+    if Z != [0 for i in bra]:
+        ket = list(np.array(ket) - np.array(bra))
+        bra = [0 for i in bra]
+    D = medmf_bd(bra, ket, max_indignation_step, n_dict, key_dict)
+    if D != 0:
+        return ZAM(D, Z, n_dict)
+    else:
+        return D
+
+
+def Polinom(bra, ket, p, alfa, n_dict, key_dict, Factor):
+    print('Polinom')
+    N = getPolynomial(tuple(bra), tuple(ket), p, alfa)
+    if N:
+        return N
+    else:
+        result = []
+        for i in product(range(0, alfa + 1), repeat=2):
+            if pravilo_otbora(bra, ket, p, i[0], i[1]) == 0: continue
+            if sum(i) == alfa:
+                BRA = AV(bra, i[0], n_dict, key_dict)
+                KET = AV(ket, i[1], n_dict, key_dict)
+                fksi = ksi_polinom(p)
+                IJK = INDEX(p - 2, len(n_dict))
+                GKET = G_KET(KET, fksi, IJK, key_dict, Factor)
+                BGK = sum([BRA_G_ket(vec, GKET) for vec in BRA])
+                result.append(BGK)
+        N = sum(result)
+        if N == None:
+            N = 0
+        insertPolynomial(tuple(bra), tuple(ket), p, alfa, N)
+        return N
 
 def Resonance(levels, zamena, max_indignation_step, n_dict, key_dict):
     vec = [0 for i in levels[0]]

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import '../../style.css'
 import { Typography, Skeleton } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector'
 
 const ConstsField = () => {
 
@@ -19,11 +19,11 @@ const ConstsField = () => {
       }, [myArray]); // зависимость от myArray, чтобы эффект выполнялся при изменении длины массива
     */
 
-    const data = useSelector(state => state.data)
+    const data = useTypedSelector(state => state.data)
 
     const { freedomDegrees, order } = data
 
-    function permutationsWithoutMirror(n, k) {
+    function permutationsWithoutMirror(n: number, k: number): number {
         let numerator = 1;
         let denominator = 1;
         for (let i = 0; i < k; i++) {
@@ -33,13 +33,13 @@ const ConstsField = () => {
         return numerator / denominator;
     }
 
-    const sum = Array.from({ length: parseInt(order) }, (_, i) => i).map(item => permutationsWithoutMirror(parseInt(freedomDegrees), item + 3)).reduce((acc, curr) => acc + curr, 0);
+    const sum = Array.from({ length: order }, (_, i) => i).map(item => permutationsWithoutMirror(freedomDegrees, item + 3)).reduce((acc, curr) => acc + curr, 0);
 
     const myArray = Array.from({ length: sum }, (_, index) => index + 1);
 
     return (
         <div className='block'>
-            <Typography variant="subtitle">Силовые постоянные</Typography>
+            <Typography variant="body1" component='span'>Силовые постоянные</Typography>
             <div style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -47,7 +47,7 @@ const ConstsField = () => {
                 justifyContent: 'center',
             }}
             >
-                {myArray.map((item, index) =>
+                {myArray.map((_, index) =>
                     <Skeleton
                         key={index}
                         variant="rounded"

@@ -1,48 +1,54 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector'
 import '../../style.css'
 import { TextField, Typography, Tabs, Tab } from '@mui/material'
-import { setDipole0, setDipoleX, setDipoleY, setDipoleZ } from '../../slice'
+import { ErrorHandler } from '../../../../../components/Errorhandler'
+import { useAction } from '../../slice/useAction'
 
-const DipoleField = (props) => {
+const DipoleField = () => {
 
-    const dispatch = useDispatch()
+    const {setDipole0, setDipoleX, setDipoleY, setDipoleZ} = useAction()
 
-    const state = useSelector(state => state.data)
-
-    const { dipole0, dipoleX, dipoleY, dipoleZ } = state
+    const data = useTypedSelector(state => state.data)
+    const http = useTypedSelector(state => state.http)
 
     const [tab, setTab] = useState('x')
 
-    const onChangeTab = (e, value) => {
+    if(http.statusConfig!==200){
+        return <ErrorHandler code={http.statusConfig}/>
+    }
+
+    const { dipole0, dipoleX, dipoleY, dipoleZ } = data
+
+    const onChangeTab = (event: React.SyntheticEvent, value: string) => {
         setTab(value)
     }
 
-    const handleChangeDipoleX = index => event => {
+    const handleChangeDipoleX = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
         let newArr = [...dipoleX]
         newArr[index].value = event.target.value
-        dispatch(setDipoleX(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') }))))
+        setDipoleX(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
     };
 
-    const handleChangeDipoleY = index => event => {
+    const handleChangeDipoleY = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
         let newArr = [...dipoleY]
         newArr[index].value = event.target.value
-        dispatch(setDipoleY(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') }))))
+        setDipoleY(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
     };
 
-    const handleChangeDipoleZ = index => event => {
+    const handleChangeDipoleZ = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
         let newArr = [...dipoleZ]
         newArr[index].value = event.target.value
-        dispatch(setDipoleZ(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') }))))
+        setDipoleZ(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
     };
 
-    const handleChangeDipole0 = (e) => {
-        dispatch(setDipole0({ ...dipole0, value: e.target.value }))
+    const handleChangeDipole0 = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDipole0({ ...dipole0, value: e.target.value })
     }
 
     return (
         <div className='block'>
-            <Typography variant="subtitle">Производные дипольного момента</Typography>
+            <Typography variant="body1" component='span'>Производные дипольного момента</Typography>
 
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Tabs value={tab} onChange={onChangeTab} variant="fullWidth">

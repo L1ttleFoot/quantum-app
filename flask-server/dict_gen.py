@@ -10,12 +10,12 @@ def factor_fi(str):
   unique = dict(zip(list(str),[factorial(list(str).count(i)) for i in list(str)]))
   return(2**(-len(str)/2)/reduce(lambda a, b : a * b, unique.values()))
 
-def dict_gen(n, omega, const, constType, dipoleX):
+def dict_gen(n_list, omega, const, constType, dipoleX, flag):
 
-  n_list = {}
-  for i in range(len(n)):
+  n_l = {}
+  for i in range(len(n_list)):
     #n_list[sy.symbols('n_'+str(n[i]['letIndex']))]=int(n[i]['value'])
-    n_list[sy.symbols('n_'+str(n[i]['letIndex']))] = 0
+    n_l[n_list[i]] = 0
 
   omega_list = {}
   for i in range(len(omega)):
@@ -35,8 +35,8 @@ def dict_gen(n, omega, const, constType, dipoleX):
   for i in range(len(dipoleX)):
     dipoleX_list[sy.symbols('D_'+str(dipoleX[i]['letIndex']))] = 0
 
-  complete_dict = {**n_list, **omega_list, **const_list_changed, **dipoleX_list}
-  
+  complete_dict = {**n_l, **omega_list, **const_list_changed, **dipoleX_list}
+
   return complete_dict
 
 def dict_dipole_x_gen(dipoleX):

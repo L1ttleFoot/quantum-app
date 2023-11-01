@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialState } from "../initialState";
+import { initialState, letterIndexes } from "../initialState";
 
 const { calcData, calcHttp } = initialState
 
@@ -7,11 +7,8 @@ export const calcPageData = createSlice({
     name: 'calcData',
     initialState: calcData,
     reducers: {
-        setNumbers1(state, action) {
-            state.numbers1 = action.payload
-        },
-        setNumbers2(state, action) {
-            state.numbers2 = action.payload
+        setStates(state, action) {
+            state.states = action.payload
         },
         setOmegas(state, action) {
             state.omegas = action.payload
@@ -32,7 +29,8 @@ export const calcPageData = createSlice({
             state.dipoleZ = action.payload
         },
         setFreedomDegrees(state, action) {
-            state.freedomDegrees = action.payload
+            state.freedomDegrees = Number(action.payload)
+            state.nList = new Array(Number(action.payload)).fill(undefined).map((_, index) => `n_${letterIndexes[index]}`)
         },
         setOrder(state, action) {
             state.order = action.payload
@@ -57,10 +55,6 @@ export const calcPageHttp = createSlice({
         setRequestCalc(state, action) {
             state.loadingCalc = action.payload.loading
             state.statusCalc = action.payload.status
-        },
-        setRequestRes(state, action) {
-            state.loadingRes = action.payload.loading
-            state.statusRes = action.payload.status
         }
     },
 })
@@ -71,8 +65,7 @@ export const {
     setConstsType,
     setConsts,
     setOmegas,
-    setNumbers1,
-    setNumbers2,
+    setStates,
     setDipole0,
     setDipoleX,
     setDipoleY,
@@ -82,6 +75,5 @@ export const {
 
 export const {
     setRequestCalc,
-    setRequestConfig,
-    setRequestRes
+    setRequestConfig
 } = calcPageHttp.actions;

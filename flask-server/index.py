@@ -29,7 +29,6 @@ if not firebase_admin._apps:
 
 
 print(firebase_admin._apps)
-print(firebase_admin)
 print('start')
 
 app = Flask(__name__)
@@ -37,123 +36,6 @@ CORS(app)
 app.config["DEBUG"] = True
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-def getVector(ket, ind):
-
-    print('here get Vector:', ket, ind)
-
-    if(db.reference("/").get()==None):
-        return None
-
-    ref = db.reference("/Vector")
-
-    vector = ref.get()
-
-    if(vector==None):
-        return None
-
-    if(vector==''):
-        return None
-
-    for key, value in vector.items():
-        if('ket' in value and 'ind' in value and
-            value["ket"] == ''.join(str(x) for x in ket) and
-            value["ind"] == ind):
-            #ref.child(key).update({"bra":5})
-            return pickle.loads(eval(value['v']))
-
-    return None
-
-def insertVector(ket, ind, v):
-
-    print('here insert Vector:', ket, ind)
-
-    if(db.reference("/").get()==None):
-        db.reference("/").update({'Vector':''})
-
-    if(db.reference("/Vector").get()==None):
-        db.reference("/").update({'Vector':''})
-
-    ref = db.reference("/Vector")
-
-    vector = ref.get()
-
-    if(vector==None):
-        return None
-
-    if(vector==''):
-        ref.push().update({'ket':''.join(str(x) for x in ket), 'ind': ind, 'v': str(pickle.dumps(v))})
-        return
-
-    for key, value in vector.items():
-        if('ket' in value and 'ind' in value and
-            value["ket"] == ''.join(str(x) for x in ket) and
-            value["ind"] == ind):
-            #ref.child(key).update({"bra":5})
-            break
-    else:
-        ref.push().update({'ket':''.join(str(x) for x in ket), 'ind': ind, 'v': str(pickle.dumps(v))})
-
-    return
-
-def getEnergy(bra, ket, ind):
-
-    print('here get Energy:', bra, ket, ind)
-
-    if(db.reference("/").get()==None):
-        return None
-
-    ref = db.reference("/Energy")
-
-    energy = ref.get()
-
-    if(energy==None):
-        return None
-
-    if(energy==''):
-        return None
-
-    #(key==f"{''.join(str(x) for x in bra)}{''.join(str(x) for x in ket)}{ind}" альтернативный поиск
-
-    for key, value in energy.items():
-        if('bra' in value and 'ket' in value and 'ind' in value and
-            value["bra"] == ''.join(str(x) for x in bra) and
-            value["ket"] == ''.join(str(x) for x in ket) and
-            value["ind"] == ind):
-            #ref.child(key).update({"bra":5})
-            return pickle.loads(eval(value['e']))
-
-    return None
-
-def insertEnergy(bra, ket, ind, e):
-
-    print('here insert Energy:', bra, ket, ind)
-
-    if(db.reference("/").get()==None):
-        db.reference("/").update({'Energy':''})
-
-    if(db.reference("/Energy").get()==None):
-        db.reference("/").update({'Energy':''})
-
-    ref = db.reference("/Energy")
-
-    energy = ref.get()
-
-    if(energy==''):
-        ref.push().set({'bra': ''.join(str(x) for x in bra),'ket':''.join(str(x) for x in ket), 'ind': ind, 'e': str(pickle.dumps(e))})
-        return
-
-    for key, value in energy.items():
-        if('bra' in value and 'ket' in value and 'ind' in value and
-            value["bra"] == ''.join(str(x) for x in bra) and
-            value["ket"] == ''.join(str(x) for x in ket) and
-            value["ind"] == ind):
-            #ref.child(key).update({"bra":5})
-            break
-    else:
-        ref.push().update({'bra': ''.join(str(x) for x in bra),'ket':''.join(str(x) for x in ket), 'ind': ind, 'e': str(pickle.dumps(e))})
-        #ref.update({f"{''.join(str(x) for x in bra)}{''.join(str(x) for x in ket)}{ind}":{'bra': ''.join(str(x) for x in bra),'ket':''.join(str(x) for x in ket), 'ind': ind, 'e': str(pickle.dumps(e))}})
-
-    return
 
 @app.route('/')
 def home():
@@ -162,69 +44,34 @@ def home():
 
 @app.route('/api/v1/calculation', methods=['GET', 'POST'])
 def get_calculation():
+
     request_data = request.get_json(force=True)
 
-    complete_dict = dict_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['constsType'], request_data['dipoleX'])
+    n_list = request_data["nList"]
+    states = request_data["states"]
+    order = request_data["order"]
+    freedomDegrees = request_data["freedomDegrees"]
+    omegas = request_data['omegas']
+    consts = request_data['consts']
+    constsType = request_data['constsType']
+    dipoleX = request_data['dipoleX']
+    dipoleY = request_data['dipoleY']
+    dipoleZ = request_data['dipoleZ']
 
-    dict_dipole_X = dict_dipole_x_gen(request_data['dipoleX'])
-    dict_dipole_Y = dict_dipole_y_gen(request_data['dipoleY'])
-    dict_dipole_Z = dict_dipole_z_gen(request_data['dipoleZ'])
+    n_l = []
+    for i in range(len(n_list)):
+        n_l.append(sy.symbols(n_list[i]))
+
+    complete_dict = dict_gen(n_l, omegas, consts, constsType, dipoleX, False)
+
+    dict_dipole_X = dict_dipole_x_gen(dipoleX)
+    dict_dipole_Y = dict_dipole_y_gen(dipoleY)
+    dict_dipole_Z = dict_dipole_z_gen(dipoleZ)
 
     complete_dict_keys = dict([(i.name,i) for i in complete_dict])
     dict_dipole_keys = dict([(i.name,i) for i in dict_dipole_X])
 
-    n_dict = {}
-    for i in range(len(request_data['numbers2'])):
-        n_dict[sy.symbols('n_' + str(request_data['numbers2'][i]['letIndex']))] = 0
-
-    n_list1 = [int(item['value']) for item in request_data['numbers1']]
-    n_list2 = [int(item['value']) for item in request_data['numbers2']]
-
-    n_str1 = ''.join([item['value'] for item in request_data['numbers1']])
-    n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
-
-    energy = sum([RR.AE(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
-    energy -= sum([RR.AE(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
-
-    #energy1 = sum([RR.AE(n_list2, n_list2, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
-    #energy2 = sum([RR.AE(n_list1, n_list1, i, n_dict, complete_dict_keys) for i in range(request_data['order'] + 1)])
-
-    #dipole = RR.MEDMF(n_list1, n_list2, 2, n_dict, complete_dict_keys)
-
-    #X = dipole.subs({**complete_dict,**dict_dipole_X})
-    #Y = dipole.subs({**complete_dict,**dict_dipole_Y})
-    #Z = dipole.subs({**complete_dict,**dict_dipole_Z})
-
-    X=0.01
-    Y=0
-    Z=0
-
-    response = jsonify(transition='%s > %s' % (n_str1, n_str2), energy='%s' % (energy.subs(complete_dict)), matrix='%s' % (((X**2+Y**2+Z**2)**(1/2))*1000))
-    response.headers.add("Access-Control-Allow-Origin", "*")
-
-    constant_gen.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['dipoleY'], request_data['dipoleZ'], request_data['constsType'], request_data['order'])
-
-    return response
-
-@app.route('/api/v1/calculation_resonans', methods=['GET', 'POST'])
-def get_resonans():
-    request_data = request.get_json(force=True)
-
-    complete_dict = dict_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['constsType'], request_data['dipoleX'])
-
-    complete_dict_keys = dict([(i.name,i) for i in complete_dict])
-
-    n_dict = {}
-    for i in range(len(request_data['numbers2'])):
-        n_dict[sy.symbols('n_' + str(request_data['numbers2'][i]['letIndex']))] = 0
-
-    n_list1 = [int(item['value']) for item in request_data['numbers1']]
-    n_list2 = [int(item['value']) for item in request_data['numbers2']]
-
-    n_str1 = ''.join([item['value'] for item in request_data['numbers1']])
-    n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
-
-    resonans = RR.Resonance([n_list1, n_list2], complete_dict, request_data['order'], n_dict, complete_dict_keys)
+    resonans = RR.Resonance(states, complete_dict, order, n_l, complete_dict_keys)
 
     result = [{'transition': f"000 > {''.join([str(value) for value in key])}",
                'energy': eval(str(values)),
@@ -240,6 +87,50 @@ def get_resonans():
     X=0.01
     Y=0
     Z=0
+
+    response = make_response(json.dumps(result))
+    response.headers.add("Access-Control-Allow-Origin", "*")
+
+    constant_gen.constant_gen(n_list, omegas, consts, dipoleX, dipoleY, dipoleZ, constsType, order)
+
+    return response
+
+@app.route('/api/v1/calculation_resonans', methods=['GET', 'POST'])
+def get_resonans():
+    request_data = request.get_json(force=True)
+
+    complete_dict = dict_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['constsType'], request_data['dipoleX'], False)
+
+    complete_dict_keys = dict([(i.name,i) for i in complete_dict])
+
+    n_dict = {}
+    for i in range(len(request_data['numbers2'])):
+        n_dict[sy.symbols('n_' + str(request_data['numbers2'][i]['letIndex']))] = 0
+
+    #n_list1 = [int(item['value']) for item in request_data['numbers1']]
+    #n_list2 = [int(item['value']) for item in request_data['numbers2']]
+
+    #n_str1 = ''.join([item['value'] for item in request_data['numbers1']])
+    #n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
+
+    resonans = RR.Resonance([[0,1,0], [1,0,0], [0,0,1]], complete_dict, request_data['order'], n_dict, complete_dict_keys)
+
+    result = [{'transition': f"000 > {''.join([str(value) for value in key])}",
+               'energy': eval(str(values)),
+               'matrix': 10} for key, values in resonans.items()]
+
+    k = [key for key in resonans.keys()]
+
+    for i in range(len(list(combinations(k,2)))):
+        result.append({'transition':f'{"".join([str(value) for value in list(combinations(k,2))[i][0]])} > {"".join([str(value) for value in list(combinations(k,2))[i][1]])}',
+                'energy': eval(str(resonans[list(combinations(k,2))[i][0]]))-eval(str(resonans[list(combinations(k,2))[i][1]])),
+                'matrix':10})
+
+    X=0.01
+    Y=0
+    Z=0
+
+    print(result)
 
     #response = jsonify(transition='%s > %s' % (n_str1, n_str2), energy='%s' % (sum([eval(str(i)) for i in resonans.values()])), matrix='%s' % (((X**2+Y**2+Z**2)**(1/2))*1000))
     response = make_response(json.dumps(result))
@@ -282,7 +173,7 @@ def config_response():
 def get_file():
     request_data = request.get_json(force=True)
 
-    constant_gen.constant_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['dipoleY'], request_data['dipoleZ'], request_data['constsType'], request_data['order'])
+    constant_gen.constant_gen(request_data['nList'], request_data['omegas'], request_data['consts'], request_data['dipoleX'], request_data['dipoleY'], request_data['dipoleZ'], request_data['constsType'], request_data['order'])
 
     return send_file('/tmp/const.py',)
 

@@ -1,3 +1,5 @@
+import { Dispatch } from "redux";
+import { DataTypes } from "../initialState";
 import {
     setConsts,
     setDipoleX,
@@ -5,8 +7,7 @@ import {
     setDipoleZ,
     setRows,
     setRequestConfig,
-    setRequestCalc,
-    setRequestRes
+    setRequestCalc
 } from "../slice";
 import { saveAs } from 'file-saver'
 
@@ -14,16 +15,23 @@ import { saveAs } from 'file-saver'
 //const url = 'https://quantum-app-bf8b.vercel.app'
 //const url = 'http://localhost:8080'
 
-const url = process.env.REACT_APP_ENV === 'development' ? 'http://localhost:8080' : 'https://quantum-app-backend.onrender.com/'
+const url = process.env.REACT_APP_ENV === 'development' ? 'http://localhost:8080' : 'https://quantum-app-backend.onrender.com'
 
-const fetchConfig = (state) => async(dispatch) => {
+interface IConfig {
+    freedomDegrees: number
+    order: number
+}
+
+type ErrorWithCode = Error & { code?: number };
+
+const fetchConfig = (props: IConfig) => (dispatch: Dispatch) => {
 
     dispatch(setRequestConfig({ status: 202, loading: true }))
 
-    await fetch(`${url}/api/v1/config?freedomDegrees=${state.freedomDegrees}&order=${state.order}`)
+    fetch(`${url}/api/v1/config?freedomDegrees=${props.freedomDegrees}&order=${props.order}`)
         .then(response => {
             if (response.status !== 200) {
-                const error = new Error();
+                const error: ErrorWithCode = new Error()
                 error.code = response.status
                 throw error
             }
@@ -37,11 +45,10 @@ const fetchConfig = (state) => async(dispatch) => {
             dispatch(setRequestConfig({ status: 200, loading: false }))
         }).catch(error => {
             dispatch(setRequestConfig({ status: error.code, loading: false }))
-            console.log(error)
         });
 }
 
-const fetchCalc = (state) => async (dispatch) => {
+const fetchCalc = (state: DataTypes) => async (dispatch: Dispatch) => {
 
     dispatch(setRequestCalc({ status: 202, loading: true }))
 
@@ -49,46 +56,16 @@ const fetchCalc = (state) => async (dispatch) => {
         {
             method: 'POST',
             body: JSON.stringify({
+                nList: state.nList,
+                states: state.states.map(item=>item.value.map(Number)),
                 freedomDegrees: state.freedomDegrees,
                 order: state.order,
-                numbers1: state.numbers1,
-                numbers2: state.numbers2,
                 omegas: state.omegas,
                 consts: state.consts,
                 dipoleX: [state.dipole0, ...state.dipoleX],
                 dipoleY: [state.dipole0, ...state.dipoleY],
                 dipoleZ: [state.dipole0, ...state.dipoleZ],
                 constsType: state.constsType,
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            dispatch(setRows([...state.rows, data]))
-        })
-        .catch(error => {
-            console.log(error)
-        });
-
-    dispatch(setRequestCalc({ status: 200, loading: false }))
-}
-
-const fetchRes = (state) => async (dispatch) => {
-
-    dispatch(setRequestRes({ status: 202, loading: true }))
-
-    await fetch(`${url}/api/v1/calculation_resonans`,
-        {
-            method: 'POST',
-            body: JSON.stringify({
-                numbers1: state.numbers1,
-                numbers2: state.numbers2,
-                omegas: state.omegas,
-                consts: state.consts,
-                dipoleX: [state.dipole0, ...state.dipoleX],
-                dipoleY: [state.dipole0, ...state.dipoleY],
-                dipoleZ: [state.dipole0, ...state.dipoleZ],
-                constsType: state.constsType,
-                order: state.order
             })
         })
         .then(response => response.json())
@@ -99,17 +76,16 @@ const fetchRes = (state) => async (dispatch) => {
             console.log(error)
         });
 
-    dispatch(setRequestRes({ status: 200, loading: false }))
+    dispatch(setRequestCalc({ status: 200, loading: false }))
 }
 
-const fetchFile = async (state) => {
+const fetchFile = async (state: DataTypes) => {
 
     await fetch(`${url}/api/v1/get_file`,
     {
         method: 'POST',
         body: JSON.stringify({
-            numbers1: state.numbers1,
-            numbers2: state.numbers2,
+            nList: state.nList,
             omegas: state.omegas,
             consts: state.consts,
             dipoleX: [state.dipole0, ...state.dipoleX],
@@ -132,6 +108,5 @@ const fetchFile = async (state) => {
 export {
     fetchConfig,
     fetchCalc,
-    fetchRes,
     fetchFile
 }

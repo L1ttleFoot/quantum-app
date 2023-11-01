@@ -1,7 +1,7 @@
 import React from 'react'
 import '../../style.css'
 import { Button, CircularProgress } from '@mui/material'
-import { fetchCalc, fetchRes } from '../../requests'
+import { fetchCalc } from '../../requests'
 import { useDispatch, useSelector } from 'react-redux'
 
 const CalculationFiled = (props) => {
@@ -10,7 +10,7 @@ const CalculationFiled = (props) => {
     const state = useSelector(state => state.data)
     const http = useSelector(state => state.http)
 
-    const { resonans, someEmpty } = props
+    const { someEmpty } = props
 
     return (
         <div className={'calcFields'}>
@@ -19,7 +19,8 @@ const CalculationFiled = (props) => {
                 fullWidth={true}
                 variant='contained'
                 onClick={() => dispatch(fetchCalc(state))}
-                disabled={someEmpty || http.loadingCalc}
+                //disabled={someEmpty || http.loadingCalc}
+                disabled={http.loadingCalc}
                 style={{ margin: '0px 5px' }}
             >
                 Расчет
@@ -31,17 +32,6 @@ const CalculationFiled = (props) => {
             >
                 Расчет
             </MyButton> */}
-
-            <Button
-                endIcon={http.loadingRes ? <CircularProgress size={20}/> : ''}
-                fullWidth={true}
-                variant='contained'
-                onClick={() => dispatch(fetchRes(state))}
-                disabled={someEmpty || http.loadingCalc}
-                style={{ margin: '0px 5px' }}
-            >
-                Резонанс
-            </Button>
         </div>
     )
 }

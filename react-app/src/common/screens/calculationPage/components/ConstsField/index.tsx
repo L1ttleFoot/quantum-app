@@ -1,27 +1,35 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector'
 import '../../style.css'
 import { TextField, Typography } from '@mui/material'
-import { setConsts } from '../../slice'
 import { constsDict } from '../../consts'
+import { ErrorHandler } from '../../../../../components/Errorhandler'
+import { useAction } from '../../slice/useAction'
 
 const ConstsField = () => {
 
-    const dispatch = useDispatch()
+    const {setConsts} = useAction()
 
-    const state = useSelector(state => state.data)
+    const data = useTypedSelector(state => state.data)
+    const http = useTypedSelector(state => state.http)
 
-    const { consts } = state
+    if(http.statusConfig!==200){
+        return <ErrorHandler code={http.statusConfig}/>
+    }
 
-    const handleChangeConst = index => event => {
+    const { consts } = data
+
+    const handleChangeConst = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
         let newArr = consts.map(item=>({...item}))
         newArr[index].value = event.target.value
-        dispatch(setConsts(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') }))))
+        setConsts(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
     };
+
+    const currentConst = constsDict.find(item => item.value === data.constsType)?.label
 
     return (
         <div className='block'>
-            <Typography variant="subtitle">Силовые постоянные</Typography>
+            <Typography variant='body1' component='span'>Силовые постоянные</Typography>
             <div style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -32,9 +40,10 @@ const ConstsField = () => {
                 {consts.map((item, index) =>
                     <TextField
                         key={item.index + 'const'}
+
                         size={'small'}
                         style={{ margin: 10, width: '15%', minWidth: 80 }}
-                        label={<span>{constsDict[state.constsType]}<sub>{item.index}</sub></span>}
+                        label={<span>{currentConst}<sub>{item.index}</sub></span>}
                         value={item.value}
                         onChange={handleChangeConst(index)}
                     />

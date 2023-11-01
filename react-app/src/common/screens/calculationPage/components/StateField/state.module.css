@@ -1,0 +1,38 @@
+.stateField {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* min-height: 210px; */
+    height: fit-content;
+}
+
+.iconAdd {
+    margin: 5px;
+    cursor: pointer;
+    width: calc(100% - 10px);
+    border-radius: 5px;
+    transition: all linear 0.3s;
+    color:grey;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconAdd:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.iconRemove {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: red;
+    cursor: pointer;
+    transition: all linear 10s;
+}
+
+.iconRemove:hover {
+    transform: scale(1.1);
+}
+

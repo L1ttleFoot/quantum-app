@@ -1,35 +1,35 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector'
 import '../../style.css'
 import { TextField, Stack, Typography } from '@mui/material'
-import { setOmegas } from '../../slice'
+import { useAction } from '../../slice/useAction'
 
 const OmegasField = () => {
 
-    const dispatch = useDispatch()
+    const {setOmegas} = useAction()
 
-    const state = useSelector(state => state.data)
+    const data = useTypedSelector(state => state.data)
 
-    const { omegas, freedomDegrees } = state
+    const { omegas, freedomDegrees } = data
 
     const letterIndexes = 'ijkl'
 
     useEffect(
         () => {
-            dispatch(setOmegas(new Array(Number(freedomDegrees)).fill(undefined).map((item, index) => ({ var: 'omega', index: index + 1, value: '', letIndex: letterIndexes[index] }))))
+            setOmegas(new Array(Number(freedomDegrees)).fill(undefined).map((item, index) => ({ var: 'omega', index: index + 1, value: '', letIndex: letterIndexes[index] })))
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [freedomDegrees],
     );
 
-    const handleChangeOmegas = index => event => {
+    const handleChangeOmegas = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const newOmegas = omegas.map((item, indexItem) => index === indexItem ? ({ ...item, value: event.target.value }) : item)
-        dispatch(setOmegas(newOmegas))
+        setOmegas(newOmegas)
     };
 
     return (
         <div className='block'>
-            <Typography variant="subtitle">Гармонические частоты</Typography>
+            <Typography variant="body1" component='span'>Гармонические частоты</Typography>
             <Stack direction={'column'} alignItems={'center'}>
 
                 {omegas.map((item, index) =>
