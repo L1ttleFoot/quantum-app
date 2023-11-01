@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { AppBar, Toolbar, TextField, FormControl, FormControlLabel, RadioGroup, Radio, IconButton, Tooltip } from '@mui/material';
+import { AppBar, Toolbar, TextField, IconButton, Tooltip } from '@mui/material';
 import Content from "./content"
 import './style.css'
 import { Upload, Download } from '@mui/icons-material'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useTypedSelector } from '../../../helpers/hooks/useTypedSelector';
 import { fetchConfig, fetchFile } from './requests';
 import {
     setFreedomDegrees,
@@ -15,14 +16,15 @@ import {
     setDipoleY,
     setDipoleZ
 } from './slice';
+import ConstTypeSelect from './components/ConstTypeSelect';
 
 const CalculationPage = () => {
 
     const dispatch = useDispatch()
 
-    const state = useSelector(state => state.data)
+    const data = useTypedSelector(state => state.data)
 
-    const {freedomDegrees, order} = state
+    const {freedomDegrees, order} = data
 
     const [fileName, setFileName] = useState('')
     const [loadFromFile, setLoadFromFile] = useState(false)
@@ -35,12 +37,10 @@ const CalculationPage = () => {
         // eslint-disable-next-line
     }, [dispatch, freedomDegrees, order])
 
-    const emptyNumbers1 = [undefined, ''].some(item => state.numbers1.map(el => el.value).includes(item))
-    const emptyNumbers2 = [undefined, ''].some(item => state.numbers2.map(el => el.value).includes(item))
-    const emptyOmegas = [undefined, ''].some(item => state.omegas.map(el => el.value).includes(item))
-    const emptyConsts = [undefined, ''].some(item => state.consts.map(el => el.value).includes(item))
+    const emptyOmegas = [undefined, ''].some(item => data.omegas.map(el => el.value).includes(item))
+    const emptyConsts = [undefined, ''].some(item => data.consts.map(el => el.value).includes(item))
 
-    const someEmpty = emptyNumbers1 || emptyNumbers2 || emptyOmegas || emptyConsts
+    const someEmpty = emptyOmegas || emptyConsts
 
     const letterIndexes = 'ijkl'
 
@@ -58,9 +58,10 @@ const CalculationPage = () => {
         reader.onload = function (event) {
 
             setFileName(e.target.files[0].name)
+
             setLoadFromFile(true)
 
-            let objFreedomDegrees = event.target.result.split('\n').filter(item => item.includes('number_of_vibrational_degrees'))[0].trim().split('=')[1]
+            let objFreedomDegrees = reader.result.split('\n').filter(item => item.includes('number_of_vibrational_degrees'))[0].trim().split('=')[1]
 
             let objOrder = event.target.result.split('\n').filter(item => item.includes('max_indignation'))[0].trim().split('=')[1]
 
@@ -111,7 +112,7 @@ const CalculationPage = () => {
                     <div className='input'>
 
                         <TextField
-                            value={state.freedomDegrees}
+                            value={freedomDegrees}
                             style={{ margin: 10, width: 130 }}
                             label={'Степени свободы'}
                             size='small'
@@ -119,27 +120,15 @@ const CalculationPage = () => {
                         />
 
                         <TextField
-                            value={state.order}
+                            value={order}
                             style={{ margin: 10, width: 80 }}
                             label={'Порядок'}
                             size='small'
                             onChange={e => dispatch(setOrder(parseInt(e.target.value)))}
                         />
 
-                        <div>
-                            <div className='radio-label'>Тип констант</div>
-                            <FormControl style={{ marginLeft: 10, padding: '0 10px', border: '1px solid #c4c4c4', borderRadius: 4, }}>
-                                <RadioGroup
-                                    row
-                                    value={state.constsType}
-                                    onChange={e => dispatch(setConstsType(e.target.value))}
-                                >
-                                    <FormControlLabel style={{ color: '#0E76BB' }} value="A" control={<Radio size='small' />} label="a" />
-                                    <FormControlLabel style={{ color: '#0E76BB' }} value="k" control={<Radio size='small' />} label="k" />
-                                    <FormControlLabel style={{ color: '#0E76BB' }} value="fi" control={<Radio size='small' />} label={<span>&phi;</span>} />
-                                </RadioGroup>
-                            </FormControl>
-                        </div>
+                        <ConstTypeSelect/>
+
                     </div>
 
                     <div className='buttons'>
@@ -157,7 +146,7 @@ const CalculationPage = () => {
                         </Tooltip>
 
                         <Tooltip title="Скачать файл" placement="bottom">
-                            <IconButton onClick={()=>fetchFile(state)} color="primary" component="label">
+                            <IconButton onClick={()=>fetchFile(data)} color="primary" component="label">
                                 <Download />
                             </IconButton>
                         </Tooltip>

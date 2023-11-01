@@ -2,7 +2,7 @@ import React from 'react';
 import YouTube from 'react-youtube';
 import {Modal, Typography} from '@mui/material'
 
-function RickRoll({open}) {
+function RickRoll({open}: any) {
 
     const videoOptions = {
         playerVars: {
@@ -14,7 +14,7 @@ function RickRoll({open}) {
         }
       };
 
-      const style = {
+      const style: any = {
         position: 'absolute',
         top: '50%',
         left: '50%',

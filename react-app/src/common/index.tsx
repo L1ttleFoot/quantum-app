@@ -33,7 +33,6 @@ const Main:React.FC = () => {
             icon: <ArticleIcon />,
             path: '/'
         },
-
         {
             text: 'Calculation',
             icon: <CalculateIcon />,
@@ -45,7 +44,6 @@ const Main:React.FC = () => {
 
     return (
         <div >
-
             <Drawer
                 className='drawer'
                 variant='permanent'

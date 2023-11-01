@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { IconButton } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { setRows } from '../../slice'
+import { useAction } from '../../slice/useAction';
 
 const Table = (props) => {
 
-    const dispatch = useDispatch()
+    const { setRows } = useAction()
 
     const { updateSelectedRows, selectedRows } = props
 
-    const state = useSelector(state => state.data)
+    const data = useSelector(state => state.data)
 
-    const { rows } = state
+    const { rows } = data
 
     const myRows = [...rows].map((item, index) => ({ ...item, id: index + 1, energy: parseFloat(item.energy).toFixed(2) }))
 
@@ -53,7 +53,7 @@ const Table = (props) => {
 
                 const onClick = (e) => {
                     e.stopPropagation(); // don't select this row after clicking
-                    dispatch(setRows([...myRows].filter(item => item.id !== params.id)))
+                    setRows([...myRows].filter(item => item.id !== params.id))
                 };
 
                 return <IconButton onClick={onClick}>

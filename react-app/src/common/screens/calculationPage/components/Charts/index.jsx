@@ -9,7 +9,7 @@ import {
     Tooltip,
 } from 'recharts';
 
-export default function Chart(props) {
+const Chart = (props) => {
 
     const { data } = props
 
@@ -38,3 +38,5 @@ export default function Chart(props) {
         </ResponsiveContainer>
     );
 }
+
+export default Chart
