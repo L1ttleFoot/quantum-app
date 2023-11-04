@@ -1,9 +1,8 @@
-from itertools import combinations_with_replacement, combinations
+from itertools import combinations_with_replacement, combinations, product
 from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 import sympy as sy
 import json
-import pickle
 
 import firebase_admin
 from firebase_admin import credentials, db
@@ -58,83 +57,53 @@ def get_calculation():
     dipoleY = request_data['dipoleY']
     dipoleZ = request_data['dipoleZ']
 
-    n_l = []
+    n_list_sy = []
     for i in range(len(n_list)):
-        n_l.append(sy.symbols(n_list[i]))
+        n_list_sy.append(sy.symbols(n_list[i]))
 
-    complete_dict = dict_gen(n_l, omegas, consts, constsType, dipoleX, False)
+    n_dict, omega_dict, const_dict, dipole_dict = dict_gen(n_list_sy, omegas, consts, constsType, dipoleX)
+
+    complete_dict = {**n_dict, **omega_dict, **const_dict, **dipole_dict}
 
     dict_dipole_X = dict_dipole_x_gen(dipoleX)
     dict_dipole_Y = dict_dipole_y_gen(dipoleY)
     dict_dipole_Z = dict_dipole_z_gen(dipoleZ)
 
     complete_dict_keys = dict([(i.name,i) for i in complete_dict])
-    dict_dipole_keys = dict([(i.name,i) for i in dict_dipole_X])
 
-    resonans = RR.Resonance(states, complete_dict, order, n_l, complete_dict_keys)
+    resonans = RR.Resonance(states, complete_dict, order, n_list_sy, complete_dict_keys)
+
+    print(resonans)
+
+    def dipole(a,b):
+        dipole = RR.MEDMF_BD(a, b, order, n_list_sy, complete_dict_keys)
+
+        dipole_n = dipole.subs(n_dict)
+        dipole_c = dipole_n.subs({**omega_dict, **const_dict,})
+
+        X = dipole_c.subs(dict_dipole_X)
+        Y = dipole_c.subs(dict_dipole_Y)
+        Z = dipole_c.subs(dict_dipole_Z)
+
+        return (((X**2+Y**2+Z**2)**(1/2))*1000)
 
     result = [{'transition': f"000 > {''.join([str(value) for value in key])}",
                'energy': eval(str(values)),
-               'matrix': 10} for key, values in resonans.items()]
+               'matrix': str(dipole([0,0,0], list(key)))} for key, values in resonans.items()]
 
     k = [key for key in resonans.keys()]
 
     for i in range(len(list(combinations(k,2)))):
         result.append({'transition':f'{"".join([str(value) for value in list(combinations(k,2))[i][0]])} > {"".join([str(value) for value in list(combinations(k,2))[i][1]])}',
                 'energy': eval(str(resonans[list(combinations(k,2))[i][0]]))-eval(str(resonans[list(combinations(k,2))[i][1]])),
-                'matrix':10})
+                'matrix': str(dipole(list(list(combinations(k,2))[i][0]), list(list(combinations(k,2))[i][1])))})
 
-    X=0.01
-    Y=0
-    Z=0
 
     response = make_response(json.dumps(result))
     response.headers.add("Access-Control-Allow-Origin", "*")
 
     constant_gen.constant_gen(n_list, omegas, consts, dipoleX, dipoleY, dipoleZ, constsType, order)
 
-    return response
-
-@app.route('/api/v1/calculation_resonans', methods=['GET', 'POST'])
-def get_resonans():
-    request_data = request.get_json(force=True)
-
-    complete_dict = dict_gen(request_data['numbers2'], request_data['omegas'], request_data['consts'], request_data['constsType'], request_data['dipoleX'], False)
-
-    complete_dict_keys = dict([(i.name,i) for i in complete_dict])
-
-    n_dict = {}
-    for i in range(len(request_data['numbers2'])):
-        n_dict[sy.symbols('n_' + str(request_data['numbers2'][i]['letIndex']))] = 0
-
-    #n_list1 = [int(item['value']) for item in request_data['numbers1']]
-    #n_list2 = [int(item['value']) for item in request_data['numbers2']]
-
-    #n_str1 = ''.join([item['value'] for item in request_data['numbers1']])
-    #n_str2 = ''.join([item['value'] for item in request_data['numbers2']])
-
-    resonans = RR.Resonance([[0,1,0], [1,0,0], [0,0,1]], complete_dict, request_data['order'], n_dict, complete_dict_keys)
-
-    result = [{'transition': f"000 > {''.join([str(value) for value in key])}",
-               'energy': eval(str(values)),
-               'matrix': 10} for key, values in resonans.items()]
-
-    k = [key for key in resonans.keys()]
-
-    for i in range(len(list(combinations(k,2)))):
-        result.append({'transition':f'{"".join([str(value) for value in list(combinations(k,2))[i][0]])} > {"".join([str(value) for value in list(combinations(k,2))[i][1]])}',
-                'energy': eval(str(resonans[list(combinations(k,2))[i][0]]))-eval(str(resonans[list(combinations(k,2))[i][1]])),
-                'matrix':10})
-
-    X=0.01
-    Y=0
-    Z=0
-
-    print(result)
-
-    #response = jsonify(transition='%s > %s' % (n_str1, n_str2), energy='%s' % (sum([eval(str(i)) for i in resonans.values()])), matrix='%s' % (((X**2+Y**2+Z**2)**(1/2))*1000))
-    response = make_response(json.dumps(result))
-    response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
 

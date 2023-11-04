@@ -3,12 +3,13 @@
 
 #from MAKE_DB import *
 from collections import namedtuple
+
 from apendix import *
 from sympy import sqrt, prod, Rational, diff, factorial
 import sympy as sy
 from itertools import product
 from db_functions import getEnergy, insertEnergy, getVector, insertVector, getDipole, insertDipole, getPolynomial, insertPolynomial
-
+from MAKE_DB import *
 
 import numpy as np
 #from const_new import *
@@ -47,23 +48,23 @@ def ZAM_ZAM(VEC, k, n_dict):
 # В этот объект встроены функции которые могут вызвать информацию хранящююся внутри этого объекта: vec(self), NF(self), const(self)
 # const=reload(const)
 
-n_i=sy.symbols("n_i")#1
+n_i=sy.symbols("n_i")
 
-n_j=sy.symbols("n_j")#2
+n_j=sy.symbols("n_j")
 
-n_k=sy.symbols("n_k")#3
+n_k=sy.symbols("n_k")
 
-const_n_dikt={n_i: 0, n_j: 0, n_k: 0}
+const_n_dict={n_i: 'n_i', n_j: 'n_j', n_k: 'n_k'}
 
 class Vector():
     def __init__(self, vec, Const=1):
-        self._vec = np.array(list(const_n_dikt.keys()))+np.array(list(vec))
+        self._vec = np.array(list(const_n_dict.keys()))+np.array(list(vec))
         #self._vec = np.array(list(vec))
         self._NF = []
         self._const = [Const]
 
     def vec(self):
-        return tuple(self._vec-np.array(list(const_n_dikt.keys())))
+        return tuple(self._vec-np.array(list(const_n_dict.keys())))
         #return tuple(self._vec)
 
     def NF(self):
@@ -121,19 +122,17 @@ def G_KET(KET: list, fksi: list, IJK: list, key_dict, Factor='A'):
             if Factor != 'omega':
                 A = key_dict[f'{Factor}_{ijk}']
             else:
-                if ijk[0] != ijk[1]:
-                    continue
+                if ijk[0] != ijk[1]: continue
                 A = key_dict[f'{Factor}_{ijk[0]}']/2
-            ijk_ind = [VECTOR_INDEX_MAP[x]-1 for x in ijk]
-            result = [Vector(ket[0], ket[1]*A) for i in range(len(fksi))]
+            ijk_ind = [VECTOR_INDEX_MAP[x] - 1 for x in ijk]
+            result = [Vector(ket[0], ket[1] * A) for i in range(len(fksi))]
             for vec, operations in zip(result, fksi):
                 for op, i in zip(operations, ijk_ind):
                     op(vec, i)
             RESULT += result
         return RESULT
     C = []
-    for i in map(apply, KET):
-        C += i
+    for i in map(apply, KET): C += i
     return C
 ###########################
 # Расчет <bra|G|ket>, где G|ket> расчитывается с помощью функции G_KET
@@ -173,6 +172,11 @@ def BRA_G_ket(bra, G_ket):
 # скобок должна равняться значению alfa. Поэтому для большего удобства работы с индексами p,q,betta,.. и т.д. мы заведем именнованные кортежи
 # Index и Index2
 
+create_VECTOR_BD(BD_V)
+create_ENERGY_BD(BD_E)
+create_dipol_BD(BD_D)
+create_polinom_BD(BD_P)
+
 Index = namedtuple('Index', 'p q betta gamma nu')
 Index2 = namedtuple('Index2', 'p betta gamma')
 Index3 = namedtuple('Index3', 'p alfa')
@@ -182,13 +186,13 @@ Index3 = namedtuple('Index3', 'p alfa')
 
 
 def AV(ket, ind, n_dict, key_dict):
+    print('AV', 'ket:', ket, 'ind:', ind)
     AAA = [0 for i in range(len(ket))]
     aaa = tuple(AAA)
-    #N = select_vector(BD_V, (aaa,ind,))
-    N = getVector(aaa, ind)
-
+    N = select_vector(BD_V, (aaa, ind))
+    #N = getVector(aaa, ind)
     if N:
-        if ket == AAA:
+        if list(ket) == AAA:
             return N
         else:
             return ZAM_ZAM(N, ket, n_dict)
@@ -199,30 +203,25 @@ def AV(ket, ind, n_dict, key_dict):
         else:
             N = []
             # (p,q,бетта,гамма,ню)
-            for i in [Index(*i) for i in product(range(0, ind+1), repeat=5) if sum(i) == ind and i[1] % 2 == 0 and i[0] > 0]:
+            for i in [Index(*i) for i in product(range(0, ind + 1), repeat=5) if sum(i) == ind and i[1] % 2 == 0 and i[0] > 0]:
                 KET = AV(AAA, i.gamma, n_dict, key_dict)
                 M_BRA = AV(AAA, i.betta, n_dict, key_dict)
                 M_KET = AV(AAA, i.nu, n_dict, key_dict)
-                fksi = ksi_polinom(i.p+2)
+                fksi = ksi_polinom(i.p + 2)
                 NF1 = Rational(i.p/ind)
                 G_ket = G_KET(KET, fksi, INDEX(i.p, len(n_dict)), key_dict)
-                for bra in VECTORS_m(3*(i.betta+i.gamma)+i.p+2, AAA, len(n_dict)):
-                    if list(bra) == list(AAA):
-                        continue
-                    if pravilo_otbora(bra, AAA, i.p+2, i.betta, i.gamma) == 0:
-                        continue
+                for bra in VECTORS_m(3 * (i.betta + i.gamma) + i.p + 2, AAA, len(n_dict)):
+                    if list(bra) == list(AAA): continue
+                    if pravilo_otbora(bra, AAA, i.p + 2, i.betta, i.gamma) == 0: continue
                     DELTA = delta(AAA, bra, i.q, n_dict, key_dict)
-                    if DELTA == 0:
-                        continue  # В этом месте буду изменять для вырожденного случая
+                    if DELTA == 0: continue  # В этом месте буду изменять для вырожденного случая
                     NF2 = sum(list(map(lambda vec: BRA_G_ket(vec, G_ket), ZAM_ZAM(M_BRA, bra, n_dict))))
-                    if NF2 == 0:
-                        continue
-                    N += list(map(lambda V: [V[0], prod([NF1, NF2,V[1], DELTA])], ZAM_ZAM(M_KET, bra, n_dict)))
+                    if NF2 == 0: continue
+                    N += list(map(lambda V: [V[0], prod([NF1, NF2, V[1], DELTA])], ZAM_ZAM(M_KET, bra, n_dict)))
                 N = DEL(N)
-            #insert_vector(BD_V, (aaa, ind, N))
-            insertVector(aaa, ind, N)
-            if ket == AAA:
-                return N
+            insert_vector(BD_V, (aaa, ind, N))
+            #insertVector(aaa, ind, N)
+            if list(ket) == AAA: return N
             N = ZAM_ZAM(N, ket, n_dict)
             return N
 
@@ -234,8 +233,7 @@ def DEL(p: list):
     key = []
     for i in p:
         I = i[0]
-        if not I in key:
-            key.append(I)
+        if not I in key: key.append(I)
     P = dict.fromkeys(key)
     for j in key:
         A = []
@@ -250,20 +248,57 @@ def DEL(p: list):
 
 
 def AE(vec1, vec2, ind, n_dict, key_dict):
+    print('AE', 'vec1:', vec1, 'vec2:', vec2, 'ind:', ind)
     if ind == 0:
-        if vec1 != vec2:
-            return 0
+        if vec1 != vec2: return 0
         fksi = ksi_polinom(2)
         G_ket = G_KET(AV(vec1, 0, n_dict, key_dict), fksi, INDEX(0, len(n_dict)), key_dict, 'omega')
         return sum([BRA_G_ket(bra, G_ket) for bra in AV(vec1, 0, n_dict, key_dict)])
     else:
+        N = select_energy(BD_E, (tuple(vec1), tuple(vec2), ind))
+        #N = getEnergy(tuple(vec1),tuple(vec2),ind)
         #N = None
-        #N = select_energy(BD_E, (tuple(vec1),tuple(vec2),ind,))
-        N = getEnergy(tuple(vec1),tuple(vec2),ind)
         if N or N == 0:
             return N
         else:
-            N = []
+             ########### Пытаюсь ускорить за счет авто замены
+            vec_0 = np.array([0 for i in vec1])
+            vec_start = np.array(vec2)
+            vec_z1 = list(np.array(vec1) - vec_start)
+
+            N = select_energy(BD_E, (tuple(vec_0), tuple(vec_z1), ind))
+            if N == 0:
+                return N
+            elif N:
+                return N.subs(const_n_dict)
+            else:
+                vec_start = np.array(vec1)
+                vec_z1 = list(np.array(vec2) - vec_start)
+                N = select_energy(BD_E, (tuple(vec_0), tuple(vec_z1), ind))
+                if N == 0:
+                    return N
+                elif N:
+                    return N.subs(const_n_dict)
+                else:
+                    N = []
+                    for i in reversed(
+                            [Index2(*i) for i in product(range(0, ind + 1), repeat=3) if sum(i) == ind and i[0] > 0]):
+                        if pravilo_otbora(vec_0, vec_z1, i.p + 2, i.betta, i.gamma) == 0: continue
+                        KET = AV(vec_z1, i.gamma, n_dict, key_dict)
+                        BRA = AV(vec_0, i.betta, n_dict, key_dict)
+                        if i.gamma > i.betta: KET, BRA = BRA, KET
+                        fksi = ksi_polinom(i.p + 2)
+                        NF1 = Rational(i.p / ind)
+                        G_ket = G_KET(KET, fksi, INDEX(i.p, len(n_dict)), key_dict)
+                        E = sum([BRA_G_ket(vec, G_ket) for vec in BRA])
+                        N.append(prod([NF1, E]))
+                    N = sum(N)
+                    insert_energy(BD_E, (tuple(vec_0), tuple(vec_z1), ind, N))
+                    if N == 0:
+                        return N
+                    else:
+                        return N.subs(const_n_dict)
+            """ N = []
             for i in reversed([Index2(*i) for i in product(range(0, ind+1), repeat=3) if sum(i) == ind and i[0] > 0]):
                 if pravilo_otbora(vec1, vec2, i.p+2, i.betta, i.gamma) == 0:
                     continue
@@ -277,17 +312,17 @@ def AE(vec1, vec2, ind, n_dict, key_dict):
                 E = sum([BRA_G_ket(vec, G_ket) for vec in BRA])
                 N.append(prod([NF1, E]))
             N = sum(N)
-            #insert_energy(BD_E, (tuple(vec1), tuple(vec2), ind, N))
-            insertEnergy(tuple(vec1), tuple(vec2), ind, N)
-            return N
+            insert_energy(BD_E, (tuple(vec1), tuple(vec2), ind, N))
+            #insertEnergy(tuple(vec1), tuple(vec2), ind, N)
+            return N """
 
 ####################################################################
 # Вытаскиваем значение Э
 
 
 def AE_BD(vec1, vec2, ind, n_dict, key_dict):
+    print('AE_BD', 'vec1:', vec1, 'vec2:', vec2, 'ind:', ind)
     '''Расчитывает поправку к энергии'''
-
     if ind == 0:
         return AE(vec1, vec2, ind, n_dict, key_dict)
     elif ind % 2 == 1 and vec1 == vec2:
@@ -295,12 +330,10 @@ def AE_BD(vec1, vec2, ind, n_dict, key_dict):
     elif ind % 2 == 0 and vec1 == vec2:
         AAA = [0 for i in range(len(vec1))]
         aaa = tuple(AAA)
+        N = select_energy(BD_E, (aaa, aaa, ind))
+        #N = getEnergy(aaa, aaa, ind)
         #N = None
-        #N = select_energy(BD_E, (aaa, aaa, ind))
-        N = getEnergy(aaa, aaa, ind)
-
-        if N == 0:
-            return N
+        if N == 0: return N
         if N:
             if vec1 == AAA:
                 return N
@@ -310,8 +343,8 @@ def AE_BD(vec1, vec2, ind, n_dict, key_dict):
             N = AE(AAA, AAA, ind, n_dict, key_dict)
             return ZAM(N, vec1, n_dict)
     else:
-        N = getEnergy(tuple(vec1), tuple(vec2), ind)
-        #N = select_energy(BD_E, (tuple(vec1), tuple(vec2), ind))
+        #N = getEnergy(tuple(vec1), tuple(vec2), ind)
+        N = select_energy(BD_E, (tuple(vec1), tuple(vec2), ind))
         if N:
             return N
         else:
@@ -319,8 +352,8 @@ def AE_BD(vec1, vec2, ind, n_dict, key_dict):
 
 
 def pravilo_otbora(bra, ket, nksi, alfa, betta):
-    k = sum(bra)-sum(ket)
-    return 0 if (alfa+betta+nksi) % 2 != k % 2 else 1
+    k = sum(bra) - sum(ket)
+    return 0 if (alfa + betta + nksi) % 2 != k % 2 else 1
 
 
 def delta(n, m, q, n_dict, key_dict):
@@ -328,7 +361,7 @@ def delta(n, m, q, n_dict, key_dict):
     En = []
     lamda = []
     E_dict = {}
-    for i in range(q+1):
+    for i in range(q + 1):
         if i % 2 == 1:
             E_dict[f'Em_{i}'] = 0
             E_dict[f'En_{i}'] = 0
@@ -338,15 +371,15 @@ def delta(n, m, q, n_dict, key_dict):
         Em.append(eval(f'sy.symbols("Em_{i}")'))
         En.append(eval(f'sy.symbols("En_{i}")'))
         lamda.append(eval(f'sy.symbols("L")')**i)
-    Em = sum([lamda[i]*Em[i] for i in range(q+1)])
-    En = sum([lamda[i]*En[i] for i in range(q+1)])
+    Em = sum([lamda[i] * Em[i] for i in range(q + 1)])
+    En = sum([lamda[i] * En[i] for i in range(q + 1)])
     Zamena = list(E_dict.items())
     S = 1/(En-Em)
     i = 0
     while i < q:
         S = diff(S, 'L')
         i += 1
-    S = S.subs('L', 0)/factorial(q)
+    S = S.subs('L', 0) / factorial(q)
     S = sy.simplify(S)
     return S.subs(Zamena)
 
@@ -355,6 +388,7 @@ def delta(n, m, q, n_dict, key_dict):
 
 
 def MEDMF(bra, ket, max_indignation_step, n_dict, key_dict):
+    print('MEDMF', 'bra:', bra, 'ket:', ket)
     result = []
     for i in reversed([Index2(*i) for i in product(range(0, max_indignation_step+1), repeat=3) if sum(i[1:]) < max_indignation_step]):
         if pravilo_otbora(bra, ket, i.p+2, i.betta, i.gamma) == 0:
@@ -369,25 +403,26 @@ def MEDMF(bra, ket, max_indignation_step, n_dict, key_dict):
     return sy.simplify(sum(result))
 
 def MEDMF_BD(bra, ket, max_indignation_step, n_dict, key_dict):
-    print('MEDMF_BD')
+    print('MEDMF_BD', 'bra:', bra, 'ket:', ket)
     def medmf_bd(bra, ket, max_indignation_step, n_dict, key_dict):
-        #D = select_dipol(BD_D, (tuple(bra), tuple(ket), max_indignation_step,))
+        D = select_dipol(BD_D, (tuple(bra), tuple(ket), max_indignation_step))
         #D = getDipole(tuple(bra), tuple(ket), max_indignation_step)
-        D = None
+        #D = None
         if D or D == 0:
             return D
         else:
             D = 0
-            for i in reversed([Index3(*i) for i in product(range(0, max_indignation_step + 2), repeat=2) if
+            for i in reversed([Index3(*i) for i in product(range(0, max_indignation_step + 2), repeat = 2) if
                                sum(i[1:]) < max_indignation_step + 1]):
-                #N = select_polinom(BD_P, (tuple(bra), tuple(ket), i.p, i.alfa,))
-                N = getPolynomial(tuple(bra), tuple(ket), i.p, i.alfa)
-                N = None
+                N = select_polinom(BD_P, (tuple(bra), tuple(ket), i.p, i.alfa))
+                #N = getPolynomial(tuple(bra), tuple(ket), i.p, i.alfa)
+                #N = None
                 if N:
                     D += N
                 else:
                     D += Polinom(bra, ket, i.p, i.alfa, n_dict, key_dict, 'D')
-            insertDipole(tuple(bra), tuple(ket), max_indignation_step, D)
+            #insertDipole(tuple(bra), tuple(ket), max_indignation_step, D)
+            insert_dipol(BD_D,(tuple(bra),tuple(ket),max_indignation_step,D))
             return D
     Z = bra
     if Z != [0 for i in bra]:
@@ -399,15 +434,16 @@ def MEDMF_BD(bra, ket, max_indignation_step, n_dict, key_dict):
     else:
         return D
 
-
 def Polinom(bra, ket, p, alfa, n_dict, key_dict, Factor):
-    print('Polinom')
-    N = getPolynomial(tuple(bra), tuple(ket), p, alfa)
+    print('Polinom', 'bra:', bra, 'ket:', ket)
+    #N = getPolynomial(tuple(bra), tuple(ket), p, alfa)
+    N = select_polinom(BD_P, (tuple(bra), tuple(ket), p, alfa))
+    #N = None
     if N:
         return N
     else:
         result = []
-        for i in product(range(0, alfa + 1), repeat=2):
+        for i in product(range(0, alfa + 1), repeat = 2):
             if pravilo_otbora(bra, ket, p, i[0], i[1]) == 0: continue
             if sum(i) == alfa:
                 BRA = AV(bra, i[0], n_dict, key_dict)
@@ -418,15 +454,15 @@ def Polinom(bra, ket, p, alfa, n_dict, key_dict, Factor):
                 BGK = sum([BRA_G_ket(vec, GKET) for vec in BRA])
                 result.append(BGK)
         N = sum(result)
-        if N == None:
-            N = 0
-        insertPolynomial(tuple(bra), tuple(ket), p, alfa, N)
+        if N == None: N = 0
+        #insertPolynomial(tuple(bra), tuple(ket), p, alfa, N)
+        insert_polinom(BD_P, (tuple(bra), tuple(ket), p, alfa, N))
         return N
 
 def Resonance(levels, zamena, max_indignation_step, n_dict, key_dict):
     vec = [0 for i in levels[0]]
     dimensions = len(levels)
-    E0 = [AE_BD(vec, vec, k, n_dict, key_dict) for k in range(max_indignation_step+1)]
+    E0 = [AE_BD(vec, vec, k, n_dict, key_dict) for k in range(max_indignation_step + 1)]
     E0 = sum([i.subs(zamena) for i in E0 if i != 0])
     matrixbase = []
     matrixrow = []
@@ -436,7 +472,7 @@ def Resonance(levels, zamena, max_indignation_step, n_dict, key_dict):
             matrixbase.append(list(matrixrow))
             matrixrow = []
             j = 0
-        AA = [AE_BD(i[0], i[1], k, n_dict, key_dict) for k in range(max_indignation_step+1)]
+        AA = [AE_BD(i[0], i[1], k, n_dict, key_dict) for k in range(max_indignation_step + 1)]
         AA1 = [k.subs(zamena) for k in AA if k != 0]
         matrixrow.append(sum(AA1))
         j += 1
@@ -449,24 +485,12 @@ def Resonance(levels, zamena, max_indignation_step, n_dict, key_dict):
     M = np.array(M)
     M = [M[i][i] for i in range(len(levels))]
 
-    print((M))
-    print((D))
-
-    print(type(M[0]))
-    print(type(D[0]), eval(str(D[0])))
-
-    def SORT(D, M):
-        s = [0 for i in M]
+    def SORT(D,M):
+        s=[0 for i in M]
         for i in range(len(M)):
             for j in D:
-                print(i, j, s)
-                print(D, M)
-                print(M[i])
-                #if sqrt((M[i] - j) ** 2) < sqrt((M[i] - s[i]) ** 2): s[i] = j
+                if sqrt((M[i]-j)**2)<sqrt((M[i]-s[i])**2): s[i]=j
         return s
-
-    print()
-
-    # print(SORT(D,M))
-
-    return dict(zip([tuple(i) for i in levels], D))
+    S=dict(zip([tuple(i) for i in levels],SORT(D,M)))
+    # S=SORT(D,m,levels)
+    return S

@@ -39,22 +39,6 @@ const StateField = () => {
             <div className='block'>
                 <Typography variant='body2' component='span'>Состояния</Typography>
                 <div style={{position: 'relative' }}>
-                    {/* <Stack direction={'row'} alignItems={'center'}>
-                        <div style={{position: 'absolute', right:0, top: 0}}>
-                            <RemoveCircleOutline fontSize='small'/>
-                        </div>
-                        {numbers1.map((item, index) =>
-                            <TextField
-                                key={item.index + 'omega'}
-                                size={'small'}
-                                style={{ margin: 10 }}
-                                label={<span>n<sub>{item.index}</sub></span>}
-                                value={item.value}
-                                onChange={handleChangeNumbers1(index)}
-                            />
-                        )}
-                    </Stack> */}
-
                     {states.map((state, indexState) =>
                         <Stack style={{position:'relative'}} key={indexState} direction={'row'} alignItems={'center'}>
                             {indexState!==0 && <div>
@@ -74,17 +58,14 @@ const StateField = () => {
                                     value={item}
                                     onChange={handleChangeState(indexState, indexValue)}
                                 />
-                        )}
-
+                            )}
                         </Stack>
                     )}
-                    
                 </div>
             </div>
             <div className={styles.iconAdd} onClick={handleChangeStateAdd()}>
                 <ControlPoint />
             </div>
-            
         </div>
     )
 }
