@@ -25,19 +25,19 @@ const DipoleField = () => {
     }
 
     const handleChangeDipoleX = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        let newArr = [...dipoleX]
+        let newArr = dipoleX.map(item=>({...item}))
         newArr[index].value = event.target.value
         setDipoleX(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
     };
 
     const handleChangeDipoleY = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        let newArr = [...dipoleY]
+        let newArr = dipoleY.map(item=>({...item}))
         newArr[index].value = event.target.value
         setDipoleY(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
     };
 
     const handleChangeDipoleZ = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        let newArr = [...dipoleZ]
+        let newArr = dipoleZ.map(item=>({...item}))
         newArr[index].value = event.target.value
         setDipoleZ(newArr.map(item => ({ ...item, letIndex: item.index.replace(/1/g, 'i').replace(/2/g, 'j').replace(/3/g, 'k') })))
     };

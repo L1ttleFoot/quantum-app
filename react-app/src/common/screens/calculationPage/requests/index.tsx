@@ -63,8 +63,8 @@ const fetchCalc = (state: DataTypes) => async (dispatch: Dispatch) => {
                 omegas: state.omegas,
                 consts: state.consts,
                 dipoleX: [state.dipole0, ...state.dipoleX],
-                dipoleY: [state.dipole0, ...state.dipoleY],
-                dipoleZ: [state.dipole0, ...state.dipoleZ],
+                dipoleY: [{ index: '0', value: '0', var: 'dipole0', letIndex: '0' }, ...state.dipoleY],
+                dipoleZ: [{ index: '0', value: '0', var: 'dipole0', letIndex: '0' }, ...state.dipoleZ],
                 constsType: state.constsType,
             })
         })
