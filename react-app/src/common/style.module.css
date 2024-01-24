@@ -13,29 +13,9 @@
     justify-content: space-around;
 }
 
-.buttons {
-    background: white;
-}
-
-.input {
-    display: flex;
-    align-items: center;
-}
-
 .radio-group {
     display: flex;
     align-items: center;
-}
-
-.radio-label {
-    position: absolute;
-    font-size: 12px;
-    top: 5px;
-    padding: 0 5px;
-    margin-left: 20px;
-    color: #666666;
-    background-color: white;
-    z-index: 1;
 }
 
 .logo {

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector'
-import '../../style.css'
+import styles from '../../style.module.css'
 import { TextField, Stack, Typography } from '@mui/material'
 import { useAction } from '../../slice/useAction'
 
@@ -28,7 +28,7 @@ const OmegasField = () => {
     };
 
     return (
-        <div className='block'>
+        <div className={styles.block}>
             <Typography variant="body1" component='span'>Гармонические частоты</Typography>
             <Stack direction={'column'} alignItems={'center'}>
 

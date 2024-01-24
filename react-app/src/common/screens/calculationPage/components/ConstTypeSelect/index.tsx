@@ -1,8 +1,8 @@
-import React from 'react'
 import { FormControl, FormControlLabel, RadioGroup, Radio } from '@mui/material';
 import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector';
 import { constsDict } from '../../consts';
 import { useAction } from '../../slice/useAction'
+import styles from './constType.module.css'
 
 const ConstTypeSelect = () => {
 
@@ -12,7 +12,7 @@ const ConstTypeSelect = () => {
 
     return (
         <div>
-            <div className='radio-label'>Тип констант</div>
+            <div className={styles['radio-label']}>Тип констант</div>
             <FormControl style={{ marginLeft: 10, padding: '0 10px', border: '1px solid #c4c4c4', borderRadius: 4, }}>
                 <RadioGroup
                     row

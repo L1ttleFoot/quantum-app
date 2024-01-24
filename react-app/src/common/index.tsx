@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { Drawer, List, ListItemButton, ListItemIcon, } from '@mui/material';
-import './style.css'
+import styles from './style.module.css'
 import StartPage from './screens/startPage'
 import CalculationPage from './screens/calculationPage'
 import { useNavigate } from "react-router";
@@ -9,7 +9,7 @@ import ArticleIcon from '@mui/icons-material/Article';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import logo from '../imges/Logo-shot.png'
 
-const Main:React.FC = () => {
+const Main = () => {
 
     const [tab, setTab] = useState('Info')
 
@@ -45,12 +45,12 @@ const Main:React.FC = () => {
     return (
         <div >
             <Drawer
-                className='drawer'
+                className={styles.drawer}
                 variant='permanent'
                 anchor='left'
             >
 
-                <div className='logo'>
+                <div className={styles.logo}>
                     <img src={logo} width="60" height="60" alt='logo' />
                 </div>
 

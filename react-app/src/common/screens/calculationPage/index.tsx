@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AppBar, Toolbar, TextField, IconButton, Tooltip } from '@mui/material';
 import Content from "./content"
-import './style.css'
+import styles from './style.module.css'
 import { Upload, Download } from '@mui/icons-material'
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../helpers/hooks/useTypedSelector';
@@ -32,7 +32,7 @@ const CalculationPage = () => {
     useEffect(()=>{
 
         if (loadFromFile) return
-
+        // @ts-ignore
         dispatch(fetchConfig({freedomDegrees, order}))
         // eslint-disable-next-line
     }, [dispatch, freedomDegrees, order])
@@ -44,38 +44,42 @@ const CalculationPage = () => {
 
     const letterIndexes = 'ijkl'
 
-    const numberIndex = {
+    type TnumberIndex = {
+        [key: string]: string
+    }
+
+    const numberIndex: TnumberIndex = {
         'i': '1',
         'j': '2',
         'k': '3',
         'f': '4',
     }
 
-    const onChange = (e) => {
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         let reader = new FileReader()
 
-        reader.onload = function (event) {
+        reader.onload = function (event:  ProgressEvent<FileReader>) {
 
             setFileName(e.target.files[0].name)
 
             setLoadFromFile(true)
 
-            let objFreedomDegrees = reader.result.split('\n').filter(item => item.includes('number_of_vibrational_degrees'))[0].trim().split('=')[1]
+            let objFreedomDegrees = reader.result.toString().split('\n').filter(item => item.includes('number_of_vibrational_degrees'))[0].trim().split('=')[1]
 
-            let objOrder = event.target.result.split('\n').filter(item => item.includes('max_indignation'))[0].trim().split('=')[1]
+            let objOrder = event.target.result.toString().split('\n').filter(item => item.includes('max_indignation'))[0].trim().split('=')[1]
 
-            let objConstType = event.target.result.split('\n').filter(item => item.includes('type_anharmonic_const'))[0].trim().split('=')[1].replace(/["']/g, '')
+            let objConstType = event.target.result.toString().split('\n').filter(item => item.includes('type_anharmonic_const'))[0].trim().split('=')[1].replace(/["']/g, '')
 
-            let objOmegas = JSON.parse(event.target.result.split('\n').filter(item => item.includes('const_omega'))[0].trim().split('=')[1].replace(/omega_[a-z]/g, x => `"${x}"`))
+            let objOmegas = JSON.parse(event.target.result.toString().split('\n').filter(item => item.includes('const_omega'))[0].trim().split('=')[1].replace(/omega_[a-z]/g, x => `"${x}"`))
 
-            let objConsts = JSON.parse(event.target.result.split('\n').filter(item => item.includes('const_anharmonic'))[0].trim().split('=')[1].replace(/A_[a-z]{0,4}/g, x => `"${x}"`))
+            let objConsts = JSON.parse(event.target.result.toString().split('\n').filter(item => item.includes('const_anharmonic'))[0].trim().split('=')[1].replace(/A_[a-z]{0,4}/g, x => `"${x}"`))
 
-            let objDipoleX = JSON.parse(event.target.result.split('\n').filter(item => item.includes('const_dipoleX_dict'))[0].trim().split('=')[1].replace(/D_[0-9,a-z]{0,4}/g, x => `"${x}"`))
+            let objDipoleX = JSON.parse(event.target.result.toString().split('\n').filter(item => item.includes('const_dipoleX_dict'))[0].trim().split('=')[1].replace(/D_[0-9,a-z]{0,4}/g, x => `"${x}"`))
 
-            let objDipoleY = JSON.parse(event.target.result.split('\n').filter(item => item.includes('const_dipoleY_dict'))[0].trim().split('=')[1].replace(/D_[0-9,a-z]{0,4}/g, x => `"${x}"`))
+            let objDipoleY = JSON.parse(event.target.result.toString().split('\n').filter(item => item.includes('const_dipoleY_dict'))[0].trim().split('=')[1].replace(/D_[0-9,a-z]{0,4}/g, x => `"${x}"`))
 
-            let objDipoleZ = JSON.parse(event.target.result.split('\n').filter(item => item.includes('const_dipoleZ_dict'))[0].trim().split('=')[1].replace(/D_[0-9,a-z]{0,4}/g, x => `"${x}"`))
+            let objDipoleZ = JSON.parse(event.target.result.toString().split('\n').filter(item => item.includes('const_dipoleZ_dict'))[0].trim().split('=')[1].replace(/D_[0-9,a-z]{0,4}/g, x => `"${x}"`))
 
             dispatch(setFreedomDegrees(objFreedomDegrees))
 
@@ -100,7 +104,8 @@ const CalculationPage = () => {
         //e.target.value = "";
     }
 
-    const onClick = (e) => {
+    const onClick = (e:React.MouseEvent<HTMLElement>) => {
+        // @ts-ignore
         e.target.value = '';
     }
 
@@ -109,7 +114,7 @@ const CalculationPage = () => {
             <AppBar style={{ background: 'white', width: `calc(100% - 60px)`, }}>
                 <Toolbar style={{ display: 'flex' }}>
 
-                    <div className='input'>
+                    <div className={styles.input}>
 
                         <TextField
                             value={freedomDegrees}
@@ -131,7 +136,7 @@ const CalculationPage = () => {
 
                     </div>
 
-                    <div className='buttons'>
+                    <div className={styles.buttons}>
 
                         <Tooltip title="Загрузить файл" placement="bottom">
                             <IconButton onClick={onClick} color="primary" component="label">

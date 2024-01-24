@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import '../style.css'
+import styles from '../style.module.css'
 import { Paper } from '@mui/material'
 import Chart from "../components/Charts"
 import DipoleField from '../components/DipoleField';
@@ -41,33 +41,33 @@ const CalculationPage: React.FC <ICalc> = ({ someEmpty }) => {
     const [open, setOpen] = useState(false)
 
     return (
-        <div className={'container'}>
+        <div className={styles.container}>
 
-            <Paper className={'box1'}>
+            <Paper className={styles.box1}>
                 <StateFieldCopy />
             </Paper>
 
-            <Paper className={'box2'}>
+            <Paper className={styles.box2}>
                 <OmegasField />
             </Paper>
 
-            <Paper className={'box3'}>
+            <Paper className={styles.box3}>
                 {!http.loadingConfig ? <ConstsField /> :  <ConstsSkeleton />}
             </Paper>
 
-            <Paper className={'box4'}>
+            <Paper className={styles.box4}>
                 {!http.loadingConfig ? <DipoleField /> :  <DipoleSkeleton />}
             </Paper>
 
-            <Paper className={'box5'}>
+            <Paper className={styles.box5}>
                 <Table selectedRows={selectedRows} updateSelectedRows={updateSelectedRows} />
             </Paper>
 
-            <Paper className={'box6'}>
+            <Paper className={styles.box6}>
                 <Chart data={selectedRows} />
             </Paper>
 
-            <Paper className={'box7'}>
+            <Paper className={styles.box7}>
                 <CalculationFiled resonans={()=>setOpen(true)} someEmpty={someEmpty}/>
             </Paper>
 

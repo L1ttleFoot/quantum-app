@@ -1,11 +1,11 @@
-from itertools import combinations_with_replacement, combinations, product
+from itertools import combinations_with_replacement, combinations
 from flask import Flask, request, jsonify, send_file, make_response
 from flask_cors import CORS
 import sympy as sy
 import json
 
 import firebase_admin
-from firebase_admin import credentials, db
+from firebase_admin import credentials
 
 import os
 from dotenv import load_dotenv
@@ -32,7 +32,7 @@ print('start')
 
 app = Flask(__name__)
 CORS(app)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 

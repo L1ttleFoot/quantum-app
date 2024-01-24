@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector'
-import '../../style.css'
+import styles from '../../style.module.css'
 import { TextField, Typography, Tabs, Tab } from '@mui/material'
 import { ErrorHandler } from '../../../../../components/Errorhandler'
 import { useAction } from '../../slice/useAction'
@@ -47,7 +47,7 @@ const DipoleField = () => {
     }
 
     return (
-        <div className='block'>
+        <div className={styles.block}>
             <Typography variant="body1" component='span'>Производные дипольного момента</Typography>
 
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>

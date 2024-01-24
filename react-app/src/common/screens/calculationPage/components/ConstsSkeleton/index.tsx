@@ -1,5 +1,4 @@
-import React from 'react'
-import '../../style.css'
+import styles from '../../style.module.css'
 import { Typography, Skeleton } from '@mui/material'
 import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector'
 
@@ -38,7 +37,7 @@ const ConstsField = () => {
     const myArray = Array.from({ length: sum }, (_, index) => index + 1);
 
     return (
-        <div className='block'>
+        <div className={styles.block}>
             <Typography variant="body1" component='span'>Силовые постоянные</Typography>
             <div style={{
                 display: 'flex',

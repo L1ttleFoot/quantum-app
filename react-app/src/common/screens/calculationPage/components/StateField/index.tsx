@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector';
-import '../../style.css'
 import { TextField, Stack, Typography } from '@mui/material'
 import { useAction } from '../../slice/useAction';
 import { ControlPoint, RemoveCircleOutline } from '@mui/icons-material';
@@ -36,7 +35,7 @@ const StateField = () => {
 
     return (
         <div className={styles.stateField}>
-            <div className='block'>
+            <div className={styles.block}>
                 <Typography variant='body2' component='span'>Состояния</Typography>
                 <div style={{position: 'relative' }}>
                     {states.map((state, indexState) =>

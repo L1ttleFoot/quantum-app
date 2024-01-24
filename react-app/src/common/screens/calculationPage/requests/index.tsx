@@ -15,7 +15,10 @@ import { saveAs } from 'file-saver'
 //const url = 'https://quantum-app-bf8b.vercel.app'
 //const url = 'http://localhost:8080'
 
-const url = process.env.REACT_APP_ENV === 'development' ? 'http://localhost:8080' : 'https://quantum-app-backend.onrender.com'
+//const url = process.env.REACT_APP_ENV === 'development' ? 'http://localhost:8080' : 'https://quantum-app-backend.onrender.com'
+
+const url = 'development' === 'development' ? 'http://localhost:8080' : 'https://quantum-app-backend.onrender.com'
+
 
 interface IConfig {
     freedomDegrees: number

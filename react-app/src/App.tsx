@@ -1,11 +1,10 @@
-import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
-import './App.css';
+import styles from './App.module.css';
 import Main from './common'
 
 function App() {
     return (
-        <div className="App">
+        <div className={styles.App}>
             <Router>
                 <Main />
             </Router>

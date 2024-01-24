@@ -1,5 +1,4 @@
-import React from 'react'
-import '../../style.css'
+import styles from '../../style.module.css'
 import { Button, CircularProgress } from '@mui/material'
 import { fetchCalc } from '../../requests'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,7 +12,7 @@ const CalculationFiled = (props) => {
     const { someEmpty } = props
 
     return (
-        <div className={'calcFields'}>
+        <div className={styles.calcFields}>
             <Button
                 endIcon={http.loadingCalc ? <CircularProgress size={20} /> : ''}
                 fullWidth={true}

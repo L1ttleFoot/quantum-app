@@ -1,6 +1,5 @@
-import React from 'react'
 import { AppBar, Toolbar, Paper, Typography, Divider } from '@mui/material'
-import './style.css'
+import styles from './style.module.css'
 import img1 from '../../../imges/Label1.png'
 import img2 from '../../../imges/Label2.png'
 import img3 from '../../../imges/Label3.png'
@@ -54,39 +53,39 @@ const StartPage = () => {
                             НАПРАВЛЕНИЯ ИССЛЕДОВАНИЙ
                         </Typography>
 
-                        <div className='directions'>
+                        <div className={styles.directions}>
                             <img src={img1} width="90" height="90" alt='logo' />
 
-                            <div className='description'>
-                                <div className={'main'}>МОДЕЛИРОВАНИЕ ФУНДАМЕНТАЛЬНЫХ ПРОЦЕССОВ</div>
-                                <div className={'additional'}>РАЗВИТИЕ ТЕОРИИ И НОВЫХ МЕТОДОВ ДЛЯ РЕШЕНИЯ КВАНТОВОМЕХАНИЧЕСКИХ ПРОБЛЕМ МОЛЕКУЛЯРНОЙ ФИЗИКИ</div>
+                            <div className={styles.description}>
+                                <div className={styles.main}>МОДЕЛИРОВАНИЕ ФУНДАМЕНТАЛЬНЫХ ПРОЦЕССОВ</div>
+                                <div className={styles.additional}>РАЗВИТИЕ ТЕОРИИ И НОВЫХ МЕТОДОВ ДЛЯ РЕШЕНИЯ КВАНТОВОМЕХАНИЧЕСКИХ ПРОБЛЕМ МОЛЕКУЛЯРНОЙ ФИЗИКИ</div>
                             </div>
                         </div>
 
-                        <div className='directions'>
+                        <div className={styles.directions}>
                             <img src={img2} width="90" height="90" alt='logo' />
 
-                            <div className='description'>
-                                <div className={'main'}>АСТРОФИЗИКА</div>
-                                <div className={'additional'}>ОПИСАНИЕ ЯВЛЕНИЙ, ПРОТЕКАЮЩИХ В МЕЖЗВЕЗДНЫХ ОБЛАКАХ, АТМОСФЕРАХ ЭКЗОПЛАНЕТ, ПЛАНЕТ СОЛНЕЧНОЙ СИСТЕМЫ, ВНУТРИ ХОЛОДНЫХ ЗВЕЗД</div>
+                            <div className={styles.description}>
+                                <div className={styles.main}>АСТРОФИЗИКА</div>
+                                <div className={styles.additional}>ОПИСАНИЕ ЯВЛЕНИЙ, ПРОТЕКАЮЩИХ В МЕЖЗВЕЗДНЫХ ОБЛАКАХ, АТМОСФЕРАХ ЭКЗОПЛАНЕТ, ПЛАНЕТ СОЛНЕЧНОЙ СИСТЕМЫ, ВНУТРИ ХОЛОДНЫХ ЗВЕЗД</div>
                             </div>
                         </div>
 
-                        <div className='directions'>
+                        <div className={styles.directions}>
                             <img src={img3} width="90" height="90" alt='logo' />
 
-                            <div className='description'>
-                                <div className={'main'}>ГЛОБАЛЬНОЕ ПОТЕПЛЕНИЕ</div>
-                                <div className={'additional'}>МОДЕЛИРОВАНИЕ ЭФФЕКТОВ РАДИАЦИОННОГО БАЛАНСА В АТМОСФЕРЕ ЗЕМЛИ И ИССЛЕДОВАНИЕ ФАКТОРОВ, ВЫЗЫВАЮЩИХ ПАРНИКОВЫЙ ЭФФЕКТ</div>
+                            <div className={styles.description}>
+                                <div className={styles.main}>ГЛОБАЛЬНОЕ ПОТЕПЛЕНИЕ</div>
+                                <div className={styles.additional}>МОДЕЛИРОВАНИЕ ЭФФЕКТОВ РАДИАЦИОННОГО БАЛАНСА В АТМОСФЕРЕ ЗЕМЛИ И ИССЛЕДОВАНИЕ ФАКТОРОВ, ВЫЗЫВАЮЩИХ ПАРНИКОВЫЙ ЭФФЕКТ</div>
                             </div>
                         </div>
 
-                        <div className='directions'>
+                        <div className={styles.directions}>
                             <img src={img4} width="90" height="90" alt='logo' />
 
-                            <div className='description'>
-                                <div className={'main'}>АТОМЫ И МОЛЕКУЛЫ В ЭКСТРЕМАЛЬНЫХ УСЛОВИЯХ</div>
-                                <div className={'additional'}>ИЗУЧЕНИЕ РАДИАЦИОННЫХ ПРОЦЕССОВ И ХИМИЧЕСКИХ ПРЕВРАЩЕНИЙ В МОЛЕКУЛЯРНЫХ ГАЗАХ ПРИ ЭКСТРЕМАЛЬНО ВЫСОКИХ ТЕМПЕРАТУРАХ И В УСЛОВИЯХ СВЕРХЗВУКОВЫХ ГАЗОВЫХ ПОТОКОВ</div>
+                            <div className={styles.description}>
+                                <div className={styles.main}>АТОМЫ И МОЛЕКУЛЫ В ЭКСТРЕМАЛЬНЫХ УСЛОВИЯХ</div>
+                                <div className={styles.additional}>ИЗУЧЕНИЕ РАДИАЦИОННЫХ ПРОЦЕССОВ И ХИМИЧЕСКИХ ПРЕВРАЩЕНИЙ В МОЛЕКУЛЯРНЫХ ГАЗАХ ПРИ ЭКСТРЕМАЛЬНО ВЫСОКИХ ТЕМПЕРАТУРАХ И В УСЛОВИЯХ СВЕРХЗВУКОВЫХ ГАЗОВЫХ ПОТОКОВ</div>
                             </div>
                         </div>
 

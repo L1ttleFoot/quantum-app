@@ -418,7 +418,7 @@ def MEDMF_BD(bra, ket, max_indignation_step, n_dict, key_dict):
                 #N = getPolynomial(tuple(bra), tuple(ket), i.p, i.alfa)
                 #N = None
                 if N:
-                    D += N
+                    D += N  
                 else:
                     D += Polinom(bra, ket, i.p, i.alfa, n_dict, key_dict, 'D')
             #insertDipole(tuple(bra), tuple(ket), max_indignation_step, D)

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector'
-import '../../style.css'
+import styles from '../../style.module.css'
 import { TextField, Typography } from '@mui/material'
 import { constsDict } from '../../consts'
 import { ErrorHandler } from '../../../../../components/Errorhandler'
@@ -28,7 +28,7 @@ const ConstsField = () => {
     const currentConst = constsDict.find(item => item.value === data.constsType)?.label
 
     return (
-        <div className='block'>
+        <div className={styles.block}>
             <Typography variant='body1' component='span'>Силовые постоянные</Typography>
             <div style={{
                 display: 'flex',
@@ -40,7 +40,6 @@ const ConstsField = () => {
                 {consts.map((item, index) =>
                     <TextField
                         key={item.index + 'const'}
-
                         size={'small'}
                         style={{ margin: 10, width: '15%', minWidth: 80 }}
                         label={<span>{currentConst}<sub>{item.index}</sub></span>}

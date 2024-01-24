@@ -18,6 +18,15 @@
     position: relative;
 }
 
+.input {
+    display: flex;
+    align-items: center;
+}
+
+.buttons {
+    background: white;
+}
+
 .calcFields {
     padding: 10px;
     display: flex;
