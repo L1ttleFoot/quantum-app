@@ -4,6 +4,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
 
 module.exports = (env) => {
+
+    const isProduction = env.mode === 'production'
+    const isDevelopment = env.mode === 'development'
+
     return {
         mode: env.mode ?? 'development',
         entry: path.resolve(__dirname, 'src', 'index.tsx'),
@@ -20,9 +24,9 @@ module.exports = (env) => {
                     favicon:  path.resolve(__dirname, 'public', 'favicon.ico')
                 }
             ),
-            new webpack.ProgressPlugin(),
+            isDevelopment && new webpack.ProgressPlugin(),
             new MiniCssExtractPlugin({filename: 'static/css/[name].[contenthash:8].css'})
-        ],
+        ].filter(Boolean),
         module: {
             rules: [
                 {
@@ -46,7 +50,17 @@ module.exports = (env) => {
               }, */
               {
                 test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, {loader: "css-loader", options: {modules: {localIdentName: '[local]_[hash:base64:8]'}}}],
+                use: [
+                    MiniCssExtractPlugin.loader, 
+                    {
+                        loader: "css-loader", 
+                        options: {
+                            modules: {
+                                localIdentName: '[local]_[hash:base64:8]'
+                            }
+                        }
+                    }
+                ],
               },
               {
                 test: /\.(png|svg|jpg|jpeg|gif)$/i,
