@@ -6,5 +6,5 @@ export interface IConsts {
 export const constsDict: IConsts[] = [
     {value: 'A', label: 'a'},
     {value: 'k', label: 'k'},
-    {value: 'fi', label: decodeURI('%CF%86')}
-]
+    {value: 'fi', label: decodeURI('%CF%86')},
+];
