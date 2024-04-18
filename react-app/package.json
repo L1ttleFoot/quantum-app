@@ -27,7 +27,7 @@
     "start-test": "webpack serve --open --env mode=development",
     "build-test": "webpack --env mode=production",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
   },
   "eslintConfig": {
     "extends": [
@@ -60,6 +60,7 @@
     "dotenv-webpack": "^8.0.1",
     "html-webpack-plugin": "^5.5.3",
     "mini-css-extract-plugin": "^2.7.6",
+    "prettier": "^3.2.5",
     "ts-loader": "^9.5.0",
     "typescript": "^4.9.5",
     "webpack": "^5.88.2",

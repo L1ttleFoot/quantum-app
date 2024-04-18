@@ -1,10 +1,5 @@
-import React from "react";
+import React from 'react';
 
 const Import = () => {
-
-    return(
-        <input>
-        
-        </input>
-    )
-}
+    return <input></input>;
+};

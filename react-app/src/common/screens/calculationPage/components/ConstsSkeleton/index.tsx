@@ -1,9 +1,8 @@
-import styles from '../../style.module.css'
-import { Typography, Skeleton } from '@mui/material'
-import { useTypedSelector } from '../../../../../helpers/hooks/useTypedSelector'
+import styles from '../../style.module.css';
+import {Typography, Skeleton} from '@mui/material';
+import {useTypedSelector} from '../../../../../helpers/hooks/useTypedSelector';
 
 const ConstsField = () => {
-
     /* const [myArray, setMyArray] = useState(new Array(0));
 
     useEffect(() => {
@@ -18,9 +17,9 @@ const ConstsField = () => {
       }, [myArray]); // зависимость от myArray, чтобы эффект выполнялся при изменении длины массива
     */
 
-    const data = useTypedSelector(state => state.data)
+    const data = useTypedSelector((state) => state.data);
 
-    const { freedomDegrees, order } = data
+    const {freedomDegrees, order} = data;
 
     function permutationsWithoutMirror(n: number, k: number): number {
         let numerator = 1;
@@ -32,32 +31,37 @@ const ConstsField = () => {
         return numerator / denominator;
     }
 
-    const sum = Array.from({ length: order }, (_, i) => i).map(item => permutationsWithoutMirror(freedomDegrees, item + 3)).reduce((acc, curr) => acc + curr, 0);
+    const sum = Array.from({length: order}, (_, i) => i)
+        .map((item) => permutationsWithoutMirror(freedomDegrees, item + 3))
+        .reduce((acc, curr) => acc + curr, 0);
 
-    const myArray = Array.from({ length: sum }, (_, index) => index + 1);
+    const myArray = Array.from({length: sum}, (_, index) => index + 1);
 
     return (
         <div className={styles.block}>
-            <Typography variant="body1" component='span'>Силовые постоянные</Typography>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-            }}
+            <Typography variant="body1" component="span">
+                Силовые постоянные
+            </Typography>
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                    justifyContent: 'center',
+                }}
             >
-                {myArray.map((_, index) =>
+                {myArray.map((_, index) => (
                     <Skeleton
                         key={index}
                         variant="rounded"
                         width={'15%'}
                         height={'40px'}
-                        style={{ margin: 10, width: '15%', minWidth: 80 }}
-                    />)}
-
+                        style={{margin: 10, width: '15%', minWidth: 80}}
+                    />
+                ))}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ConstsField
+export default ConstsField;
